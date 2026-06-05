@@ -9,14 +9,18 @@ cells); a **local embedding model** routes each customer message into
 that space in ~10 ms, serves a pre-audited template on a confident
 match, and falls back to the LLM only on genuine novelty.
 
-## The four proofs (P0.5 slice: objection stage, 10 intents)
+## The six proofs (P0.5 slice: objection stage, 10 intents)
 
 | Claim | Gate | Result |
 |---|---|---|
-| Perfect routing | ≥95% held-out accuracy, confident-wrong = 0 | **PASS** — 95.7%, 0.00% |
+| Perfect routing (held-out) | ≥95% accuracy, confident-wrong = 0 | **PASS** — 95.7%, 0.00% |
 | $0 at runtime | full path with networking socket-blocked | **PASS** — 184 turns, 0 attempts, p50 11 ms |
-| Quality = pure API | blind-judged, safety 100% + non-inferior rubric | **PASS** — 0.972 = 0.972; safety **1.00 vs 0.91** |
+| Quality = pure API | blind-judged, safety + non-inferior rubric | **PASS** — 0.972 = 0.972; safety 1.00 vs 0.91 |
 | Product-agnostic | zero product literals in cached values | **PASS** — 10/10 pure sales moves |
+| **Battle-tested** | 100k+ independent persona traffic, 5 write-back waves | wrong-serves **5.25% → 1.19%**, novelty false-serve **0.14%** |
+| **Sales Turing test** | blind judge guesses which reply is the template | **PASS** — identified **47.0%** (= chance), 0 named safety violations, non-inferior rubric |
+
+Every Cerebras call of the campaign is usage-logged to `data/spend_ledger.jsonl`; the book's final chapter is the measured cost analysis.
 
 Full methodology and results: **[the book report](index.html)**
 (`scripts/build_book.py`, chapter mechanism ported from

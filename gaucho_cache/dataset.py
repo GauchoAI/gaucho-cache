@@ -28,7 +28,7 @@ NOISE_LEVELS = {
     1: "typical WhatsApp noise: typos, missing accents, abbreviations (q, xq, tmb), little punctuation",
 }
 PARAPHRASES_PER_CELL = 4  # 4×3×2 cells × 4 ≈ 96 positives per intent
-NEGATIVES_PER_INTENT = 35  # 20 initial + boundary top-ups (rounds 6-7)
+NEGATIVES_PER_INTENT = 55  # 20 initial + boundary top-ups (rounds 6-7, battle waves)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS variants (

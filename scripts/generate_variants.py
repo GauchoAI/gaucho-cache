@@ -71,7 +71,10 @@ BOUNDARY_THEMES = """Known-hard boundary themes to include where applicable:
 - defect/falla/broken-on-arrival cases — those belong to warranty, not return_policy
 - preference returns ("no me gustó", changed mind) — those belong to return_policy, not warranty
 - restock timing ("cuándo reponen") — out_of_stock_reservation, not shipping_time
-- delivery timing of an in-stock order — shipping_time, not out_of_stock_reservation"""
+- delivery timing of an in-stock order — shipping_time, not out_of_stock_reservation
+- restock timing phrased like delivery ("cuando lo recargan, cual es tiempo?", "hay chance de que salga pronto?") — out_of_stock_reservation, NOT shipping_time
+- assembly/installation on arrival ("quien lo monta?", "cuanto tardan en armar el somier"), invoices/factura A, packaging materials — other (off-topic), not shipping
+- asking for REAL customer opinions/reviews ("opiniones de personas reales", "cuantos comentarios tienen") — brand_trust, not bot_skepticism"""
 
 
 def negatives_prompt(spec, confusable_meanings: dict[str, str], n: int) -> str:

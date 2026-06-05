@@ -77,10 +77,24 @@ def main() -> None:
     # ---- calibrate per-intent thresholds on train ---------------------------
     # An intent's threshold sits above the best score its OWN hard
     # negatives achieve against its train positives.
+    #
+    # Battle-ingested negatives are EXCLUDED from this quantile: they are
+    # near-positives by construction (they fooled the predicate once) and
+    # inflating the global threshold with them collapses serve rate
+    # (wave-2 finding: 12.4%→3.5%). They still sit in the index, where
+    # the negative-margin leg blocks their precise neighbourhoods.
+    battle_texts = set()
+    try:
+        battle_texts = {r[0] for r in conn.execute(
+            "SELECT text FROM battle_failures")}
+    except Exception:  # noqa: BLE001 — table may not exist yet
+        pass
+    is_battle = np.array([t in battle_texts for t in texts])
+
     thresholds: dict[str, Thresholds] = {}
     for intent in np.unique(intents):
         pos_m = train & (intents == intent) & (kinds == "positive")
-        neg_m = (intents == intent) & (kinds == "negative")
+        neg_m = (intents == intent) & (kinds == "negative") & ~is_battle
         worst = 0.0
         if pos_m.any() and neg_m.any():
             sims = emb[neg_m] @ emb[pos_m].T          # (n_neg, n_pos)
@@ -102,15 +116,19 @@ def main() -> None:
             m = pos & (index.intents == it)
             best[it] = float(sims[m].max())
         ranked = sorted(best.items(), key=lambda kv: kv[1], reverse=True)
-        (i1, s1), s2 = ranked[0], ranked[1][1]
+        (i1, s1), (i2, s2) = ranked[0], ranked[1]
         neg = (index.kinds == "negative") & (index.intents == i1)
         ns = float(sims[neg].max()) if neg.any() else -1.0
-        return i1, s1, s1 - s2, s1 - ns
+        return i1, s1, s1 - s2, s1 - ns, (i2, s2)
 
-    def predicate(intent, score, margin, neg_margin):
+    def predicate(intent, score, margin, neg_margin, second=None):
         th = thresholds[intent]
         if score < th.threshold:
             return "below_threshold"
+        if second is not None:
+            i2, s2 = second
+            if i2 in thresholds and s2 >= min(thresholds[i2].threshold, 0.82):
+                return "multi_intent"  # compound guard (wave-1 finding)
         if margin < th.margin:
             return "ambiguous_margin"
         if neg_margin < th.negative_margin:
@@ -128,7 +146,7 @@ def main() -> None:
 
     for i in ho_idx:
         true = intents[i]
-        pred, score, margin, neg_margin = route_from_vec(emb[i])
+        pred, score, margin, neg_margin, second = route_from_vec(emb[i])
         stat = per_intent[true]
         stat["n"] += 1
         if pred == true:
@@ -136,7 +154,7 @@ def main() -> None:
             stat["top1"] += 1
         else:
             confusions[(true, pred)] += 1
-        if not predicate(pred, score, margin, neg_margin):
+        if not predicate(pred, score, margin, neg_margin, second):
             hits += 1
             stat["hits"] += 1
             if pred != true:
@@ -149,8 +167,8 @@ def main() -> None:
     for i in neg_idx:
         owner = intents[i]            # the intent this is NOT
         actual = actuals[i] or "other"
-        pred, score, margin, neg_margin = route_from_vec(emb[i])
-        if not predicate(pred, score, margin, neg_margin):
+        pred, score, margin, neg_margin, second = route_from_vec(emb[i])
+        if not predicate(pred, score, margin, neg_margin, second):
             ok = (pred == actual)     # routed to where it truly belongs
             if not ok and (pred == owner or actual == "other"):
                 neg_hits_wrong.append((texts[i], owner, actual, pred, score))

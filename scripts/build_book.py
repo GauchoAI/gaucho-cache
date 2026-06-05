@@ -56,8 +56,30 @@ footer{color:var(--soft);font-size:14px;text-align:center;padding:24px 0}
 """
 
 
+def ledger_table() -> str:
+    sys.path.insert(0, str(REPO))
+    from gaucho_cache import spend
+    s = spend.summary()
+    if not s:
+        return "*(no ledger yet)*"
+    rows = ["| Activity | Calls | Input tok | Output tok | USD |",
+            "|---|---|---|---|---|"]
+    for act in sorted(s, key=lambda a: -s[a]["usd"]):
+        v = s[act]
+        rows.append(f"| {act} | {v['calls']} | {v['input_tokens']:,} "
+                    f"| {v['output_tokens']:,} | ${v['usd']:.2f} |")
+    rows.append(f"| **total (ledgered)** | | | | **${spend.spent():.2f}** |")
+    return "\n".join(rows)
+
+
 def stats() -> dict[str, str]:
     out: dict[str, str] = {}
+    try:
+        sys.path.insert(0, str(REPO))
+        from gaucho_cache import spend
+        out["spend_total"] = f"{spend.spent():.2f}"
+    except Exception:  # noqa: BLE001
+        out["spend_total"] = "?"
     if DB_PATH.exists():
         c = sqlite3.connect(DB_PATH)
         q = lambda s: c.execute(s).fetchone()[0]  # noqa: E731
@@ -81,6 +103,7 @@ def resolve(md: str, st: dict[str, str]) -> str:
         p = REPO / m.group(1)
         return p.read_text(encoding="utf-8") if p.exists() else f"*({m.group(1)} not generated yet)*"
     md = re.sub(r"\{\{include:([^}]+)\}\}", inc, md)
+    md = md.replace("{{ledger_table}}", ledger_table())
     return re.sub(r"\{\{stat:(\w+)\}\}",
                   lambda m: st.get(m.group(1), "?"), md)
 

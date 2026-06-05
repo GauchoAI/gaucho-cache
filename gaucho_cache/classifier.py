@@ -96,8 +96,15 @@ class Classifier:
     def _thresholds_for(self, intent: str) -> Thresholds:
         return self.thresholds.get(intent, Thresholds(**DEFAULT_THRESHOLDS))
 
-    def route(self, text: str) -> tuple[str, float, float, float, str]:
-        """Semantic legs only: (intent, score, margin, neg_margin, nearest_neg_actual)."""
+    def route(self, text: str) -> tuple[str, float, float, float, str, bool]:
+        """Semantic legs: (intent, score, margin, neg_margin,
+        nearest_neg_actual, multi_intent).
+
+        ``multi_intent``: the second-best DISTINCT intent also clears its
+        own serving threshold — strong evidence of a compound message
+        carrying two concerns (wave-1 battle finding: compounds were the
+        dominant confirmed-wrong class). Compounds must miss.
+        """
         q = self.embedder.encode([text])[0]
         sims = self.index.embeddings @ q
 
@@ -110,6 +117,12 @@ class Classifier:
         ranked = sorted(best.items(), key=lambda kv: kv[1], reverse=True)
         top1_intent, top1 = ranked[0]
         top2 = ranked[1][1] if len(ranked) > 1 else -1.0
+        # Compound floor: a very strong second intent is compound evidence
+        # even when that intent's calibrated threshold sits higher
+        # (battle wave-3 finding: "¿precio y garantia?").
+        COMPOUND_FLOOR = 0.82
+        multi = (len(ranked) > 1 and ranked[1][1] >= min(
+            self._thresholds_for(ranked[1][0]).threshold, COMPOUND_FLOOR))
 
         # Nearest hard negative attached to the winning intent.
         neg = (self.index.kinds == "negative") & (self.index.intents == top1_intent)
@@ -120,11 +133,12 @@ class Classifier:
         else:
             neg_score, neg_actual = -1.0, ""
 
-        return top1_intent, top1, top1 - top2, top1 - neg_score, neg_actual
+        return (top1_intent, top1, top1 - top2, top1 - neg_score,
+                neg_actual, multi)
 
     def classify(self, text: str, *, stage: str,
                  state_fields: set[str] | None = None) -> CacheDecision:
-        intent, score, margin, neg_margin, neg_actual = self.route(text)
+        intent, score, margin, neg_margin, neg_actual, multi = self.route(text)
         th = self._thresholds_for(intent)
         contract = self.contracts.get(intent)
 
@@ -142,6 +156,9 @@ class Classifier:
         # Compound predicate — first failing leg names the reason.
         if score < th.threshold:
             d.reason = "below_threshold"
+            return d
+        if multi:
+            d.reason = "multi_intent"   # compound message: two concerns
             return d
         if margin < th.margin:
             d.reason = "ambiguous_margin"

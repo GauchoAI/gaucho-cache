@@ -1,0 +1,66 @@
+{
+ "bot_skepticism": [
+  "Sí, soy un asistente automático del equipo de La Feria del Colchón. Si preferís hablar con una persona, te paso ahora mismo, sin drama. ¿Querés que te derive?",
+  "Sí, soy el asistente automático del equipo de La Feria del Colchón. Si preferís charlar con una persona, puedo pasarte ahora mismo, sin drama. ¿Querés que te derive?",
+  "Soy el asistente automático del equipo de La Feria del Colchón. Si querés conversar con una persona, te paso enseguida. ¿Querés que te derive?",
+  "Soy el asistente automático del equipo de La Feria del Colchón. Si querés hablar con una persona real, lo paso al instante, sin problema. ¿Querés que te derive?",
+  "¡Hola! Soy asistente automático del equipo de La Feria del Colchón. Si preferís que te atienda una persona, te lo transfiero al momento. ¿Querés que te derive?",
+  "Aquí el asistente automático del equipo de La Feria del Colchón. Si te gustaría conversar con una persona, te paso ahora mismo, sin vueltas. ¿Querés que te derive?",
+  "Soy el asistente automático que representa al equipo de La Feria del Colchón. Si deseás hablar con una persona, te lo paso al toque. ¿Querés que te derive?",
+  "Como asistente automático del equipo de La Feria del Colchón, puedo conectar con una persona de inmediato si lo necesitás. ¿Querés que te derive?",
+  "Te saluda el asistente automático del equipo de La Feria del Colchón. Si preferís que una persona te atienda, lo gestiono al momento. ¿Querés que te derive?"
+ ],
+ "brand_trust": [
+  "La marca está hace años en el mercado y trabajamos con ella habitualmente. En la página tenés ficha técnica completa con materiales y certificaciones, y opiniones reales publicadas. Además somos socios de la Cámara Argentina de Comercio Electrónico (CACE) — podés ver nuestro perfil acá: https://cace.org.ar/products/la-feria-del-colchon — y despachamos con número de guía de Vía Cargo, así seguís el envío vos mismo en la web oficial. ¿Querés que te pase la ficha del modelo que estás mirando, así lo ves tranquilo?"
+ ],
+ "firmness_doubt": [
+  "La firmeza la elegimos según tu peso y posición al dormir, y lo que te recomendé está alineado con eso. Si querés probarlo en persona, también podés acercarte al local; si te queda lejos, seguimos por acá. Contame, ¿dormís más de costado o boca arriba? Así te confirmo que la firmeza es la justa para vos.",
+  "La firmeza la basamos en tu peso y en la posición que adoptás al dormir; lo que te propuse está alineado con esos criterios. Si te interesa probarlo, podés venir al local; si la distancia es un inconveniente, seguimos por acá. Decime, ¿dormís más de lado o de espaldas? Así te confirmo que la firmeza es la justa para vos.",
+  "Según tu peso y la forma en que te recostás elegimos la firmeza, y la recomendación que te hice coincide con esos parámetros. Si querés probar el colchón, podés pasar al showroom; si el local te queda lejos, continuamos la conversación por acá. ¿Dormís más de lado o de espaldas? Así confirmo que la firmeza es la indicada para vos."
+ ],
+ "other": [
+  "Te entiendo. Si querés contame un poco más para asesorarte mejor, o si preferís te paso con un asesor humano que pueda darte una respuesta más específica.",
+  "Te entiendo. ¿Podés contarme un poco más para orientarte mejor, o mejor te paso con un asesor humano que te dé una respuesta más concreta?",
+  "Entiendo lo que decís. ¿Te gustaría darme más info para poder ayudarte mejor, o preferís que te derive a un asesor humano que te brinde una respuesta más detallada?",
+  "Entiendo. ¿Querés contarme más para que te asesore con mayor precisión, o preferís que te pase a un asesor humano que pueda darte una respuesta más exacta?"
+ ],
+ "out_of_stock_reservation": [
+  "Ahora mismo no hay stock, pero te lo reservamos cuando llegue 👍 Paso tu pedido al equipo y te confirman fecha estimada. ⚠️ La reserva queda a tu nombre, no perdés la promo si hay alguna activa."
+ ],
+ "price": [
+  "Te entiendo, es una compra importante — pero también es algo que usás todas las noches, así que vale la pena. Para hacerlo más accesible tenés cuotas sin interés con tarjeta, o un descuento si pagás por transferencia. ¿Cuál te conviene más para avanzar?",
+  "Comprendo que sea una compra importante; al ser algo que usás cada noche, realmente vale la pena. Podés financiarlo con cuotas sin interés usando la tarjeta, o aprovechar un descuento al pagar por transferencia. ¿Qué opción te resulta más cómoda para seguir?",
+  "Sé que la inversión es grande, pero al ser el colchón que vas a usar todas las noches, la vale. Tenés la posibilidad de pagar en cuotas sin interés con tarjeta, o conseguir un descuento si lo transferís. ¿Con cuál te quedás para avanzar?",
+  "Mirá, sé que la compra es significativa, sin embargo es el producto que vas a usar cada noche, por eso creemos que vale la pena. Podés elegir cuotas sin interés con tarjeta o un descuento al pagar por transferencia. ¿Cuál te sirve mejor para seguir?",
+  "Entiendo lo importante que es esta compra; al ser algo que te acompañará cada noche, tiene sentido. Disponemos de cuotas sin interés con tarjeta y también de un descuento si pagás mediante transferencia. ¿Cuál de las dos opciones preferís para seguir?"
+ ],
+ "return_policy": [
+  "Aceptamos cambios y devoluciones según lo que marca la Ley de Defensa del Consumidor. Si cuando llega no es lo que esperabas, hablamos y lo gestionamos; el detalle exacto te lo confirma un asesor humano por este mismo WhatsApp. ¿Te quedó alguna otra duda o seguimos con la compra?",
+  "Te confirmamos que podés cambiar o devolver el producto bajo lo que indica la Ley de Defensa del Consumidor. Si al recibirlo no coincide con lo que esperabas, charlamos y lo gestionamos; un asesor humano te dará los datos exactos por este mismo WhatsApp. ¿Tenés alguna otra consulta o avanzamos con la compra?"
+ ],
+ "shipping_time": [
+  "El plazo depende de tu zona y del stock del modelo. Una vez confirmado el pedido, te llega la fecha estimada exacta. Si te urge para una fecha puntual, decímela antes de cerrar y la chequeamos.",
+  "El plazo depende de tu zona y del stock del modelo. Cuando el pedido quede confirmado, te envío la fecha exacta estimada. ¿Tenés una fecha límite? Decímela antes de cerrar y lo verificamos.",
+  "Dependemos de tu zona y del stock del modelo para fijar el plazo. En cuanto confirmemos el pedido, te paso la fecha estimada con precisión. Si necesitás que llegue para un día concreto, avisame antes de cerrar y lo revisamos.",
+  "El plazo está condicionado por la zona donde vivís y por la disponibilidad del modelo. Tras confirmar el pedido, te mandamos la fecha exacta estimada. ¿Hay una fecha en la que lo necesites? Decime antes del cierre y la checamos.",
+  "Según la zona y el stock del modelo, el tiempo de entrega puede variar. Una vez que el pedido quede confirmado, te paso la fecha estimada al detalle. Si tenés que recibirlo en una fecha específica, contámela antes de cerrar y lo confirmamos.",
+  "El tiempo que tarda depende de tu zona y de cuántas unidades tenga el modelo. Cuando confirmemos el pedido, te damos la fecha exacta estimada. ¿Necesitás que sea para un día determinado? Decime la fecha antes de cerrar y la verificamos.",
+  "Zoná y stock del modelo definen el plazo de entrega. En el momento de confirmar el pedido, recibís la fecha estimada precisa. Si te urge para una fecha puntual, avisá antes de cerrar y lo revisamos."
+ ],
+ "shipping_zone": [
+  "Hacemos envíos a todo el país por Vía Cargo, con número de guía para que sigas el estado del envío vos mismo en la web oficial. Tu zona se confirma cuando ponés el código postal en la página del producto, junto con el costo y el plazo. Si querés, mandame el CP y te lo confirmamos.",
+  "¡Sí, hacemos envíos a nivel nacional a través de Vía Cargo! Te paso el número de guía para que lo rastrees en el sitio oficial. Cuando ponés el código postal en la ficha del producto, se fija tu zona y se muestra el precio y el tiempo de entrega. ¿Me decís tu CP para confirmártelo?",
+  "Realizamos envíos a todo el país por Vía Cargo; recibís el número de guía y podés rastrearlo en la página oficial. Al poner el código postal en la ficha del producto, se determina tu zona y se muestra el costo y el plazo. ¿Me pasas tu CP y te lo confirmamos?",
+  "Usamos Vía Cargo para despachar a cualquier parte de la República, con número de guía para que lo sigas en la web oficial. La zona se fija al ingresar el código postal en la página del producto, y ahí ves el precio y el tiempo de entrega. ¿Me mandas el CP y te confirmamos los datos?"
+ ],
+ "size_fit": [
+  "Las medidas las tenés en la página del producto. Si tu cama es estándar argentina, va a entrar bien. Si tenés dudas, decime el largo y ancho exactos de tu cama y lo confirmamos juntos.",
+  "Las dimensiones están en la página del producto. Si tu cama es del estándar argentino, va a entrar bien. ¿Tenés dudas? Pasame el largo y ancho exactos y lo confirmamos juntos."
+ ],
+ "warranty": [
+  "Tranqui: el colchón viene con garantía oficial de fábrica. Si llega a haber alguna falla de fabricación, te lo cambiamos. Para cualquier reclamo, atención al cliente directo por este mismo WhatsApp. ¿Avanzamos?",
+  "No te preocupes, la garantía es oficial de fábrica y, ante cualquier falla de fabricación, lo reemplazamos. Si necesitás hacer reclamo, te atendemos acá por WhatsApp. ¿Querés avanzar?",
+  "Te aseguro que el colchón tiene garantía oficial de fábrica; si hay alguna falla de fabricación, lo cambiamos. Para cualquier reclamo, hablamos directamente por este WhatsApp. ¿Continuamos?",
+  "Todo el colchón incluye garantía oficial de fábrica; en caso de falla de fabricación, lo reemplazamos. Si tenés cualquier reclamo, te atendemos por este mismo WhatsApp. ¿Vamos al siguiente paso?"
+ ]
+}
