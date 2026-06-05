@@ -40,6 +40,26 @@ a frontier model. Everything after that is margin, plus the two things
 no API price buys: **~11 ms latency** and **structural immunity to
 invented specifics**.
 
+## Call accounting: what is and isn't captured
+
+Full disclosure of the ledger's blind spots:
+
+- **Ledgered (campaign era):** every successful call records its actual
+  usage — including calls whose output was discarded (a truncated JSON
+  generation, superseded experiment runs). Tokens are counted even when
+  the result wasn't kept; the superseded runs are narrated in
+  Chapters 9–10.
+- **Pre-ledger (slice era):** ~644 calls ran before usage logging
+  existed; the ≈$0.70 figure above is reconstructed from call counts
+  and is an estimate, not a measurement.
+- **Known waste, itemized:** one corpus-QA run crashed on a parsing bug
+  *after* its ~58 judging calls returned (billed, results lost,
+  re-run idempotently), and 1–2 generations truncated at the token cap
+  before the cap was raised. Estimated total waste: **under $0.15**.
+- Intermediate report files are overwritten per round; their numbers
+  survive in the execution log (PLAN §14), the chapter narratives, and
+  the reports committed at each git/HF snapshot.
+
 ## Where spend goes as the system grows
 
 - Scaling to the full 72-cell taxonomy: ~7× the slice's generation +

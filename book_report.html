@@ -30,7 +30,7 @@ footer{color:var(--soft);font-size:14px;text-align:center;padding:24px 0}
 .pass{color:var(--accent);font-weight:bold}.fail{color:#a33;font-weight:bold}
 </style></head><body><div class="wrap">
 <header><h1>Gaucho Caché</h1>
-<p>$0-Runtime Semantic Cache for FSM Funnels · build f9d228e ·
+<p>$0-Runtime Semantic Cache for FSM Funnels · build 653459c ·
 1715 generated variants</p></header>
 <nav><a href="#ch1">Chapter 1: Mission: zero-dollar conversational turns</a><a href="#ch2">Chapter 2: Reference systems and the evidence we ported</a><a href="#ch3">Chapter 3: The dataset: generated once, curated hard</a><a href="#ch4">Chapter 4: Routing: eight rounds to zero confident-wrong</a><a href="#ch5">Chapter 5: The zero-spend proof: $0 by construction, not by accounting</a><a href="#ch6">Chapter 6: Quality: the cache against the live LLM, blind-judged</a><a href="#ch7">Chapter 7: Sales intelligence, not product data</a><a href="#ch8">Chapter 8: Conclusions and the road to the full funnel</a><a href="#ch9">Chapter 9: Battle test: independent traffic at scale</a><a href="#ch10">Chapter 10: The sales Turing test: can a judge even tell?</a><a href="#ch11">Chapter 11: Cost analysis: what the evidence cost, what the cache saves</a></nav>
 <div class="chapter" id="ch1"><h1>Mission: zero-dollar conversational turns</h1>
@@ -591,6 +591,31 @@ match-contract preconditions pass       (stage, state, audit)
 <p>a frontier model. Everything after that is margin, plus the two things</p>
 <p>no API price buys: <strong>~11 ms latency</strong> and **structural immunity to</p>
 <p>invented specifics**.</p>
+<h2>Call accounting: what is and isn't captured</h2>
+<p>Full disclosure of the ledger's blind spots:</p>
+<ul>
+<li><strong>Ledgered (campaign era):</strong> every successful call records its actual</li>
+</ul>
+<p>  usage — including calls whose output was discarded (a truncated JSON</p>
+<p>  generation, superseded experiment runs). Tokens are counted even when</p>
+<p>  the result wasn't kept; the superseded runs are narrated in</p>
+<p>  Chapters 9–10.</p>
+<ul>
+<li><strong>Pre-ledger (slice era):</strong> ~644 calls ran before usage logging</li>
+</ul>
+<p>  existed; the ≈$0.70 figure above is reconstructed from call counts</p>
+<p>  and is an estimate, not a measurement.</p>
+<ul>
+<li><strong>Known waste, itemized:</strong> one corpus-QA run crashed on a parsing bug</li>
+</ul>
+<p>  <em>after</em> its ~58 judging calls returned (billed, results lost,</p>
+<p>  re-run idempotently), and 1–2 generations truncated at the token cap</p>
+<p>  before the cap was raised. Estimated total waste: <strong>under $0.15</strong>.</p>
+<ul>
+<li>Intermediate report files are overwritten per round; their numbers</li>
+</ul>
+<p>  survive in the execution log (PLAN §14), the chapter narratives, and</p>
+<p>  the reports committed at each git/HF snapshot.</p>
 <h2>Where spend goes as the system grows</h2>
 <ul>
 <li>Scaling to the full 72-cell taxonomy: ~7× the slice's generation +</li>
