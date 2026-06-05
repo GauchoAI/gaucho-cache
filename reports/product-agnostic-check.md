@@ -3,11 +3,11 @@
 | Template | audited | placeholders | product-specific literals |
 |---|---|---|---|
 | BOT_SKEPTICISM-v1 | ✓ | — (pure sales move) | **none** |
-| BRAND_TRUST-v1 | ✗ | — (pure sales move) | **none** |
-| FIRMNESS_DOUBT-v1 | ✗ | — (pure sales move) | **none** |
+| BRAND_TRUST-v2 | ✗ | — (pure sales move) | **none** |
+| FIRMNESS_DOUBT-v2 | ✗ | — (pure sales move) | **none** |
 | OUT_OF_STOCK_RESERVATION-v1 | ✓ | — (pure sales move) | **none** |
-| PRICE-v1 | ✗ | — (pure sales move) | **none** |
-| RETURN_POLICY-v1 | ✓ | — (pure sales move) | **none** |
+| PRICE-v2 | ✗ | — (pure sales move) | **none** |
+| RETURN_POLICY-v2 | ✗ | — (pure sales move) | **none** |
 | SHIPPING_TIME-v1 | ✓ | — (pure sales move) | **none** |
 | SHIPPING_ZONE-v1 | ✓ | — (pure sales move) | **none** |
 | SIZE_FIT-v1 | ✗ | — (pure sales move) | **none** |

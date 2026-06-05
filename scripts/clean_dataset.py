@@ -81,11 +81,16 @@ async def main() -> None:
     if not api_key:
         sys.exit("CEREBRAS_API_KEY not set")
 
+    negatives_only = "--negatives-only" in sys.argv
+
     specs = load_intent_specs(INTENTS_YAML)
     valid = {s.intent for s in specs} | {"other", "ambiguous"}
     conn = dataset.connect(DB_PATH)
+    where = "stage=? AND dropped=0"
+    if negatives_only:
+        where += " AND kind='negative'"
     rows = conn.execute(
-        "SELECT id, kind, intent, text FROM variants WHERE stage=?", (STAGE,)
+        f"SELECT id, kind, intent, text FROM variants WHERE {where}", (STAGE,)
     ).fetchall()
 
     client = AsyncOpenAI(api_key=api_key, base_url=BASE_URL)
@@ -103,12 +108,19 @@ async def main() -> None:
                         max_tokens=2000, temperature=0.0)
                     items = extract_json(r.choices[0].message.content)
                     out = {}
-                    for it in items:
-                        label = str(it["intent"]).strip()
-                        if label in valid:
-                            out[batch[int(it["i"])][0]] = label
+                    for pos, it in enumerate(items):
+                        try:
+                            label = str(it.get("intent") or it.get("label")
+                                        or it.get("category") or "").strip()
+                            idx = int(it.get("i", pos))
+                            if label in valid and 0 <= idx < len(batch):
+                                out[batch[idx][0]] = label
+                        except (TypeError, ValueError, AttributeError):
+                            continue
                     if len(out) == len(batch):
                         return out
+                    if attempt == 2 and out:
+                        return out  # partial beats nothing; rest stays unjudged
                 except Exception:  # noqa: BLE001
                     if attempt == 2:
                         raise

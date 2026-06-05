@@ -1,51 +1,51 @@
 {
   "bot_skepticism": {
-    "threshold": 0.55,
+    "threshold": 0.6708023142814636,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "brand_trust": {
-    "threshold": 0.5570094776153565,
+    "threshold": 0.7597871017456055,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "firmness_doubt": {
-    "threshold": 0.55,
+    "threshold": 0.8158068251609802,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "out_of_stock_reservation": {
-    "threshold": 0.6110310745239258,
+    "threshold": 0.8064847183227539,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "price": {
-    "threshold": 0.55,
+    "threshold": 0.7442122292518616,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "return_policy": {
-    "threshold": 0.6334790182113648,
+    "threshold": 0.8844101619720459,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "shipping_time": {
-    "threshold": 0.5819457364082337,
+    "threshold": 0.7547300052642822,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "shipping_zone": {
-    "threshold": 0.6152938795089722,
+    "threshold": 0.786923725605011,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "size_fit": {
-    "threshold": 0.59657790184021,
+    "threshold": 0.867379207611084,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "warranty": {
-    "threshold": 0.6776204895973206,
+    "threshold": 0.8964126300811768,
     "margin": 0.05,
     "negative_margin": 0.03
   }

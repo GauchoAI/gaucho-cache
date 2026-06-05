@@ -63,7 +63,8 @@ HOLDOUT_EVERY = 5
 
 
 def main() -> None:
-    contracts = load_contracts(CONTRACTS_DIR)
+    contracts = load_contracts(CONTRACTS_DIR,
+                               REPO / "data" / "contract_extensions.yaml")
     clf = Classifier(StageIndex.load(INDEX), contracts,
                      load_thresholds(THRESHOLDS))
 

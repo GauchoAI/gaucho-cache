@@ -21,7 +21,7 @@ import numpy as np
 
 from .contracts import CacheDecision, MatchContract
 
-DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 DEFAULT_THRESHOLDS = {"threshold": 0.70, "margin": 0.05, "negative_margin": 0.03}
 
 

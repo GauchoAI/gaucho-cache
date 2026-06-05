@@ -1,0 +1,11 @@
+# Gaucho Caché contract extensions — serving preconditions layered on
+# top of the merchant templates' own frontmatter (PLAN.md §13.1) without
+# editing the audited files in agentic-crm.
+#
+# Quality-eval round 1 finding: OUT_OF_STOCK_RESERVATION's body asserts
+# "ahora mismo no hay stock" — a state claim. Serving it requires the
+# orchestrator to actually know the product is out of stock; otherwise
+# the turn must miss to the LLM/tool path. Class B with a hard state
+# precondition, not Class A.
+out_of_stock_reservation:
+  required_state_fields: [product_out_of_stock]

@@ -102,11 +102,34 @@ def parse_frontmatter(path: Path) -> MatchContract:
     )
 
 
-def load_contracts(contracts_dir: Path) -> dict[str, MatchContract]:
-    """Load every template in a directory, keyed by category (intent)."""
+def load_contracts(contracts_dir: Path,
+                   extensions_path: Path | None = None) -> dict[str, MatchContract]:
+    """Load every template in a directory, keyed by category (intent).
+
+    ``extensions_path`` points to a YAML of Gaucho Caché-side contract
+    extensions ({category: {required_state_fields: [...], ...}}) so
+    serving preconditions can be tightened without editing the
+    merchant's audited template files.
+    """
+    ext: dict = {}
+    if extensions_path and extensions_path.exists():
+        ext = yaml.safe_load(extensions_path.read_text(encoding="utf-8")) or {}
     contracts: dict[str, MatchContract] = {}
     for p in sorted(contracts_dir.glob("*.md")):
         c = parse_frontmatter(p)
+        e = ext.get(c.category) or {}
+        if e:
+            c = MatchContract(
+                template_id=c.template_id, category=c.category,
+                version=c.version, audited=c.audited,
+                prohibited_topics=c.prohibited_topics,
+                required_placeholders=c.required_placeholders,
+                allowed_stages=tuple(e.get("allowed_stages")
+                                     or c.allowed_stages),
+                required_state_fields=tuple(e.get("required_state_fields")
+                                            or c.required_state_fields),
+                body=c.body, source_path=c.source_path,
+            )
         contracts[c.category] = c
     return contracts
 

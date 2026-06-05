@@ -41,7 +41,8 @@ def main(argv: list[str] | None = None) -> int:
 
     clf = Classifier(
         index=StageIndex.load(args.index),
-        contracts=load_contracts(args.contracts),
+        contracts=load_contracts(args.contracts,
+                                 REPO_ROOT / "data" / "contract_extensions.yaml"),
         thresholds=load_thresholds(args.thresholds),
     )
     print(clf.classify(args.text, stage=args.stage).to_json())

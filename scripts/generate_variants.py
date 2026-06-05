@@ -67,7 +67,15 @@ Rules:
 Output: a JSON array of {dataset.PARAPHRASES_PER_CELL} strings."""
 
 
-def negatives_prompt(spec, confusable_meanings: dict[str, str]) -> str:
+BOUNDARY_THEMES = """Known-hard boundary themes to include where applicable:
+- payment methods/platforms as logistics (Mercado Pago, efectivo, tarjeta as a means, paying online, loyalty points) — these are NOT price and NOT brand_trust → actual_intent "other"
+- defect/falla/broken-on-arrival cases — those belong to warranty, not return_policy
+- preference returns ("no me gustó", changed mind) — those belong to return_policy, not warranty
+- restock timing ("cuándo reponen") — out_of_stock_reservation, not shipping_time
+- delivery timing of an in-stock order — shipping_time, not out_of_stock_reservation"""
+
+
+def negatives_prompt(spec, confusable_meanings: dict[str, str], n: int) -> str:
     conf_lines = "\n".join(
         f"- {name}: {meaning}" for name, meaning in confusable_meanings.items()
     ) or "- other: anything the shop's canned answer for the intent cannot safely answer"
@@ -76,13 +84,15 @@ def negatives_prompt(spec, confusable_meanings: dict[str, str]) -> str:
 INTENT: {spec.intent}
 MEANING: {spec.meaning}
 
-Write exactly {dataset.NEGATIVES_PER_INTENT} HARD NEGATIVES: WhatsApp messages in Argentine Spanish that share vocabulary or topic with this intent — a naive classifier would route them here — but that actually express something DIFFERENT, belonging to one of:
+Write exactly {n} HARD NEGATIVES: WhatsApp messages in Argentine Spanish that share vocabulary or topic with this intent — a naive classifier would route them here — but that actually express something DIFFERENT, belonging to one of:
 {conf_lines}
 - other: a related but distinct concern none of the above covers
 
-Mix lengths and registers (formal, neutral, rioplatense slang, some with typos).
+{BOUNDARY_THEMES}
 
-Output: a JSON array of {dataset.NEGATIVES_PER_INTENT} objects, each
+Mix lengths and registers (formal, neutral, rioplatense slang, some with typos, some 2-4 word fragments).
+
+Output: a JSON array of {n} objects, each
 {{"text": "<message>", "actual_intent": "<one of: {", ".join(list(confusable_meanings) + ["other"])}>"}}"""
 
 
@@ -106,7 +116,7 @@ async def call(client: AsyncOpenAI, sem: asyncio.Semaphore, prompt: str,
                     model=MODEL,
                     messages=[{"role": "system", "content": SYSTEM},
                               {"role": "user", "content": prompt}],
-                    max_tokens=2000,
+                    max_tokens=5000,
                     temperature=0.9,
                 )
                 return extract_json(resp.choices[0].message.content)
@@ -137,20 +147,23 @@ async def main() -> None:
             raise ValueError(f"{spec.intent}/{cell}: got {len(texts)} variants")
         dataset.store_positives(conn, cell, texts)
 
-    async def fill_negatives(spec):
+    async def fill_negatives(spec, n_missing: int):
         conf = {c: meanings[c] for c in spec.confusables if c in meanings}
-        items = await call(client, sem, negatives_prompt(spec, conf))
+        items = await call(client, sem, negatives_prompt(spec, conf, n_missing))
         pairs = [(str(it["text"]), str(it.get("actual_intent", "other")))
-                 for it in items][: dataset.NEGATIVES_PER_INTENT]
-        dataset.store_negatives(conn, spec.stage, spec.intent, pairs)
+                 for it in items][:n_missing]
+        start = dataset.next_negative_index(conn, spec.stage, spec.intent)
+        dataset.store_negatives(conn, spec.stage, spec.intent, pairs,
+                                start_index=start)
 
     for spec in specs:
         cells = dataset.missing_positive_cells(conn, spec.stage, spec.intent)
+        n_neg = dataset.missing_negatives(conn, spec.stage, spec.intent)
         print(f"{spec.intent}: {len(cells)} positive cells missing, "
-              f"{dataset.missing_negatives(conn, spec.stage, spec.intent)} negatives missing")
+              f"{n_neg} negatives missing")
         tasks += [fill_cell(spec, c) for c in cells]
-        if dataset.missing_negatives(conn, spec.stage, spec.intent) > 0:
-            tasks.append(fill_negatives(spec))
+        if n_neg > 0:
+            tasks.append(fill_negatives(spec, n_neg))
 
     print(f"→ {len(tasks)} generation calls (concurrency {CONCURRENCY})")
     results = await asyncio.gather(*tasks, return_exceptions=True)

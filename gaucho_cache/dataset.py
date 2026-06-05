@@ -28,7 +28,7 @@ NOISE_LEVELS = {
     1: "typical WhatsApp noise: typos, missing accents, abbreviations (q, xq, tmb), little punctuation",
 }
 PARAPHRASES_PER_CELL = 4  # 4×3×2 cells × 4 ≈ 96 positives per intent
-NEGATIVES_PER_INTENT = 20
+NEGATIVES_PER_INTENT = 35  # 20 initial + boundary top-ups (rounds 6-7)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS variants (
@@ -98,10 +98,21 @@ def missing_positive_cells(conn: sqlite3.Connection, stage: str, intent: str) ->
 
 def missing_negatives(conn: sqlite3.Connection, stage: str, intent: str) -> int:
     n = conn.execute(
-        "SELECT COUNT(*) FROM variants WHERE stage=? AND intent=? AND kind='negative'",
+        """SELECT COUNT(*) FROM variants
+           WHERE stage=? AND intent=? AND kind='negative' AND dropped=0""",
         (stage, intent),
     ).fetchone()[0]
     return max(0, NEGATIVES_PER_INTENT - n)
+
+
+def next_negative_index(conn: sqlite3.Connection, stage: str, intent: str) -> int:
+    """First free variant_index for negative top-ups (never reuses an
+    index, including dropped rows', so UNIQUE can't collide)."""
+    return conn.execute(
+        """SELECT COALESCE(MAX(variant_index) + 1, 0) FROM variants
+           WHERE stage=? AND intent=? AND kind='negative'""",
+        (stage, intent),
+    ).fetchone()[0]
 
 
 def store_positives(conn: sqlite3.Connection, cell: Cell, texts: list[str]) -> None:
