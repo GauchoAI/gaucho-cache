@@ -163,6 +163,7 @@ name = "gaucho-cache"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "huggingface-hub" },
     { name = "numpy" },
     { name = "openai" },
     { name = "pyyaml" },
@@ -171,6 +172,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "huggingface-hub", specifier = ">=0.24" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "openai", specifier = ">=1.40" },
     { name = "pyyaml", specifier = ">=6.0" },

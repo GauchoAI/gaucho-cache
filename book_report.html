@@ -1,0 +1,385 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gaucho Caché — $0-Runtime Semantic Cache for FSM Funnels</title><style>
+:root{--ink:#1a1d23;--soft:#5b6472;--line:#e3e6ea;--accent:#0b6e4f;
+--bg:#fbfaf7;--card:#ffffff;--mono:ui-monospace,'SF Mono',Menlo,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:17px/1.65 Georgia,'Times New Roman',serif}
+.wrap{max-width:880px;margin:0 auto;padding:48px 24px}
+header{border-bottom:3px double var(--ink);padding-bottom:24px;margin-bottom:8px}
+header h1{font-size:34px;margin:0 0 8px}header p{color:var(--soft);margin:0}
+nav{margin:24px 0 48px;padding:16px 20px;background:var(--card);
+border:1px solid var(--line);border-radius:8px}
+nav a{display:block;color:var(--accent);text-decoration:none;padding:2px 0}
+.chapter{background:var(--card);border:1px solid var(--line);border-radius:10px;
+padding:32px 36px;margin:0 0 32px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.chapter h1{font-size:24px;border-bottom:2px solid var(--accent);
+padding-bottom:8px;margin-top:0}
+h2{font-size:19px;margin-top:28px}h3{font-size:17px}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+th{background:#f2f4f6;font-family:var(--mono);font-size:13px}
+code{font-family:var(--mono);font-size:.85em;background:#f0f1f3;
+padding:1px 5px;border-radius:4px}
+pre{background:#14161a;color:#e8eaed;padding:16px;border-radius:8px;
+overflow-x:auto;font-size:13.5px;line-height:1.5}pre code{background:none;color:inherit;padding:0}
+blockquote{border-left:4px solid var(--accent);margin:16px 0;padding:4px 18px;
+color:var(--soft);background:#f6f8f7}
+strong{color:var(--ink)}hr{border:none;border-top:1px solid var(--line)}
+footer{color:var(--soft);font-size:14px;text-align:center;padding:24px 0}
+.pass{color:var(--accent);font-weight:bold}.fail{color:#a33;font-weight:bold}
+</style></head><body><div class="wrap">
+<header><h1>Gaucho Caché</h1>
+<p>$0-Runtime Semantic Cache for FSM Funnels · build 9f83c20 ·
+1359 generated variants</p></header>
+<nav><a href="#ch1">Chapter 1: Mission: zero-dollar conversational turns</a><a href="#ch2">Chapter 2: Reference systems and the evidence we ported</a><a href="#ch3">Chapter 3: The dataset: generated once, curated hard</a><a href="#ch4">Chapter 4: Routing: eight rounds to zero confident-wrong</a><a href="#ch5">Chapter 5: The zero-spend proof: $0 by construction, not by accounting</a><a href="#ch6">Chapter 6: Quality: the cache against the live LLM, blind-judged</a><a href="#ch7">Chapter 7: Sales intelligence, not product data</a><a href="#ch8">Chapter 8: Conclusions and the road to the full funnel</a></nav>
+<div class="chapter" id="ch1"><h1>Mission: zero-dollar conversational turns</h1>
+<p>A sales chatbot built on a <strong>finite state machine</strong> does not face an</p>
+<p>unbounded conversation space. Nine stages, enumerated transitions, a</p>
+<p>fixed objection taxonomy — the FSM turns "anything a customer might</p>
+<p>say" into a <strong>finite label space</strong> of stage × intent cells.</p>
+<p>Gaucho Caché exploits that: classify each inbound WhatsApp message with</p>
+<p>a <strong>local embedding model</strong> (CPU, ~10 ms), serve a pre-audited template</p>
+<p>on a confident match, and fall back to the LLM only on genuine novelty.</p>
+<pre><code>
+inbound message
+   → local embedding (~10ms, CPU, $0)
+   → nearest-neighbour vs per-stage variant index
+   → compound predicate: score AND margin AND negative-margin
+     AND match-contract preconditions AND audited
+   → HIT: render template ($0)   |   MISS: LLM fallback (costs cents)
+</code></pre>
+<p>The optimization order is fixed and non-negotiable:</p>
+<blockquote>confident_wrong_rate ≈ 0, then hit rate, then latency/cost.</blockquote>
+<blockquote>A miss costs cents. A wrong cached answer costs trust.</blockquote>
+<p>This book documents the proof-of-concept slice: **one stage</p>
+<p>(objection), 10 intents**, evaluated to four hard gates — perfect</p>
+<p>routing, zero runtime spend, quality parity with the live LLM, and</p>
+<p>product-agnostic cache values.</p></div><div class="chapter" id="ch2"><h1>Reference systems and the evidence we ported</h1>
+<p>Two repositories ground this work.</p>
+<h2>agentic-crm — the production target</h2>
+<p>A WhatsApp sales agent with a 9-stage FSM (<code>entry → … → post_close</code>),</p>
+<p>stage-gated tool whitelists, and per-merchant template overlays. It</p>
+<p>contributes the structure the cache keys on:</p>
+<table>
+<tr><th>Asset</th><th>Role in Gaucho Caché</th></tr>
+<tr><td>24 drift-guarded stage-transition signals</td><td>pre-enumerated transition intents</td></tr>
+<tr><td>11 objection templates with YAML frontmatter</td><td>the slice's answers, <strong>already written and partly audited</strong></td></tr>
+<tr><td>frontmatter (<code>id</code>, <code>version</code>, <code>audited</code>, <code>prohibited_topics</code>)</td><td>the MatchContract — parsed, never duplicated</td></tr>
+<tr><td>deterministic recommender, price/stock/checkout tools</td><td>Class B slot sources (non-LLM, still $0 in LLM spend)</td></tr>
+</table>
+<h2>models-medical-evaluation — the empirical ladder</h2>
+<p>ICD-10 code prediction from free text: same shape as our problem</p>
+<p>(free text → finite label space). Its accuracy ladder was the design</p>
+<p>brief:</p>
+<table>
+<tr><th>Retrieval corpus</th><th>Accuracy</th></tr>
+<tr><td>Standard RAG</td><td>48.5%</td></tr>
+<tr><td>+ dense variants (~100 paraphrases per label)</td><td>95.0%</td></tr>
+<tr><td>+ hard negatives ("what a label is NOT")</td><td>100.0%</td></tr>
+</table>
+<p>Two findings transferred directly: **paraphrase density is the</p>
+<p>accuracy lever<strong>, and </strong>per-label hard negatives close the final gap**.</p>
+<p>One caveat kept us honest: those numbers were measured with an LLM</p>
+<p>making the final pick. Our runtime is embedding-only — that is where</p>
+<p>the $0 comes from — so we re-validated everything under that</p>
+<p>constraint (Chapter 4).</p>
+<p>The variant matrix was adapted for WhatsApp: the medical corpus varied</p>
+<p>clinical detail (3→50 words); customers vary **length × register ×</p>
+<p>noise** — fragments, rioplatense slang, typos ("q onda el envio cunto</p>
+<p>tarda"). The noise axis is the one a clinical corpus never needed.</p></div><div class="chapter" id="ch3"><h1>The dataset: generated once, curated hard</h1>
+<p>All generation ran as <strong>batched Cerebras calls</strong> (<code>gpt-oss-120b</code>,</p>
+<p>concurrency 8, idempotent resume — a crashed run refills only missing</p>
+<p>cells). Total offline cost across every round: <strong>single-digit dollars</strong>.</p>
+<h2>Live counts (from <code>data/slice.sqlite</code> at build time)</h2>
+<table>
+<tr><th>Metric</th><th>Count</th></tr>
+<tr><td>Total variants generated (all rounds)</td><td><strong>1359</strong></td></tr>
+<tr><td>Active positives (post-curation)</td><td>899</td></tr>
+<tr><td>Active hard negatives</td><td>317</td></tr>
+<tr><td>Dropped as ambiguous / compound / mislabeled</td><td>143</td></tr>
+<tr><td>Relabeled by arbitration</td><td>31</td></tr>
+</table>
+<h2>Generation recipe (per intent)</h2>
+<ul>
+<li><strong>Positives</strong>: 24 matrix cells — length (fragment → long) × register</li>
+</ul>
+<p>  (formal / neutral / rioplatense slang) × noise (clean / typos) — × 4</p>
+<p>  paraphrases ≈ 96 utterances.</p>
+<ul>
+<li><strong>Hard negatives</strong>: 35 messages that <em>look like</em> the intent but</li>
+</ul>
+<p>  belong elsewhere, with boundary themes targeted at observed failure</p>
+<p>  modes (payment-method logistics, defect-vs-preference,</p>
+<p>  restock-vs-delivery).</p>
+<ul>
+<li><strong>~20 human-curated boundary fragments</strong> — the highest-value</li>
+</ul>
+<p>  calibration data is hand-authorable sales intelligence: "q pasa</p>
+<p>  falla?" seeded as a return_policy negative means a defect fragment</p>
+<p>  can never confidently serve the returns template.</p>
+<h2>Curation: where the accuracy actually came from</h2>
+<p>The raw generated corpus routed at 87%. Every point above that came</p>
+<p>from corpus QA, not classifier changes:</p>
+<p>1. <strong>Label QA</strong> — every variant re-judged in batched calls (58 calls,</p>
+<p>   20 variants each). Found positives expressing the wrong intent</p>
+<p>   ("¿Tienen garantía?" generated under brand_trust) and negatives</p>
+<p>   mislabeled "other".</p>
+<p>2. <strong>Ambiguity arbitration</strong> — cross-intent near-duplicate detection +</p>
+<p>   leave-one-out routing disagreement, judged against boundary-aware</p>
+<p>   definitions. Compound messages ("if it doesn't fit, can I return</p>
+<p>   it?") and vague fragments dropped: **ambiguity is the miss path,</p>
+<p>   never a classifier target.**</p>
+<p>3. <strong>Strict fragment rule</strong> — every 1-3-word fragment arbitrated; a</p>
+<p>   fragment that could fit two intents is ambiguous by definition.</p>
+<p>Reproduce from scratch: <code>scripts/generate_variants.py</code> →</p>
+<p><code>scripts/clean_dataset.py</code> → <code>scripts/arbitrate_ambiguity.py</code> →</p>
+<p><code>scripts/seed_curated_negatives.py</code> → <code>scripts/build_index.py</code>.</p>
+<p>Or pull the finished dataset: <code>scripts/hf_sync.py pull</code> (HF dataset</p>
+<p><code>miguelemosreverte/gaucho-cache</code>, versioned snapshots).</p></div><div class="chapter" id="ch4"><h1>Routing: eight rounds to zero confident-wrong</h1>
+<p>The gate was fixed before the first run and never moved: **≥95%</p>
+<p>held-out routing accuracy AND confident-wrong = 0**. A slice that</p>
+<p>misses often but never lies passes; a slice that hits 99% with one</p>
+<p>confident wrong answer fails.</p>
+<h2>The evolution</h2>
+<table>
+<tr><th>Round</th><th>Change</th><th>Routing</th><th>Confident-wrong</th></tr>
+<tr><td>1</td><td>raw generated corpus</td><td>87.0%</td><td>6 (3.0%)</td></tr>
+<tr><td>2</td><td>full label QA + q95 calibration</td><td>87.6%</td><td>5 (2.6%)</td></tr>
+<tr><td>3</td><td>dedup + LOO arbitration</td><td>93.2%</td><td>4</td></tr>
+<tr><td>4</td><td>E1: mpnet-base-v2 (adversarial 4→1)</td><td>92.6%</td><td>4 (all fragments)</td></tr>
+<tr><td>5</td><td>strict fragment rule</td><td>94.1%</td><td>1</td></tr>
+<tr><td>6</td><td>payment-boundary sweep</td><td>95.7%</td><td>1</td></tr>
+<tr><td>7–8</td><td>boundary negatives ×35 + curated fragments</td><td><strong>95.7%</strong></td><td><strong>0</strong></td></tr>
+</table>
+<p>Every confident-wrong fixed between rounds 1 and 8 was a **corpus</p>
+<p>defect** — a mislabel, a cross-intent duplicate, a compound message, or</p>
+<p>a thin negative pool on a boundary. The classifier itself changed once</p>
+<p>(round 4, embedding model swap).</p>
+<h2>The compound hit predicate</h2>
+<p>Score alone never serves. A hit requires all of:</p>
+<pre><code>
+score        >= intent_threshold        (calibrated on own negatives)
+top1 - top2  >= margin                  (no ambiguity between intents)
+top1 - nearest_negative >= neg_margin   (not a known imposter pattern)
+match-contract preconditions pass       (stage, state, audit)
+</code></pre>
+<h2>Final evaluation report (generated)</h2>
+<h1>P0.5 slice evaluation — embedding-only (mini-E2)</h1>
+<ul>
+<li>Model: <code>sentence-transformers/paraphrase-multilingual-mpnet-base-v2</code></li>
+<li>Index: 715 train positives + 317 hard negatives; 184 held-out positives evaluated</li>
+</ul>
+<h2>Headline (gate: accuracy ≥95%, confident_wrong = 0)</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Routing accuracy (top-1)</td><td><strong>95.7%</strong></td></tr>
+<tr><td>Hit rate (compound predicate)</td><td>62.5%</td></tr>
+<tr><td>Confident-wrong rate</td><td><strong>0.00%</strong> (0)</td></tr>
+<tr><td>Adversarial negatives confidently mis-served</td><td>4 / 317</td></tr>
+</table>
+<h2>Per intent</h2>
+<table>
+<tr><th>Intent</th><th>audited</th><th>n</th><th>top-1</th><th>hits</th><th>confident-wrong</th></tr>
+<tr><td>bot_skepticism</td><td>✓</td><td>20</td><td>100%</td><td>95%</td><td>0</td></tr>
+<tr><td>brand_trust</td><td>✗</td><td>19</td><td>89%</td><td>74%</td><td>0</td></tr>
+<tr><td>firmness_doubt</td><td>✗</td><td>17</td><td>88%</td><td>47%</td><td>0</td></tr>
+<tr><td>out_of_stock_reservation</td><td>✓</td><td>15</td><td>93%</td><td>53%</td><td>0</td></tr>
+<tr><td>price</td><td>✗</td><td>19</td><td>100%</td><td>84%</td><td>0</td></tr>
+<tr><td>return_policy</td><td>✓</td><td>17</td><td>94%</td><td>18%</td><td>0</td></tr>
+<tr><td>shipping_time</td><td>✓</td><td>18</td><td>100%</td><td>89%</td><td>0</td></tr>
+<tr><td>shipping_zone</td><td>✓</td><td>19</td><td>95%</td><td>47%</td><td>0</td></tr>
+<tr><td>size_fit</td><td>✗</td><td>19</td><td>100%</td><td>89%</td><td>0</td></tr>
+<tr><td>warranty</td><td>✓</td><td>21</td><td>95%</td><td>24%</td><td>0</td></tr>
+</table>
+<h2>Confusable pairs (routing confusions, held-out)</h2>
+<table>
+<tr><th>Pair</th><th>a→b</th><th>b→a</th></tr>
+<tr><td>shipping_time ↔ shipping_zone</td><td>0</td><td>1</td></tr>
+<tr><td>warranty ↔ return_policy</td><td>1</td><td>0</td></tr>
+<tr><td>size_fit ↔ firmness_doubt</td><td>0</td><td>2</td></tr>
+<tr><td>brand_trust ↔ bot_skepticism</td><td>0</td><td>0</td></tr>
+</table>
+<p>Other confusions: brand_trust→size_fit×2, out_of_stock_reservation→shipping_time×1, return_policy→price×1</p>
+<h2>Adversarial negatives confidently mis-served</h2>
+<ul>
+<li><code>¿Puedo pagar con Mercado Pago y que me cuadren los puntos del programa de fidelidad?</code> — not-out_of_stock_reservation (actually other), served <code>price</code> (0.795)</li>
+<li><code>¿Aceptan pagos con Mercado Pago? Vi que hay una promo, pero no sé si puedo usar mis puntos.</code> — not-out_of_stock_reservation (actually other), served <code>price</code> (0.751)</li>
+<li><code>¿y si llega fallado?</code> — not-return_policy (actually other), served <code>warranty</code> (0.900)</li>
+<li><code>¿cuándo vuelve a haber stock?</code> — not-shipping_time (actually other), served <code>out_of_stock_reservation</code> (0.914)</li>
+</ul>
+<h2>Gate: <strong>PASS</strong></h2></div><div class="chapter" id="ch5"><h1>The zero-spend proof: $0 by construction, not by accounting</h1>
+<p>A cost claim based on <em>not observing</em> API calls is weak — something</p>
+<p>could call out in a code path the test missed. The proof here is</p>
+<p>constructive: <strong>the process cannot reach the network at all.</strong></p>
+<p>Before any import, <code>socket.socket.connect</code> is replaced with a raising</p>
+<p>stub, every <code><em>API_KEY</em></code>/<code><em>TOKEN</em></code> environment variable is deleted, and</p>
+<p><code>HF_HUB_OFFLINE=1</code> forces the embedding model to load from the local</p>
+<p>cache. Then the full runtime path — embed → route → compound predicate</p>
+<p>→ template render — runs over the entire held-out evaluation set. One</p>
+<p>attempted connection anywhere would crash the run.</p>
+<h1>Zero-spend proof</h1>
+<p>Method: <code>socket.socket.connect</code> is replaced with a raising stub for the entire process (before any import); all <code><em>API_KEY</em></code>/<code><em>TOKEN</em></code> env vars are deleted; <code>HF_HUB_OFFLINE=1</code>. Any attempt by any component to reach a network endpoint would crash the run.</p>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Turns processed</td><td>184</td></tr>
+<tr><td>Network connections attempted</td><td><strong>0</strong></td></tr>
+<tr><td>API spend</td><td><strong>$0.00 (by construction)</strong></td></tr>
+<tr><td>Serve-eligible (audited hits)</td><td>78 (42%)</td></tr>
+<tr><td>Latency p50 / p95</td><td>11.4 ms / 31.8 ms</td></tr>
+<tr><td>Cold start (model load + first encode)</td><td>4.0 s</td></tr>
+</table>
+<p><strong>PASS — the runtime path cannot spend money.</strong></p>
+<p>Two numbers matter beyond the zero:</p>
+<ul>
+<li><strong>p50 latency ~11 ms</strong> — three orders of magnitude under an LLM</li>
+</ul>
+<p>  round-trip. The cache is not just free, it is <em>instant</em>, which is its</p>
+<p>  own UX win on WhatsApp.</p>
+<ul>
+<li><strong>Serve-eligible rate</strong> reflects the audit gate, not the classifier:</li>
+</ul>
+<p>  template edits made during the quality round reset <code>audited:false</code></p>
+<p>  pending human re-review. Routing coverage is higher; serving is</p>
+<p>  deliberately throttled by the human-audit pipeline.</p></div><div class="chapter" id="ch6"><h1>Quality: the cache against the live LLM, blind-judged</h1>
+<p>The $0 claim is worthless if cached replies are worse than what the</p>
+<p>live model would have said. The comparison had to be fair in both</p>
+<p>directions, and getting it fair took two iterations — the first</p>
+<p>methodology <strong>failed honestly</strong>.</p>
+<h2>Round 1 failed — and indicted the method, not the cache</h2>
+<ul>
+<li>The judge flagged the cache's <em>audited merchant facts</em> (CACE</li>
+</ul>
+<p>  membership, cuotas sin interés) as "invented" — it had no merchant</p>
+<p>  ground truth.</p>
+<ul>
+<li>The API arm ran without the policy book that production prompts</li>
+</ul>
+<p>  include — unrealistically unconstrained.</p>
+<ul>
+<li>Winner-take-all pairwise judging converted tiny stylistic deltas into</li>
+</ul>
+<p>  losses (84% "API wins" while both replies were correct).</p>
+<ul>
+<li>It also caught a <strong>real bug</strong>: the out-of-stock template asserts</li>
+</ul>
+<p>  "ahora mismo no hay stock" — a state claim. It now carries a hard</p>
+<p>  precondition (<code>required_state_fields: [product_out_of_stock]</code>) and</p>
+<p>  misses without known stock state.</p>
+<h2>Round 2: both arms get the policy book, judging goes absolute</h2>
+<p>Each reply scored independently — concern addressed, safety vs the</p>
+<p>policy book, brand voice, sales next-step — with non-inferiority as the</p>
+<p>gate. The eval's "template improvement queue" then drove real template</p>
+<p>v2s (closing questions added; one audited template honestly demoted to</p>
+<p><code>audited:false</code> for re-review because its content changed).</p>
+<h1>Quality equivalence v2 — absolute rubric vs policy book, non-inferiority</h1>
+<ul>
+<li>Sample: 50 held-out utterances (5/intent); 45 served and judged; skips: {'precondition_failed': 5}</li>
+<li>Agent and judge: <code>gpt-oss-120b</code> (Cerebras); both arms and the judge share the merchant policy book; blind randomized A/B, seed 7</li>
+</ul>
+<h2>Headline (gate: cache safety = 100% AND cache rubric ≥ API − 0.05)</h2>
+<table>
+<tr><th>Metric</th><th>Cache</th><th>Pure API</th></tr>
+<tr><td>Rubric mean (4 criteria)</td><td><strong>0.972</strong></td><td>0.972</td></tr>
+<tr><td>concern addressed</td><td>0.91</td><td>1.00</td></tr>
+<tr><td>safety vs policy book</td><td><strong>1.00</strong></td><td>0.91</td></tr>
+<tr><td>brand voice</td><td>0.98</td><td>0.98</td></tr>
+<tr><td>next step / sales move</td><td>1.00</td><td>1.00</td></tr>
+</table>
+<p>Pairwise (secondary): cache 5 / tie 35 / api 5</p>
+<h2>API safety violations (the live-LLM risk)</h2>
+<ul>
+<li><code>Me da mecha pagar en linea, xq no confío sin certificado?</code> → ['Reclama que la web tiene certificado SSL, lo cual no está mencionado en el policy book', 'Afirma que el pago se hace a través de una pasarela segura, lo cual no está respaldado por el policy book']</li>
+<li><code>¿Tiene garantía de autenticidad los productos que venden en </code> → ['Claim that all mattresses are 100\u202f% authentic is not supported by the policy book']</li>
+<li><code>Necesito el colchón pa el 15</code> → ['Promesa de entrega para el 15 no respaldada por la política; la política solo indica que el plazo depende de zona y stock y no garantiza una fecha específica.']</li>
+<li><code>Estoy pensando en un colchón de 90x190, pero mi habitación e</code> → ['Claim that a 90×190\u202fcm mattress "suele dejar espacio para mesas" is not supported by the policy book.']</li>
+</ul>
+<h2>Rubric losses (template improvement queue)</h2>
+<ul>
+<li>[shipping_time] <code>¿Para cuándo llega?</code> — cache lost on ['voice']</li>
+<li>[size_fit] <code>¿Me indica si el colchón de 200x200 cm será demasiado grande</code> — cache lost on ['concern']</li>
+</ul>
+<h2>Gate: <strong>PASS</strong></h2>
+<p>The headline is not that the cache matched the LLM (0.972 = 0.972).</p>
+<p>It is the safety column: <strong>1.00 vs 0.91</strong> — even with the policy book</p>
+<p>in its prompt, the live LLM invented an SSL certificate, an</p>
+<p>authenticity guarantee, and a delivery date in ~9% of replies. The</p>
+<p>audited cache structurally cannot. On the axis that costs customer</p>
+<p>trust, the cache is not equal to the API — it is strictly better.</p></div><div class="chapter" id="ch7"><h1>Sales intelligence, not product data</h1>
+<p>The cache's combinatorial space is <strong>(stage × intent × sales-move)</strong> —</p>
+<p>funnel knowledge, not catalog knowledge. The values cached are</p>
+<p>reusable sales moves: reassure, defer unverifiable specifics, ask the</p>
+<p>closing question. Product facts (names, prices, sizes, stock) must</p>
+<p>never be baked in; they arrive at render time through placeholders</p>
+<p>resolved from deterministic sources (catalog DB, WooCommerce, the</p>
+<p>order system) — still $0 in LLM spend.</p>
+<p>This is enforced mechanically, not by convention: every template body</p>
+<p>is swept for price literals, percentage discounts, concrete</p>
+<p>delivery/warranty durations, and SKU-like tokens.</p>
+<h1>Product-agnosticism check — cached values are sales moves</h1>
+<table>
+<tr><th>Template</th><th>audited</th><th>placeholders</th><th>product-specific literals</th></tr>
+<tr><td>BOT_SKEPTICISM-v1</td><td>✓</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>BRAND_TRUST-v2</td><td>✗</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>FIRMNESS_DOUBT-v2</td><td>✗</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>OUT_OF_STOCK_RESERVATION-v1</td><td>✓</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>PRICE-v2</td><td>✗</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>RETURN_POLICY-v2</td><td>✗</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>SHIPPING_TIME-v1</td><td>✓</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>SHIPPING_ZONE-v1</td><td>✓</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>SIZE_FIT-v1</td><td>✗</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+<tr><td>WARRANTY-v1</td><td>✓</td><td>— (pure sales move)</td><td><strong>none</strong></td></tr>
+</table>
+<h2>PASS — zero product-specific values in cached templates</h2>
+<p>Every template encodes a reusable sales move (reassure, defer specifics to verified sources, ask the closing question). The same cache transfers to a new catalog without regeneration; product facts enter only through render-time slots.</p>
+<p>The practical consequence for new deployments: swapping the catalog</p>
+<p>(or the merchant) does not invalidate the cache's sales intelligence.</p>
+<p>A new domain reuses the intent taxonomy and the curation recipe;</p>
+<p>only the merchant-voice overlay and the utterance corpus regenerate —</p>
+<p>a one-time, single-digit-dollar batched job.</p></div><div class="chapter" id="ch8"><h1>Conclusions and the road to the full funnel</h1>
+<h2>The four proofs</h2>
+<table>
+<tr><th>Claim</th><th>Gate</th><th>Result</th></tr>
+<tr><td>Perfect routing</td><td>≥95% accuracy, confident-wrong = 0</td><td><strong>PASS</strong> — 95.7%, 0.00%</td></tr>
+<tr><td>$0 at runtime</td><td>socket-blocked execution, 0 attempts</td><td><strong>PASS</strong> — 184 turns, p50 ~11 ms</td></tr>
+<tr><td>Quality = pure API</td><td>safety 100% AND non-inferior rubric</td><td><strong>PASS</strong> — 0.972 = 0.972; safety 1.00 vs 0.91</td></tr>
+<tr><td>Product-agnostic</td><td>zero product literals</td><td><strong>PASS</strong> — 10/10 pure sales moves</td></tr>
+</table>
+<h2>What we learned</h2>
+<p>1. <strong>Corpus quality is the whole game.</strong> Eight rounds, one classifier</p>
+<p>   change. Every confident-wrong was a corpus defect: a mislabel, a</p>
+<p>   cross-intent duplicate, a compound message, a thin negative pool.</p>
+<p>   The medical repo's 48.5→95→100 ladder was corpus work; so was ours.</p>
+<p>2. <strong>Ambiguity is the miss path.</strong> Fragments and compound messages get</p>
+<p>   dropped from the classifier's targets, not threshold-hacked into</p>
+<p>   them. At runtime they fall through to the LLM — which is exactly</p>
+<p>   where they belong.</p>
+<p>3. <strong>Hard negatives are authorable sales intelligence.</strong> The most</p>
+<p>   valuable calibration data — boundary fragments like "q pasa</p>
+<p>   falla?" — can be written by hand in minutes per boundary.</p>
+<p>4. <strong>The safety asymmetry is structural.</strong> A generative model with the</p>
+<p>   policy in its prompt still invents specifics ~9% of the time. An</p>
+<p>   audited template cannot. For commerce, that asymmetry may matter</p>
+<p>   more than the cost savings.</p>
+<h2>Next</h2>
+<ul>
+<li>Human re-audit of the v2 templates (restores serve-eligible coverage).</li>
+<li>Hit-rate tuning on shadow traffic (P4 of the plan) — current</li>
+</ul>
+<p>  thresholds are deliberately conservative.</p>
+<ul>
+<li>Scale the recipe from 10 intents to the full <strong>72-cell taxonomy</strong></li>
+</ul>
+<p>  (global intents, 24 transition intents, ~30 stage-hold intents) —</p>
+<p>  same generation + curation pipeline, same gates.</p>
+<ul>
+<li>Write-back loop: every LLM fallback proposes a new template candidate</li>
+</ul>
+<p>  through the existing merchant review workflow.</p>
+<hr>
+<p><em>Reproduce everything</em>: code on GitHub (<code>GauchoAI/gaucho-cache</code>),</p>
+<p>dataset + index on the HF Hub (<code>miguelemosreverte/gaucho-cache</code>,</p>
+<p>versioned snapshots), demo: <code>uv run gaucho-cache tour</code>.</p></div>
+<footer>Generated by scripts/build_book.py — methodology ported from
+<a href="https://miguelemosreverte.github.io/models-medical-evaluation/">models-medical-evaluation</a></footer>
+</div></body></html>

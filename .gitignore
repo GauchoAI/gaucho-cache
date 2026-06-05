@@ -1,7 +1,7 @@
 .venv/
 __pycache__/
 *.egg-info/
-data/slice.sqlite
-index/*.npz
+# data/slice.sqlite — committed: tiny + source of truth (also on HF)
+# index/*.npz — committed for zero-friction demo (also on HF)
 models/
 .DS_Store

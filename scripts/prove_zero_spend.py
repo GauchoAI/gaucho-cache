@@ -49,14 +49,13 @@ import numpy as np  # noqa: E402
 
 from gaucho_cache import dataset  # noqa: E402
 from gaucho_cache.classifier import Classifier, StageIndex, load_thresholds  # noqa: E402
-from gaucho_cache.contracts import load_contracts  # noqa: E402
+from gaucho_cache.contracts import default_contracts_dir, load_contracts  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
 INDEX = REPO / "index" / "slice-v1.npz"
 THRESHOLDS = REPO / "index" / "thresholds.json"
-CONTRACTS_DIR = (REPO.parent / "agentic-crm" / "merchants" / "laferia"
-                 / "templates" / "objections")
+CONTRACTS_DIR = default_contracts_dir(REPO)
 REPORT_OUT = REPO / "reports" / "zero-spend-proof.md"
 STAGE = "objection"
 HOLDOUT_EVERY = 5

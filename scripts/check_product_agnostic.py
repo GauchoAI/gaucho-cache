@@ -28,11 +28,11 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from gaucho_cache.contracts import load_contracts, load_intent_specs
+from gaucho_cache.contracts import (default_contracts_dir, load_contracts,
+                                    load_intent_specs)
 
 REPO = Path(__file__).resolve().parent.parent
-CONTRACTS_DIR = (REPO.parent / "agentic-crm" / "merchants" / "laferia"
-                 / "templates" / "objections")
+CONTRACTS_DIR = default_contracts_dir(REPO)
 INTENTS_YAML = REPO / "data" / "intents_slice.yaml"
 REPORT_OUT = REPO / "reports" / "product-agnostic-check.md"
 

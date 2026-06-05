@@ -26,14 +26,13 @@ from openai import AsyncOpenAI
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import dataset
-from gaucho_cache.contracts import load_contracts, load_intent_specs
+from gaucho_cache.contracts import (default_contracts_dir, load_contracts,
+                                    load_intent_specs)
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
 INTENTS_YAML = REPO / "data" / "intents_slice.yaml"
-CONTRACTS_DIR = (REPO.parent / "agentic-crm" / "merchants" / "laferia"
-                 / "templates" / "objections")
-
+CONTRACTS_DIR = default_contracts_dir(REPO)
 MODEL = "gpt-oss-120b"
 BASE_URL = "https://api.cerebras.ai/v1"
 CONCURRENCY = 8

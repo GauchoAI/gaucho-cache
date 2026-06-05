@@ -10,10 +10,28 @@ already declare.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
 import yaml
+
+
+def default_contracts_dir(repo_root: Path) -> Path:
+    """Resolve the merchant templates directory, standalone-friendly.
+
+    Order: $GAUCHO_CACHE_CONTRACTS → live agentic-crm sibling checkout →
+    the vendored snapshot under examples/ (committed, so a fresh clone
+    works with no sibling repo).
+    """
+    env = os.environ.get("GAUCHO_CACHE_CONTRACTS")
+    if env:
+        return Path(env)
+    live = (repo_root.parent / "agentic-crm" / "merchants" / "laferia"
+            / "templates" / "objections")
+    if live.exists():
+        return live
+    return repo_root / "examples" / "laferia" / "objections"
 
 
 @dataclass(frozen=True)

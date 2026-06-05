@@ -41,14 +41,13 @@ from openai import AsyncOpenAI
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import dataset
 from gaucho_cache.classifier import Classifier, StageIndex, load_thresholds
-from gaucho_cache.contracts import load_contracts
+from gaucho_cache.contracts import default_contracts_dir, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
 INDEX = REPO / "index" / "slice-v1.npz"
 THRESHOLDS = REPO / "index" / "thresholds.json"
-CONTRACTS_DIR = (REPO.parent / "agentic-crm" / "merchants" / "laferia"
-                 / "templates" / "objections")
+CONTRACTS_DIR = default_contracts_dir(REPO)
 EXTENSIONS = REPO / "data" / "contract_extensions.yaml"
 REPORT_OUT = REPO / "reports" / "quality-equivalence.md"
 STAGE = "objection"
