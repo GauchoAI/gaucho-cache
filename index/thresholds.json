@@ -1,0 +1,52 @@
+{
+  "bot_skepticism": {
+    "threshold": 0.55,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "brand_trust": {
+    "threshold": 0.5570094776153565,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "firmness_doubt": {
+    "threshold": 0.55,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "out_of_stock_reservation": {
+    "threshold": 0.6110310745239258,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "price": {
+    "threshold": 0.55,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "return_policy": {
+    "threshold": 0.6334790182113648,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "shipping_time": {
+    "threshold": 0.5819457364082337,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "shipping_zone": {
+    "threshold": 0.6152938795089722,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "size_fit": {
+    "threshold": 0.59657790184021,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "warranty": {
+    "threshold": 0.6776204895973206,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  }
+}

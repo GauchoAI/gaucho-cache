@@ -1,0 +1,98 @@
+# P0.5 slice taxonomy: stage=objection, the 10 laferia objection
+# categories minus `other` (PLAN.md §11 — `other` IS the miss path).
+# `meaning` is generator-facing meta (English); generated utterances are
+# Spanish rioplatense WhatsApp messages. `confusables` drive hard-negative
+# generation (§10/§13): messages that look like this intent but belong
+# to a neighbour.
+intents:
+  - stage: objection
+    intent: price
+    meaning: >
+      The customer objects that the mattress is too expensive, asks for a
+      discount, mentions their budget is lower, asks about installment
+      plans or cheaper payment options, or compares the price unfavourably.
+    confusables: [brand_trust]
+    template_file: price.md
+
+  - stage: objection
+    intent: size_fit
+    meaning: >
+      The customer doubts whether the mattress dimensions will fit their
+      bed frame or room, asks about measurements matching their existing
+      bed, or worries it is too big/small for their space.
+    confusables: [firmness_doubt]
+    template_file: size_fit.md
+
+  - stage: objection
+    intent: firmness_doubt
+    meaning: >
+      The customer worries the mattress will be too firm or too soft for
+      them, doubts the recommended firmness suits their body or sleep
+      style, or asks how they can know the firmness is right without
+      trying it.
+    confusables: [size_fit]
+    template_file: firmness_doubt.md
+
+  - stage: objection
+    intent: brand_trust
+    meaning: >
+      The customer doubts the store or the brand: is this shop legit, has
+      anyone bought here, are there reviews, is the brand any good, fear
+      of scams when paying online.
+    confusables: [bot_skepticism, price]
+    template_file: brand_trust.md
+
+  - stage: objection
+    intent: bot_skepticism
+    meaning: >
+      The customer suspects or complains they are talking to a bot, asks
+      if this is a real person, or demands a human agent out of distrust
+      of automated answers.
+    confusables: [brand_trust]
+    template_file: bot_skepticism.md
+
+  - stage: objection
+    intent: warranty
+    meaning: >
+      The customer asks whether the mattress has a warranty, what happens
+      if it comes with a manufacturing defect, or who responds if
+      something breaks or sags later.
+    confusables: [return_policy]
+    template_file: warranty.md
+
+  - stage: objection
+    intent: return_policy
+    meaning: >
+      The customer asks if they can return or exchange the mattress if
+      they don't like it after it arrives, whether there are refunds, or
+      what the return process looks like.
+    confusables: [warranty]
+    template_file: return_policy.md
+
+  - stage: objection
+    intent: shipping_time
+    meaning: >
+      The customer worries about how long delivery takes, says they need
+      it by a specific date, or complains the estimated wait sounds long.
+      The concern is WHEN it arrives.
+    confusables: [shipping_zone, out_of_stock_reservation]
+    template_file: shipping_time.md
+
+  - stage: objection
+    intent: shipping_zone
+    meaning: >
+      The customer doubts whether delivery reaches their location at all
+      (their town, neighbourhood, province, postal code) or asks how
+      shipping coverage works for where they live. The concern is WHERE
+      it ships.
+    confusables: [shipping_time]
+    template_file: shipping_zone.md
+
+  - stage: objection
+    intent: out_of_stock_reservation
+    meaning: >
+      The customer reacts to an item being out of stock: asks when it
+      will be available again, whether they can reserve one, or whether
+      they will lose a promotion while waiting for restock.
+    confusables: [shipping_time]
+    template_file: out_of_stock_reservation.md
