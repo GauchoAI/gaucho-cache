@@ -171,6 +171,127 @@ def inline(s: str) -> str:
     return s
 
 
+DEMO_SECTION = """
+<div class="chapter" id="live-demo">
+<h1>Live demo — the cache running in YOUR browser, $0</h1>
+<p>This is not a video and there is no server: the embedding model
+(<code>Xenova/paraphrase-multilingual-mpnet-base-v2</code>) downloads once
+from the Hugging Face Hub and runs <strong>inside this tab</strong>
+(transformers.js); the index, thresholds and match contracts are inlined
+in this very HTML file. After the model loads you can go offline — the
+bot keeps deciding. Open DevTools → Network and watch: no API calls,
+ever.</p>
+<p id="demo-status" style="font-family:var(--mono);font-size:13px"></p>
+<div id="demo-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0"></div>
+<div style="display:flex;gap:8px">
+<input id="demo-input" placeholder="Escribile al bot (etapa de objeciones)… typos y lunfardo bienvenidos"
+ style="flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:8px;font:15px Georgia"/>
+<button id="demo-send" style="padding:10px 18px;border:0;border-radius:8px;
+background:var(--accent);color:#fff;font-weight:bold;cursor:pointer">→</button>
+</div>
+<div id="demo-out" style="margin-top:14px"></div>
+<p id="demo-counter" style="color:var(--soft);font-size:14px"></p>
+</div>
+<script>window.DEMO_DATA = __DEMO_DATA__;</script>
+<script type="module">
+const D = window.DEMO_DATA;
+const $ = id => document.getElementById(id);
+const status = m => $("demo-status").textContent = m;
+
+// ---- decode f16 index --------------------------------------------------
+const raw = Uint8Array.from(atob(D.embeddings_f16_b64), c=>c.charCodeAt(0));
+const u16 = new Uint16Array(raw.buffer);
+const EMB = new Float32Array(u16.length);
+for (let i=0;i<u16.length;i++){ // f16 -> f32
+  const h=u16[i],s=(h&0x8000)>>15,e=(h&0x7C00)>>10,f=h&0x03FF;
+  EMB[i]=(e===0?(s?-1:1)*Math.pow(2,-14)*(f/1024)
+   :e===31?(f?NaN:(s?-1:1)*Infinity)
+   :(s?-1:1)*Math.pow(2,e-15)*(1+f/1024));
+}
+const N=D.n, DIM=D.dim;
+const POS=[],NEG={};
+D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
+  else (NEG[it]=NEG[it]||[]).push(i); });
+
+function decide(q){
+  const t0=performance.now();
+  const best={};
+  for(const [it,i] of POS){
+    let s=0; const o=i*DIM;
+    for(let d=0;d<DIM;d++) s+=EMB[o+d]*q[d];
+    if(!(it in best)||s>best[it]) best[it]=s;
+  }
+  const ranked=Object.entries(best).sort((a,b)=>b[1]-a[1]);
+  const [i1,s1]=ranked[0], [i2,s2]=ranked[1];
+  let ns=-1;
+  for(const i of (NEG[i1]||[])){
+    let s=0; const o=i*DIM;
+    for(let d=0;d<DIM;d++) s+=EMB[o+d]*q[d];
+    if(s>ns) ns=s;
+  }
+  const th=D.thresholds[i1]||{threshold:.7,margin:.05,negative_margin:.03};
+  const th2=D.thresholds[i2];
+  const c=D.contracts[i1]||{};
+  let verdict="miss", reason="";
+  if(s1<th.threshold) reason="below_threshold";
+  else if(th2 && s2>=Math.min(th2.threshold,D.compound_floor)) reason="multi_intent (mensaje compuesto)";
+  else if(s1-s2<th.margin) reason="ambiguous_margin";
+  else if(s1-ns<th.negative_margin) reason="negative_margin (patrón impostor conocido)";
+  else if((c.requires_state||[]).length) reason="precondition_failed (estado de stock desconocido)";
+  else if(!c.audited){ verdict="hit"; reason="template_unaudited (shadow-only)"; }
+  else verdict="serve";
+  const pool=D.variants[i1]||[];
+  const reply=(verdict==="serve"&&pool.length)?pool[Math.floor(Math.random()*pool.length)]:null;
+  return {verdict,reason,intent:i1,score:s1,margin:s1-s2,negMargin:s1-ns,
+          reply,ms:performance.now()-t0};
+}
+
+let extractor=null, count=0;
+async function init(){
+  status("⏳ descargando el modelo desde Hugging Face (una vez, queda cacheado)…");
+  const {pipeline}=await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.3.1");
+  extractor=await pipeline("feature-extraction",D.model,{dtype:"q8",
+    progress_callback:p=>{ if(p.status==="progress"&&p.file?.endsWith(".onnx"))
+      status(`⏳ modelo: ${(p.progress||0).toFixed(0)}%`); }});
+  status("✅ modelo listo — el bot corre en esta pestaña. Probá los escenarios o escribí lo que quieras.");
+  $("demo-send").disabled=false;
+}
+async function ask(text){
+  if(!extractor||!text.trim()) return;
+  status("…");
+  const out=await extractor(text,{pooling:"mean",normalize:true});
+  const d=decide(Array.from(out.data));
+  count++;
+  const color=d.verdict==="serve"?"#0b6e4f":d.verdict==="hit"?"#9a6b00":"#a33";
+  const label=d.verdict==="serve"?"SERVE":d.verdict==="hit"?"HIT (no-serve)":"MISS";
+  $("demo-out").innerHTML=`
+   <div style="border:1px solid var(--line);border-radius:10px;padding:14px 18px;background:#fff">
+   <div><span style="color:${color};font-weight:bold">${label}</span>
+   <span style="color:var(--soft)"> · intent <code>${d.intent}</code> · score ${d.score.toFixed(3)}
+   · margin ${d.margin.toFixed(3)} · neg ${d.negMargin.toFixed(3)}
+   · <strong>${d.ms.toFixed(1)} ms · $0.00</strong></span></div>
+   ${d.reason?`<div style="color:var(--soft);font-size:14px">razón: ${d.reason} → este turno iría al LLM de fallback</div>`:""}
+   ${d.reply?`<div style="margin-top:10px;padding:10px 14px;background:#eef7f3;border-radius:10px">🤖 ${d.reply}</div>`:""}
+   </div>`;
+  status("✅ listo");
+  $("demo-counter").textContent=
+    `${count} decisión(es) en esta sesión — gasto acumulado de API: $0.00 (no hay API)`;
+}
+D.scenarios.forEach(([label,text])=>{
+  const b=document.createElement("button");
+  b.textContent=label;
+  b.style.cssText="padding:6px 12px;border:1px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;font-size:13px";
+  b.onclick=()=>{ $("demo-input").value=text; ask(text); };
+  $("demo-chips").appendChild(b);
+});
+$("demo-send").disabled=true;
+$("demo-send").onclick=()=>ask($("demo-input").value);
+$("demo-input").addEventListener("keydown",e=>{ if(e.key==="Enter") ask($("demo-input").value); });
+init();
+</script>
+"""
+
+
 def main() -> None:
     st = stats()
     files = sorted(CHAPTERS.glob("*.md"))
@@ -185,6 +306,13 @@ def main() -> None:
         toc.append(f'<a href="#{anchor}">Chapter {i}: {title}</a>')
         body.append(f'<div class="chapter" id="{anchor}">'
                     + md_to_html(md) + "</div>")
+    demo_html = ""
+    demo_data = REPO / "web" / "demo-data.json"
+    if demo_data.exists():
+        demo_html = DEMO_SECTION.replace(
+            "__DEMO_DATA__", demo_data.read_text(encoding="utf-8"))
+        toc.insert(0, '<a href="#live-demo">▶ Live demo (in-browser, $0)</a>')
+
     doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{TITLE}</title><style>{CSS}</style></head><body><div class="wrap">
@@ -192,6 +320,7 @@ def main() -> None:
 <p>{TITLE.split("— ")[1]} · build {st.get("commit", "?")} ·
 {st.get("total_rows", "?")} generated variants</p></header>
 <nav>{"".join(toc)}</nav>
+{demo_html}
 {"".join(body)}
 <footer>Generated by scripts/build_book.py — methodology ported from
 <a href="https://miguelemosreverte.github.io/models-medical-evaluation/">models-medical-evaluation</a></footer>
