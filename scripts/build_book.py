@@ -303,9 +303,9 @@ async function ask(text){
   bubble("user",text);
   // salutation decomposition: greet + concern → route the concern
   let target=text, saluted=false;
-  const m=text.trim().match(SAL_RX);
-  if(m && m[0].length>0){
-    const rest=text.trim().slice(m[0].length).replace(/^[\\s,.!¡¿?:;]+|[\\s,.!¡¿?:;]+$/g,"");
+  const sm=text.trim().match(SAL_RX);
+  if(sm && sm[0].length>0){
+    const rest=text.trim().slice(sm[0].length).replace(/^[\\s,.!¡¿?:;]+|[\\s,.!¡¿?:;]+$/g,"");
     if(rest.split(/\\s+/).length>=2){ target=rest; saluted=true; }
   }
   const out=await extractor(target,{pooling:"mean",normalize:true});
