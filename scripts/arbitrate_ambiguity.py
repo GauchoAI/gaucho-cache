@@ -63,6 +63,13 @@ BOUNDARIES = """- price: cost, discounts, installments/cuotas, payment options, 
 - greet: opens the conversation (hola, buenas, como va, que tal, holis) with NO concern attached.
 - thanks_goodbye: gratitude or farewell closing the chat (gracias, joya gracias, chau, nos vemos).
 - what_do_you_sell: asks what the store offers in general (que venden, solo colchones?, que marcas).
+- confirmation: pure agreement to proceed after a bot question (si dale, ok confirmo, avancemos, mandá nomás).
+- declination: polite decline (no gracias, no hace falta, por ahora no).
+- answer_size_posture: states bed size and/or sleeping position (2 plazas de costado, queen boca arriba).
+- answer_payment_choice: picks an offered payment option (cuotas, transferencia, tarjeta sin interés).
+- want_to_buy: states purchase intent for a mattress (quiero comprar un colchón), maybe with a size.
+- answer_for_whom: says who it is for (es para mi, para mi hijo, es un regalo).
+- order_status: asks about an existing order's state.
 - other: a real concern none of the above covers.
 - ambiguous: fragment too vague to assign, OR a compound message carrying two or more distinct concerns.
 
@@ -103,7 +110,8 @@ async def main() -> None:
     rows = conn.execute(
         """SELECT id, COALESCE(NULLIF(judged_intent,''), intent), text,
                   COALESCE(length_level, 9)
-           FROM variants WHERE stage=? AND kind='positive' AND dropped=0""",
+           FROM variants WHERE stage=? AND kind='positive' AND dropped=0
+             AND COALESCE(register,'') != 'curated'""",
         (STAGE,),
     ).fetchall()
     ids = np.array([r[0] for r in rows])

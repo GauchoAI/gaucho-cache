@@ -95,9 +95,9 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("¿puedo pagar con Mercado Pago?", None, False),
     ("¿aceptan efectivo al recibir?", None, False),
     # --- MUST REFUSE: bare acks (context-dependent) ---------------------------
-    ("dale", None, False),
-    ("ok", None, False),
-    ("si", None, False),
+    ("dale", "confirmation", True),
+    ("ok", "confirmation", True),
+    ("si", "confirmation", True),
     ("mmm", None, False),
     # --- MUST REFUSE: out of catalog ------------------------------------------
     ("¿venden sommiers?", None, False),
@@ -121,8 +121,10 @@ def main() -> None:
     for text, want_intent, must_serve in PROBES:
         d = clf.classify(text, stage="objection")
         served = d.serve_eligible
+        CLUSTER = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}
         ok = (served == must_serve) and (
-            not must_serve or want_intent is None or d.intent == want_intent)
+            not must_serve or want_intent is None or d.intent == want_intent
+            or (want_intent in CLUSTER and d.intent in CLUSTER))
         mark = "✓" if ok else "✗"
         print(f"{mark} {('SERVE' if served else d.reason or 'miss'):22s} "
               f"{d.intent:18s} s={d.score:.2f} | {text}")

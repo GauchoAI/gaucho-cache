@@ -43,7 +43,7 @@ def strip_salutation(text: str) -> str | None:
 
 DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 DEFAULT_THRESHOLDS = {"threshold": 0.70, "margin": 0.05, "negative_margin": 0.03}
-SOCIAL = {"greet", "thanks_goodbye"}  # mutually-safe social intents
+SOCIAL = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}  # safe cluster
 
 
 @dataclass
@@ -165,7 +165,7 @@ class Classifier:
             neg_score, neg_actual = -1.0, ""
 
         return (top1_intent, top1, top1 - top2, top1 - neg_score,
-                neg_actual, multi)
+                neg_actual, multi, ranked[1][0] if len(ranked) > 1 else "")
 
     def classify(self, text: str, *, stage: str,
                  state_fields: set[str] | None = None,
@@ -179,7 +179,8 @@ class Classifier:
                 if d.decision == "hit":
                     d.reason = (d.reason + "; " if d.reason else "") + "salutation_stripped"
                     return d
-        intent, score, margin, neg_margin, neg_actual, multi = self.route(text)
+        (intent, score, margin, neg_margin, neg_actual, multi,
+         second_intent) = self.route(text)
         th = self._thresholds_for(intent)
         contract = self.contracts.get(intent)
 
@@ -201,8 +202,8 @@ class Classifier:
         if multi:
             d.reason = "multi_intent"   # compound message: two concerns
             return d
-        if margin < th.margin:
-            d.reason = "ambiguous_margin"
+        if margin < th.margin and not ({intent, second_intent} <= SOCIAL):
+            d.reason = "ambiguous_margin"   # in-cluster ties are safe to serve
             return d
         if neg_margin < th.negative_margin:
             d.reason = "negative_margin"

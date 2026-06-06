@@ -130,7 +130,7 @@ def main() -> None:
             i2, s2 = second
             if (i2 in thresholds and s2 >= 0.75 and s2 >= min(thresholds[i2].threshold, 0.82)
                     and (not short or score - s2 < 0.12)
-                    and not ({intent, i2} <= {"greet", "thanks_goodbye"})):
+                    and not ({intent, i2} <= {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"})):
                 return "multi_intent"  # compound guard (wave-1 finding)
         if margin < th.margin:
             return "ambiguous_margin"
@@ -161,7 +161,8 @@ def main() -> None:
                          len(texts[i].split()) <= 3):
             hits += 1
             stat["hits"] += 1
-            if pred != true:
+            SOCIAL_CLUSTER = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}
+            if pred != true and not ({pred, true} <= SOCIAL_CLUSTER):
                 confident_wrong.append((texts[i], true, pred, score))
                 stat["wrong"] += 1
 

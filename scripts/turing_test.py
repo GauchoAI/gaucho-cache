@@ -114,7 +114,7 @@ async def main() -> None:
         if (th is None or c is None or s1 < th.threshold
                 or (th2 is not None and s2 >= 0.75 and s2 >= min(th2.threshold, 0.82)
                     and (not short or s1 - s2 < 0.12)
-                    and not ({i1, i2} <= {"greet", "thanks_goodbye"}))  # compound
+                    and not ({i1, i2} <= {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}))  # compound
                 or s1 - s2 < th.margin or s1 - ns < th.negative_margin
                 or not c.preconditions_pass(stage=STAGE,
                                             state_fields=set())[0]

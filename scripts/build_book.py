@@ -221,7 +221,7 @@ const N=D.n, DIM=D.dim;
 const POS=[],NEG={};
 D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
   else (NEG[it]=NEG[it]||[]).push(i); });
-const SOCIAL=new Set(["greet","thanks_goodbye"]);
+const SOCIAL=new Set(["greet","thanks_goodbye","confirmation","declination","answer_for_whom"]);
 
 function decide(q, isShort){
   const t0=performance.now();
