@@ -1,4 +1,9 @@
 {
+  "answer_for_whom": {
+    "threshold": 0.6390610527992249,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
   "bot_skepticism": {
     "threshold": 0.714324254989624,
     "margin": 0.05,
@@ -56,6 +61,11 @@
   },
   "thanks_goodbye": {
     "threshold": 0.7617497038841248,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "want_to_buy": {
+    "threshold": 0.907537956237793,
     "margin": 0.05,
     "negative_margin": 0.03
   },

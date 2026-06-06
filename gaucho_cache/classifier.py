@@ -147,6 +147,7 @@ class Classifier:
                            # short-fragment embedding noise ("Como va?")
         short = len(text.split()) <= 3   # fragments embed promiscuously;
         multi = (len(ranked) > 1         # real compounds are long (2 clauses)
+                 and ranked[1][1] >= 0.75  # a real second concern is strong
                  and ranked[1][1] >= min(
                      self._thresholds_for(ranked[1][0]).threshold,
                      COMPOUND_FLOOR)

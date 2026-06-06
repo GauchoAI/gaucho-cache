@@ -46,6 +46,15 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("Holiss como están?", "greet", True),
     ("Hola!! Cómo estás?", "greet", True),
     ("Buen día chicas", "greet", True),
+    # --- purchase intent: the funnel's entry point ----------------------------
+    ("queria comprar un colchon", "want_to_buy", True),
+    ("Queria comprar un colchon, dos plazas", "want_to_buy", True),
+    ("busco un colchón", "want_to_buy", True),
+    # --- answers to the bot's own greeting question --------------------------
+    ("es para mi", "answer_for_whom", True),
+    ("para mi pareja", "answer_for_whom", True),
+    ("es para otra persona", "answer_for_whom", True),
+    ("es un regalo", "answer_for_whom", True),
     # --- thanks / farewells ------------------------------------------------
     ("gracias!", "thanks_goodbye", True),
     ("mil gracias, genial!", "thanks_goodbye", True),

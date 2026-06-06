@@ -128,7 +128,7 @@ def main() -> None:
             return "below_threshold"
         if second is not None:
             i2, s2 = second
-            if (i2 in thresholds and s2 >= min(thresholds[i2].threshold, 0.82)
+            if (i2 in thresholds and s2 >= 0.75 and s2 >= min(thresholds[i2].threshold, 0.82)
                     and (not short or score - s2 < 0.12)
                     and not ({intent, i2} <= {"greet", "thanks_goodbye"})):
                 return "multi_intent"  # compound guard (wave-1 finding)

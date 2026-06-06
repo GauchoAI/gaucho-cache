@@ -134,3 +134,21 @@ intents:
       speed in general (shipping_time), NOT returns or defects.
     confusables: [shipping_time]
     template_file: order_status.md
+
+  - stage: objection
+    intent: answer_for_whom
+    meaning: >
+      The customer answers WHO the mattress is for, replying to the
+      greeting question: it is for me, for my son/partner/mom, for
+      someone else, a gift. Short answer, no other concern.
+    confusables: [greet]
+    template_file: answer_for_whom.md
+
+  - stage: objection
+    intent: want_to_buy
+    meaning: >
+      The customer states purchase intent for a mattress: wants to buy,
+      is looking for one, needs a new one — possibly mentioning a size.
+      No objection or other concern attached.
+    confusables: [what_do_you_sell]
+    template_file: want_to_buy.md

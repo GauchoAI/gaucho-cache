@@ -244,7 +244,7 @@ function decide(q, isShort){
   const c=D.contracts[i1]||{};
   let verdict="miss", reason="";
   if(s1<th.threshold) reason="below_threshold";
-  else if(th2 && s2>=Math.min(th2.threshold,D.compound_floor)
+  else if(th2 && s2>=0.75 && s2>=Math.min(th2.threshold,D.compound_floor)
           && (!isShort || s1-s2<0.12)
           && !(SOCIAL.has(i1)&&SOCIAL.has(i2))) reason="multi_intent";
   else if(s1-s2<th.margin) reason="ambiguous_margin";

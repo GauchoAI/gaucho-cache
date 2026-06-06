@@ -50,6 +50,8 @@ def main() -> None:
                                REPO / "data" / "contract_extensions.yaml")
     variants = json.loads(
         (REPO / "data" / "template_variants.json").read_text(encoding="utf-8"))
+    for cat, c in contracts.items():   # every template always has a pool
+        variants.setdefault(cat, [c.body])
 
     emb16 = index.embeddings.astype(np.float16)
     payload = {

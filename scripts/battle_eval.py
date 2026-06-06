@@ -121,7 +121,7 @@ async def main() -> None:
         th = thresholds.get(i1)
         th2 = thresholds.get(i2)
         c = contracts.get(i1)
-        multi = (th2 is not None and s2 >= min(th2.threshold, 0.82)
+        multi = (th2 is not None and s2 >= 0.75 and s2 >= min(th2.threshold, 0.82)
                  and (not short or s1 - s2 < 0.12)
                  and not ({i1, i2} <= {"greet", "thanks_goodbye"}))  # compound guard
         if (th is None or s1 < th.threshold or multi
