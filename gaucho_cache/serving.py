@@ -38,6 +38,7 @@ class BotState:
     offered_payments: bool = False
     closed: bool = False
     last_intent: str = "greet"
+    salt: int = 0   # per-conversation phrasing rotation (anti-tell)
 
 
 def serve_turn(clf, variants: dict, state: BotState, msg: str,
@@ -55,7 +56,7 @@ def serve_turn(clf, variants: dict, state: BotState, msg: str,
     if pm and state.recommended and len(msg.split()) <= 8:
         state.closed = True
         state.last_intent = "close"
-        return (render_close(state.slots, pm), "CACHE",
+        return (render_close(state.slots, pm, salt=state.salt), "CACHE",
                 "answer_payment_choice", "class_b_close")
     # Same doctrine for the payment-options ASK: "pasame las opciones de
     # pago" after a recommendation is a ladder lookup, not a similarity call.
@@ -63,7 +64,7 @@ def serve_turn(clf, variants: dict, state: BotState, msg: str,
             and PAYMENT_ASK_RX.search(msg) and len(msg.split()) <= 10):
         state.offered_payments = True
         state.last_intent = "answer_payment_choice"
-        return (render_payment_options(state.slots), "CACHE",
+        return (render_payment_options(state.slots, salt=state.salt), "CACHE",
                 "answer_payment_choice", "class_b_payments")
 
     d = clf.classify(msg[:200], stage="objection",
@@ -73,7 +74,7 @@ def serve_turn(clf, variants: dict, state: BotState, msg: str,
 
     intent = d.intent
     if intent in FUNNEL_INTENTS and state.slots.get("size"):
-        reco = render_recommendation(state.slots)
+        reco = render_recommendation(state.slots, salt=state.salt)
         if reco:
             state.recommended = True
             state.last_intent = "answer_size_posture"
@@ -81,18 +82,18 @@ def serve_turn(clf, variants: dict, state: BotState, msg: str,
     if intent == "answer_payment_choice" and state.recommended:
         state.offered_payments = True
         state.last_intent = "answer_payment_choice"
-        return (render_payment_options(state.slots), "CACHE", intent,
+        return (render_payment_options(state.slots, salt=state.salt), "CACHE", intent,
                 "class_b_payments")
     if intent in ACK_INTENTS and state.recommended and not state.offered_payments:
         # "dale" after a recommendation means: move toward the close.
         state.offered_payments = True
         state.last_intent = "answer_payment_choice"
-        return (render_payment_options(state.slots), "CACHE", intent,
+        return (render_payment_options(state.slots, salt=state.salt), "CACHE", intent,
                 "class_b_payments")
     if intent == "price" and state.recommended:
         state.offered_payments = True
         state.last_intent = "answer_payment_choice"
-        return (render_payment_options(state.slots), "CACHE", intent,
+        return (render_payment_options(state.slots, salt=state.salt), "CACHE", intent,
                 "class_b_payments")
 
     # Class A — audited template (rotation pool).

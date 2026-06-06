@@ -100,6 +100,41 @@ def payment_lines(price: float) -> list[str]:
     return out
 
 
+# ---- anti-tell phrasing rotation -------------------------------------------
+# A single fixed phrasing is the Turing tell the chapter-10 test already
+# taught us about. Renders rotate among deterministic phrasings, seeded
+# per conversation (rotation, never generation — still zero tokens).
+RECO_INTRO = [
+    "Estas son mis recomendaciones para tu cama {size}: 🛏️",
+    "Mirá, para una cama {size} yo iría por alguno de estos: 🛏️",
+    "Te separé lo mejor que tengo en {size}: 🛏️",
+]
+RECO_OUTRO = [
+    "¿Te paso las opciones de pago de alguno, o querés ver otro estilo?",
+    "Si alguno te tienta te paso enseguida cómo pagarlo, ¿dale?",
+    "Decime cuál te llama y vemos números, o te muestro otro estilo.",
+]
+PAY_INTRO = [
+    "Para el *{name}* (lista {price}) tenés: 💳",
+    "Con el *{name}* (lista {price}) los números quedan así: 💳",
+    "Te detallo cómo queda el *{name}* (lista {price}): 💳",
+]
+PAY_OUTRO = [
+    "¿Con cuál te queda cómodo? Apenas elijas te paso el link para cerrarlo.",
+    "Decime cuál te conviene y te mando el link al toque.",
+    "Elegí la que más te sirva y lo dejamos cerrado en un minuto.",
+]
+CLOSE_INTRO = [
+    "¡Listo! 🎉 Te reservo el *{name}* con {method}: {total}{per}.",
+    "¡Hecho! 🙌 Queda apartado el *{name}* con {method}: {total}{per}.",
+    "¡Excelente elección! ✨ Te dejo el *{name}* con {method}: {total}{per}.",
+]
+
+
+def _pick(options: list[str], salt: int) -> str:
+    return options[salt % len(options)]
+
+
 # ---- class-B renderers -----------------------------------------------------
 def pick_products(size: str | None, firmness_pref: tuple[str, ...] | None,
                   k: int = 2) -> list[dict]:
@@ -118,7 +153,7 @@ def pick_products(size: str | None, firmness_pref: tuple[str, ...] | None,
     return sorted(items, key=rank)[:k]
 
 
-def render_recommendation(slots: dict) -> str | None:
+def render_recommendation(slots: dict, salt: int = 0) -> str | None:
     """The funnel's recommend step as a class-B serve. None when the
     slots aren't there — the ask-templates' job is to get them first."""
     size = slots.get("size")
@@ -135,22 +170,22 @@ def render_recommendation(slots: dict) -> str | None:
             f"• *{p['name']}* ({p['firmeza']}, {p['tecnologia']}, "
             f"{p['altura_cm']} cm){sale} — lista {_ars(p['price'])}, "
             f"con {label.lower()}: {_ars(off)}")
-    return ("Estas son mis recomendaciones para tu cama "
-            f"{size}: 🛏️\n" + "\n".join(lines) +
-            "\n¿Te paso las opciones de pago de alguno, o querés ver otro estilo?")
+    return (_pick(RECO_INTRO, salt).format(size=size)
+            + "\n" + "\n".join(lines) + "\n" + _pick(RECO_OUTRO, salt))
 
 
-def render_payment_options(slots: dict) -> str:
+def render_payment_options(slots: dict, salt: int = 0) -> str:
     """Cuotas/discount ladder for the recommended (or cheapest matching)
     product — pure arithmetic over the ladder file."""
     prods = pick_products(slots.get("size"), slots.get("firmness_pref"), k=1)
     p = prods[0]
-    return (f"Para el *{p['name']}* (lista {_ars(p['price'])}) tenés: 💳\n"
-            + "\n".join(payment_lines(p["price"]))
-            + "\n¿Con cuál te queda cómodo? Apenas elijas te paso el link para cerrarlo.")
+    return (_pick(PAY_INTRO, salt).format(name=p["name"], price=_ars(p["price"]))
+            + "\n" + "\n".join(payment_lines(p["price"]))
+            + "\n" + _pick(PAY_OUTRO, salt))
 
 
-def render_close(slots: dict, method_key: str | None = None) -> str:
+def render_close(slots: dict, method_key: str | None = None,
+                 salt: int = 0) -> str:
     """The close: confirm the chosen payment and hand the checkout link."""
     prods = pick_products(slots.get("size"), slots.get("firmness_pref"), k=1)
     p = prods[0]
@@ -159,8 +194,9 @@ def render_close(slots: dict, method_key: str | None = None) -> str:
         m = min(ladder(), key=lambda x: x["multiplier"])
     total = p["price"] * m["multiplier"]
     per = (f" ({m['cuotas']}× {_ars(total / m['cuotas'])})" if m["cuotas"] > 1 else "")
-    return (f"¡Listo! 🎉 Te reservo el *{p['name']}* con {m['label'].lower()}: "
-            f"{_ars(total)}{per}. Completá el pago acá y queda confirmado: "
+    intro = _pick(CLOSE_INTRO, salt).format(
+        name=p["name"], method=m["label"].lower(), total=_ars(total), per=per)
+    return (intro + " Completá el pago acá y queda confirmado: "
             f"https://laferia.example/checkout/{p['sku']}?pago={m['method_key']} "
             "— cualquier cosa me escribís por acá.")
 

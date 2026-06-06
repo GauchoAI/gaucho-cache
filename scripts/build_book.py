@@ -306,6 +306,12 @@ function extractSlots(t){
   for(const [rx,p] of POST_RX){ if(rx.test(t)){BOT.slots.pref=BOT.slots.pref||p;return;} }
 }
 const ars=n=>"$"+Math.round(n).toLocaleString("es-AR");
+const SALT=Math.floor(Math.random()*3); // per-session phrasing rotation (anti-tell)
+const RECO_INTRO=["Estas son mis recomendaciones para tu cama {s}: 🛏️","Mirá, para una cama {s} yo iría por alguno de estos: 🛏️","Te separé lo mejor que tengo en {s}: 🛏️"];
+const RECO_OUTRO=["¿Te paso las opciones de pago de alguno, o querés ver otro estilo?","Si alguno te tienta te paso enseguida cómo pagarlo, ¿dale?","Decime cuál te llama y vemos números, o te muestro otro estilo."];
+const PAY_INTRO=["Para el <b>{n}</b> (lista {p}) tenés: 💳","Con el <b>{n}</b> (lista {p}) los números quedan así: 💳","Te detallo cómo queda el <b>{n}</b> (lista {p}): 💳"];
+const PAY_OUTRO=["¿Con cuál te queda cómodo? Apenas elijas te paso el link para cerrarlo.","Decime cuál te conviene y te mando el link al toque.","Elegí la que más te sirva y lo dejamos cerrado en un minuto."];
+const CLOSE_INTRO=["¡Listo! 🎉 Te reservo el <b>{n}</b> con {m}: {t}{x}.","¡Hecho! 🙌 Queda apartado el <b>{n}</b> con {m}: {t}{x}.","¡Excelente elección! ✨ Te dejo el <b>{n}</b> con {m}: {t}{x}."];
 function pickProducts(k){
   let items=(D.catalog||[]).filter(p=>p.stock_status==="instock");
   if(BOT.slots.size){const f=items.filter(p=>p.size===BOT.slots.size); if(f.length) items=f;}
@@ -323,13 +329,13 @@ function renderReco(){
   BOT.recommended=true;
   const lines=ps.map(p=>{const [lab,off]=bestOffer(p.price);
     return `• <b>${p.name}</b> (${p.firmeza}, ${p.tecnologia}, ${p.altura_cm} cm)${p.on_sale?" 🔥 en oferta":""} — lista ${ars(p.price)}, con ${lab.toLowerCase()}: ${ars(off)}`;});
-  return `Estas son mis recomendaciones para tu cama ${BOT.slots.size}: 🛏️<br>${lines.join("<br>")}<br>¿Te paso las opciones de pago de alguno, o querés ver otro estilo?`;
+  return `${RECO_INTRO[SALT].replace("{s}",BOT.slots.size)}<br>${lines.join("<br>")}<br>${RECO_OUTRO[SALT]}`;
 }
 function renderPayments(){
   const p=pickProducts(1)[0]; BOT.offered=true;
   const lines=(D.ladder||[]).map(m=>{const tot=p.price*m.multiplier;
     return m.cuotas>1?`• ${m.label}: ${m.cuotas}× ${ars(tot/m.cuotas)} (total ${ars(tot)})`:`• ${m.label}: ${ars(tot)}`;});
-  return `Para el <b>${p.name}</b> (lista ${ars(p.price)}) tenés: 💳<br>${lines.join("<br>")}<br>¿Con cuál te queda cómodo? Apenas elijas te paso el link para cerrarlo.`;
+  return `${PAY_INTRO[SALT].replace("{n}",p.name).replace("{p}",ars(p.price))}<br>${lines.join("<br>")}<br>${PAY_OUTRO[SALT]}`;
 }
 function detectPayment(t){t=(t||"").toLowerCase();
   if(/\\befectivo\\b|\\bcontado\\b/.test(t))return "efectivo";
@@ -343,7 +349,7 @@ function renderClose(mk){
   const m=(D.ladder||[]).find(x=>x.method_key===mk)||(D.ladder||[]).reduce((a,b)=>a.multiplier<b.multiplier?a:b);
   const tot=p.price*m.multiplier;
   const per=m.cuotas>1?` (${m.cuotas}× ${ars(tot/m.cuotas)})`:"";
-  return `¡Listo! 🎉 Te reservo el <b>${p.name}</b> con ${m.label.toLowerCase()}: ${ars(tot)}${per}. Completá el pago acá y queda confirmado: <a href="#" onclick="return false">laferia.example/checkout/${p.sku}?pago=${m.method_key}</a> 🧾 — cualquier cosa me escribís por acá.`;
+  return `${CLOSE_INTRO[SALT].replace("{n}",p.name).replace("{m}",m.label.toLowerCase()).replace("{t}",ars(tot)).replace("{x}",per)} Completá el pago acá y queda confirmado: <a href="#" onclick="return false">laferia.example/checkout/${p.sku}?pago=${m.method_key}</a> 🧾 — cualquier cosa me escribís por acá.`;
 }
 const FUNNEL_B=new Set(["answer_size_posture","ask_recommendation","want_to_buy","answer_for_whom"]);
 const ACK_B=new Set(["confirmation","awaiting_reply"]);

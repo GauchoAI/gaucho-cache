@@ -117,7 +117,7 @@ async def run_conv(client, clf, variants, arm: str, i: int, seed: int,
     goal_key, goal = GOALS[i % len(GOALS)]
     size = r.choice(["1 plaza", "2 plazas", "queen", "king"])
     posture = r.choice(["de costado", "boca arriba", "boca abajo"])
-    state = BotState()
+    state = BotState(salt=seed * 1000 + i)
     greet = variants["greet"][0]
     hist = [("bot", greet, "CACHE")]
     stage = "awareness"
