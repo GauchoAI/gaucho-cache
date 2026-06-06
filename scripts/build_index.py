@@ -14,8 +14,9 @@ from gaucho_cache.classifier import DEFAULT_MODEL, Embedder, StageIndex
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
-OUT = REPO / "index" / "slice-v1.npz"
-STAGE = "objection"
+import os as _os
+OUT = REPO / "index" / _os.environ.get("GAUCHO_INDEX", "slice-v1.npz")
+STAGE = _os.environ.get("GAUCHO_STAGE", "objection")
 
 
 def main() -> None:

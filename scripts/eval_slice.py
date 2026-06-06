@@ -21,6 +21,7 @@ from __future__ import annotations
 import json
 import sys
 from collections import Counter, defaultdict
+import os as _os
 from pathlib import Path
 
 import numpy as np
@@ -34,9 +35,9 @@ from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, lo
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
 CONTRACTS_DIR = default_contracts_dir(REPO)
-THRESHOLDS_OUT = REPO / "index" / "thresholds.json"
+THRESHOLDS_OUT = REPO / "index" / _os.environ.get("GAUCHO_THRESHOLDS", "thresholds.json")
 REPORT_OUT = REPO / "reports" / "slice-eval.md"
-STAGE = "objection"
+STAGE = _os.environ.get("GAUCHO_STAGE", "objection")
 HOLDOUT_EVERY = 5           # 20%
 MARGIN = 0.05
 NEGATIVE_MARGIN = 0.03

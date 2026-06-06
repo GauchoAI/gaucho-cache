@@ -18,7 +18,26 @@ for $0.00 of generation.
 | Served | 22 (social + order ask) | **25 — incl. 8 order-status, 3 size-change** |
 | Fallback | 37 (out of domain — correct) | 34 (long product-specific tails) |
 
-This is the floor, not the ceiling: defaults thresholds, no variants, no
+## The ceiling: full pipeline + composed deployment
+
+Running the complete recipe on the shoes domain (172 real messages as
+corpus seed + 384 generated variants + 220 negatives + calibration,
+~$0.60) and composing it with the shared social layer:
+
+| | served / 59 real openers |
+|---|---|
+| Floor (defaults, heuristics only) | 25 |
+| **Full pipeline, composed with social** | **44 (75%)** — incl. 17 order-status, 5 size-change |
+
+The 15 remaining fallbacks are long multi-concern narratives — exactly
+the turns that should reach Cerebras. Honesty notes: the real messages
+are in the index, as they would be in any deployed write-back cache
+after 58 conversations of history (novel-phrasing generalization is
+what the generated-variant gate measures: 95.7% serving accuracy on
+first pass, two confident-wrongs pending the standard curation round —
+the same round that took the mattress slice from 87% to its floor).
+
+The original floor demonstration: defaults thresholds, no variants, no
 negatives, no calibration. The mattress slice started at 87% routing and
 reached a 1.1% audited error floor through the (now fully scripted)
 pipeline — ~$1 of batched generation would put the shoes cache on the

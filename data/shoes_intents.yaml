@@ -1,0 +1,25 @@
+intents:
+  - stage: shoes
+    intent: order_status
+    meaning: >
+      The customer of an Argentine online SHOE store asks about the state of an EXISTING shoe order: news, tracking, did it ship, order number status. NOT general delivery speed.
+    confusables: [shipping]
+    template_file: order_status.md
+  - stage: shoes
+    intent: size_change
+    meaning: >
+      The customer of an Argentine online SHOE store wants to exchange shoes for a different size, or says they fit too big/small (cambio de talle).
+    confusables: [order_status]
+    template_file: size_change.md
+  - stage: shoes
+    intent: stock_model
+    meaning: >
+      The customer of an Argentine online SHOE store asks availability of a specific model/color/size in stock, or when a model restocks.
+    confusables: [order_status]
+    template_file: stock_model.md
+  - stage: shoes
+    intent: shipping
+    meaning: >
+      The customer of an Argentine online SHOE store asks delivery coverage, cost or timing in general for a NEW purchase (not an existing order).
+    confusables: [order_status]
+    template_file: shipping.md

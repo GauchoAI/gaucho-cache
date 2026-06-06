@@ -31,7 +31,8 @@ from gaucho_cache.contracts import (default_contracts_dir, load_all_contracts, l
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
-INTENTS_YAML = REPO / "data" / "intents_slice.yaml"
+import os as _os
+INTENTS_YAML = REPO / _os.environ.get("GAUCHO_INTENTS", "data/intents_slice.yaml")
 CONTRACTS_DIR = default_contracts_dir(REPO)
 MODEL = "gpt-oss-120b"
 BASE_URL = "https://api.cerebras.ai/v1"

@@ -1,0 +1,22 @@
+{
+  "order_status": {
+    "threshold": 0.795676429271698,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "shipping": {
+    "threshold": 0.8223647665977478,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "size_change": {
+    "threshold": 0.7905138325691223,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "stock_model": {
+    "threshold": 0.8049580049514771,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  }
+}
