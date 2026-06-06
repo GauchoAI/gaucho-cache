@@ -10,12 +10,17 @@
     "negative_margin": 0.03
   },
   "firmness_doubt": {
-    "threshold": 0.8465827894210816,
+    "threshold": 0.8465829086303711,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "greet": {
     "threshold": 0.775628228187561,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "order_status": {
+    "threshold": 0.6668457579612732,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -50,7 +55,7 @@
     "negative_margin": 0.03
   },
   "thanks_goodbye": {
-    "threshold": 0.7617495250701904,
+    "threshold": 0.7617497038841248,
     "margin": 0.05,
     "negative_margin": 0.03
   },

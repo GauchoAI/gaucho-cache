@@ -125,3 +125,12 @@ intents:
       product question.
     confusables: [brand_trust]
     template_file: what_do_you_sell.md
+
+  - stage: objection
+    intent: order_status
+    meaning: >
+      The customer asks about the state of an EXISTING order: any news,
+      is it on the way, status of purchase/order number. NOT delivery
+      speed in general (shipping_time), NOT returns or defects.
+    confusables: [shipping_time]
+    template_file: order_status.md

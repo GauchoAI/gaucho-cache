@@ -64,6 +64,11 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("el envio cuanto demora?", "shipping_time", True),
     ("sos un bot?", "bot_skepticism", True),
     ("hay alguien real ahi?", "bot_skepticism", True),
+    # --- order status: the dominant real concern (ask-the-slot move) ---------
+    ("alguna novedad de mi pedido?", "order_status", True),
+    ("hola, como viene mi pedido?", "order_status", True),
+    ("mi pedido ya salió?", "order_status", True),
+    ("cuanto tarda el envio en general?", "shipping_time", True),
     # --- salutation decomposition: greeting + servable concern ---------------
     ("hola, tiene garantia?", "warranty", True),
     ("buenas! envian a salta capital?", "shipping_zone", True),
@@ -93,7 +98,7 @@ PROBES: list[tuple[str, str | None, bool]] = [
     # --- real-world greeting+concern (must fall to the LLM lane) -------------
     ("Hola! Tenes el modelo king en blanco?", None, False),
     ("Hola buen dia! Te escribo para tramitar un cambio de mi pedido", None, False),
-    ("Hola! Alguna novedad sobre mi pedido?", None, False),
+    ("Hola! Alguna novedad sobre mi pedido?", "order_status", True),
 ]
 
 
