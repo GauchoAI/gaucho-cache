@@ -129,7 +129,7 @@ def main() -> None:
         short = words <= 3
         if score < th.threshold:
             return "below_threshold"
-        FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom"}
+        FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom", "ask_recommendation"}
         if second is not None and not corpus_exact and words > 2:
             # two words can't carry two concerns (classifier parity)
             i2, s2 = second
@@ -170,7 +170,7 @@ def main() -> None:
             hits += 1
             stat["hits"] += 1
             SOCIAL_CLUSTER = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}
-            FUNNEL_CLUSTER = {"want_to_buy","answer_size_posture","answer_for_whom"}
+            FUNNEL_CLUSTER = {"want_to_buy","answer_size_posture","answer_for_whom","ask_recommendation"}
             # In-cluster confusions never lie: social crossings are mutual
             # niceties; funnel crossings ask/ack the same purchase step
             # (worst case a redundant question, classifier doctrine parity).

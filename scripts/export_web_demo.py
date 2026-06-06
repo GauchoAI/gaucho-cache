@@ -20,7 +20,8 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from gaucho_cache.classifier import StageIndex, load_thresholds
+from gaucho_cache.classifier import (CONTEXT_DISCOUNT, EXPECTED_NEXT,
+                                     StageIndex, load_thresholds)
 from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
@@ -72,6 +73,8 @@ def main() -> None:
         "variants": variants,
         "scenarios": SCENARIOS,
         "compound_floor": 0.82,
+        "expected_next": {k: list(v) for k, v in EXPECTED_NEXT.items()},
+        "context_discount": CONTEXT_DISCOUNT,
         "curated_exact": json.loads((REPO / "data" / "curated_exact.json").read_text())
             if (REPO / "data" / "curated_exact.json").exists() else {},
     }

@@ -74,7 +74,9 @@ async def main() -> None:
                     mood=mood, style=style, goal=goal, hist=htxt),
                     temperature=0.9, max_tokens=900)).strip()
             if "[FIN]" in msg or not msg: break
-            d = clf.classify(msg[:200], stage="objection")
+            last_bot = hist[-1][3] if hist and hist[-1][0] == "bot" else None
+            d = clf.classify(msg[:200], stage="objection",
+                             last_bot_intent=last_bot)
             if d.serve_eligible:
                 pool = variants.get(d.intent) or ["..."]
                 reply, lane = r.choice(pool), "CACHE"; cached += 1

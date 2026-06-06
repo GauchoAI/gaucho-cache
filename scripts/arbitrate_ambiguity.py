@@ -68,6 +68,8 @@ BOUNDARIES = """- price: cost, discounts, installments/cuotas, payment options, 
 - answer_size_posture: states bed size and/or sleeping position (2 plazas de costado, queen boca arriba).
 - answer_payment_choice: picks an offered payment option (cuotas, transferencia, tarjeta sin interés).
 - want_to_buy: states purchase intent for a mattress (quiero comprar un colchón), maybe with a size.
+- ask_recommendation: asks the bot to recommend or help choose, without giving size/posture yet (que me recomendas, no se cual elegir, ayudame a elegir).
+- awaiting_reply: politely says they'll wait for the bot's promised options/answer (ok espero, quedo atento, quedo a la espera).
 - answer_for_whom: says who it is for (es para mi, para mi hijo, es un regalo).
 - order_status: asks about an existing order's state.
 - other: a real concern none of the above covers.

@@ -87,8 +87,15 @@ Reply-context rules (these messages are ANSWERS to the bot question shown):
   other. Serving a generic ack would ignore the condition.
 - A reply carrying TWO distinct concerns → ambiguous.""" % BOUNDARIES
 
-FIT_SYS = ("You audit a WhatsApp bot's CACHED reply for fitness. "
-           'Output ONLY JSON {"verdict": "ok"|"reject", "reason": "..."}.')
+FIT_SYS = ("You audit a WhatsApp bot's CACHED reply for fitness. Output "
+           'ONLY JSON {"verdict": "ok"|"incomplete"|"contradicts", '
+           '"reason": "..."}. "contradicts" = the reply answers a different '
+           "question, points the wrong direction (a goodbye to someone who "
+           "wants to continue, a proceed-ack to someone demanding a human), "
+           'or states something false for this message. "incomplete" = the '
+           "reply is a reasonable funnel step but leaves an explicit "
+           'customer question or requirement unaddressed. "ok" = correct '
+           "and complete.")
 
 FIT_PROMPT = """The customer just sent this reply to the bot:
 "{answer}"
@@ -102,7 +109,15 @@ it must not ignore any request, condition or question the customer's
 message carries. If the customer asked for something the template
 doesn't address (a human agent, a language, a channel, a speed, a
 specific product/detail), verdict "reject": the live LLM should answer
-instead."""
+instead.
+
+IMPORTANT: a template that asks a reasonable follow-up question to
+gather details IS a correct response to a message that only provides
+partial information (e.g. "para mi esposa" answered with a question
+about size/position is perfect funnel behavior). The template does NOT
+need to echo or restate what the customer said. Reject only when the
+template CONTRADICTS the message, answers a different question than
+the one asked, or leaves an explicit customer QUESTION unanswered."""
 
 
 async def judge_coverable(client: BatchClient, contracts, question: str,
@@ -146,12 +161,23 @@ def is_heard(d) -> bool:
     return False
 
 
-def insert_positives(rows: list[tuple[str, str]]) -> int:
-    """rows: (intent, text). register='closure' marks audit-judged answers."""
+def insert_positives(rows: list[tuple[str, str]],
+                     clf=None) -> int:
+    """rows: (intent, text). register='closure' marks audit-judged answers.
+
+    Router pre-check (2026-06-06): a judge label the live router strongly
+    disagrees with becomes an eval confident-wrong the moment it lands in
+    the corpus ("Aguardo, tranqui" filed awaiting_reply, routed
+    answer_for_whom). If the router puts the text under a DIFFERENT
+    intent above 0.80, skip the row — the LLM lane keeps it honestly."""
     con = sqlite3.connect(DB_PATH)
     cur = con.cursor()
     n = 0
     for intent, text in rows:
+        if clf is not None:
+            routed, score, *_ = clf.route(text)
+            if routed != intent and score >= 0.80:
+                continue
         dup = cur.execute(
             "SELECT 1 FROM variants WHERE stage=? AND intent=? AND kind='positive' "
             "AND lower(text)=lower(?) AND dropped=0", (STAGE, intent, text)).fetchone()
@@ -202,7 +228,7 @@ async def run_round(client: BatchClient, flavor: str) -> tuple[int, int, int]:
     for _cat, body, answers in batches:
         for a in answers:
             total += 1
-            d = clf.classify(a, stage=STAGE)
+            d = clf.classify(a, stage=STAGE, last_bot_intent=_cat)
             if not is_heard(d):
                 unheard.append((body, a))
 
@@ -215,7 +241,7 @@ async def run_round(client: BatchClient, flavor: str) -> tuple[int, int, int]:
     coverable = [(i, a) for (_b, a), i in zip(unheard, verdicts) if i]
     llm_ok = len(verdicts) - len(coverable)
 
-    n_new = insert_positives(coverable)
+    n_new = insert_positives(coverable, clf=clf)
     for i, a in coverable[:8]:
         print(f"    closing: {a!r} → {i}")
     print(f"  round: {total} answers | {len(unheard)} unheard | "

@@ -222,7 +222,7 @@ const POS=[],NEG={};
 D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
   else (NEG[it]=NEG[it]||[]).push(i); });
 const SOCIAL=new Set(["greet","thanks_goodbye","confirmation","declination","answer_for_whom"]);
-const FUNNEL=new Set(["want_to_buy","answer_size_posture","answer_for_whom"]); // one funnel move, not two concerns
+const FUNNEL=new Set(["want_to_buy","answer_size_posture","answer_for_whom","ask_recommendation"]); // one funnel move, not two concerns
 
 function normTxt(t){return t.toLowerCase().normalize("NFKD").replace(/[^a-z0-9ñ ]+/g,"").trim();}
 function decide(q, nWords, rawText){
@@ -250,18 +250,32 @@ function decide(q, nWords, rawText){
   const th2=D.thresholds[i2];
   const c=D.contracts[i1]||{};
   const corpusExact=s1>=0.995; // verbatim corpus member: multi/margin legs don't apply
+  // context conditioning: the demo knows what it just asked (lastBotIntent)
+  const expected=(D.expected_next||{})[lastBotIntent]||[];
+  const effTh=expected.includes(i1)?Math.max(0.70,th.threshold-(D.context_discount||0.05)):th.threshold;
   let verdict="miss", reason="";
-  if(s1<th.threshold) reason="below_threshold";
+  if(s1<effTh) reason="below_threshold";
   else if(!corpusExact && nWords>2 && th2 && s2>=0.75 && s2>=Math.min(th2.threshold,D.compound_floor)
           && (!isShort || s1-s2<0.12)
           && !(SOCIAL.has(i1)&&SOCIAL.has(i2))
           && !(FUNNEL.has(i1)&&FUNNEL.has(i2))) reason="multi_intent";
   else if(!corpusExact && s1-s2<th.margin && !(SOCIAL.has(i1)&&SOCIAL.has(i2)) && !(FUNNEL.has(i1)&&FUNNEL.has(i2))) reason="ambiguous_margin";
   else if(s1-ns<th.negative_margin) reason="negative_margin";
-  else if((c.requires_state||[]).length) reason="precondition_failed";
-  else if(!c.audited){ verdict="hit"; reason="template_unaudited"; }
-  else verdict="serve";
-  return {verdict,reason,intent:i1,score:s1,margin:s1-s2,negMargin:s1-ns,
+  // funnel-tie slot preference: both slots present -> never re-ask them
+  let servedIntent=i1, cc=c;
+  if(!reason && s1-s2<th.margin && FUNNEL.has(i1) && i1!=="answer_size_posture"
+     && i2==="answer_size_posture"
+     && /\b(1|una?|2|dos)\s*plazas?\b|\bqueen\b|\bking\b/i.test(rawText||"")
+     && /\bde\s+costado\b|\bde\s+lado\b|\bboca\s+(arriba|abajo)\b|\bde\s+espaldas?\b/i.test(rawText||"")
+     && D.contracts["answer_size_posture"] && D.contracts["answer_size_posture"].audited){
+    servedIntent="answer_size_posture"; cc=D.contracts["answer_size_posture"]; reason="funnel_tie_slots";
+  }
+  if(reason==="" || reason==="funnel_tie_slots"){
+    if((cc.requires_state||[]).length){ reason="precondition_failed"; }
+    else if(!cc.audited){ verdict="hit"; reason="template_unaudited"; }
+    else verdict="serve";
+  }
+  return {verdict,reason,intent:servedIntent,score:s1,margin:s1-s2,negMargin:s1-ns,
           ms:performance.now()-t0};
 }
 

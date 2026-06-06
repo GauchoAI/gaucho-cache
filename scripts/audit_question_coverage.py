@@ -27,7 +27,8 @@ from gaucho_cache.classifier import Classifier, StageIndex, load_thresholds
 from gaucho_cache.contracts import load_all_contracts
 
 REPO = Path(__file__).resolve().parent.parent
-N_ANSWERS = 12
+N_ANSWERS = 24   # 24×11 templates ≈ 264 fresh samples/run — halves the
+                 # per-run variance that made the 5% gate flap at N=132
 
 async def main() -> None:
     contracts = load_all_contracts(REPO, REPO/"data/contract_extensions.yaml")
@@ -51,7 +52,7 @@ async def main() -> None:
     pending: list[tuple[str, str, str, str, str, float]] = []
     for cat, answers in results:
         for a in answers:
-            d = clf.classify(a, stage="objection")
+            d = clf.classify(a, stage="objection", last_bot_intent=cat)
             ok = d.serve_eligible or d.decision == "hit" or d.reason in (
                 "multi_intent", "ambiguous_margin")  # safe-structured miss
             if not ok and d.reason == "below_threshold" and len(a.split()) <= 2:

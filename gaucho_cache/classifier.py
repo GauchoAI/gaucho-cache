@@ -65,7 +65,43 @@ SOCIAL = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom
 # not two concerns — serving the more-informed template advances correctly.
 # A genuine second concern (shipping, price…) is outside the cluster and
 # still vetoes.
-FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom"}
+FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom", "ask_recommendation"}
+# Slot detectors for the funnel-tie preference (see classify()).
+SIZE_RX = re.compile(r"\b(1|una?|2|dos)\s*plazas?\b|\bqueen\b|\bking\b|\b(90|140|150|160|180|200)\s*x\s*(190|200)\b", re.I)
+POSTURE_RX = re.compile(r"\bde\s+costado\b|\bde\s+lado\b|\bboca\s+(arriba|abajo)\b|\bde\s+espaldas?\b", re.I)
+
+# Conversation-state conditioning: the bot KNOWS what it just asked (the
+# FSM always did — ADR-0016's cache key carries stage; the demo tracks its
+# last intent; the audit reconstructs the question by construction). An
+# answer that routes to an intent the last bot turn INVITED gets a
+# threshold discount: hearing "queen, de costado" is easier right after
+# asking for size — that's context, not leniency. Discount applies to the
+# threshold leg ONLY; multi/margin/negative legs stay fully armed.
+EXPECTED_NEXT: dict[str, tuple[str, ...]] = {
+    "greet": ("answer_for_whom", "want_to_buy", "answer_size_posture",
+              "ask_recommendation"),
+    "what_do_you_sell": ("want_to_buy", "ask_recommendation",
+                         "confirmation", "declination"),
+    "answer_for_whom": ("answer_size_posture", "ask_recommendation"),
+    "want_to_buy": ("answer_size_posture", "ask_recommendation"),
+    "ask_recommendation": ("answer_size_posture",),
+    "answer_size_posture": ("awaiting_reply", "confirmation", "declination"),
+    "answer_payment_choice": ("confirmation", "declination"),
+    "confirmation": ("confirmation", "declination", "answer_payment_choice"),
+    "price": ("answer_payment_choice", "confirmation", "declination"),
+    "brand_trust": ("confirmation", "declination"),
+    "bot_skepticism": ("confirmation", "declination", "bot_skepticism"),
+    "warranty": ("confirmation", "declination"),
+    "return_policy": ("confirmation", "declination"),
+    "shipping_time": ("confirmation", "declination"),
+    "shipping_zone": ("confirmation", "declination"),
+    "out_of_stock_reservation": ("confirmation", "declination"),
+    "firmness_doubt": ("confirmation", "declination", "answer_size_posture"),
+    "size_fit": ("confirmation", "declination", "answer_size_posture"),
+    "awaiting_reply": ("awaiting_reply", "confirmation"),
+}
+CONTEXT_DISCOUNT = 0.07  # an FSM's prior on answers-to-its-own-question
+                         # is far stronger than this cosine nudge
 
 
 @dataclass
@@ -194,6 +230,7 @@ class Classifier:
 
     def classify(self, text: str, *, stage: str,
                  state_fields: set[str] | None = None,
+                 last_bot_intent: str | None = None,
                  _decomposed: bool = False) -> CacheDecision:
         # Curated exact lane: a verbatim match to a human-curated row is
         # constitutional — similarity noise cannot veto it.
@@ -210,7 +247,9 @@ class Classifier:
             rest = strip_salutation(text)
             if rest:
                 d = self.classify(rest, stage=stage,
-                                  state_fields=state_fields, _decomposed=True)
+                                  state_fields=state_fields,
+                                  last_bot_intent=last_bot_intent,
+                                  _decomposed=True)
                 if d.decision == "hit":
                     d.reason = (d.reason + "; " if d.reason else "") + "salutation_stripped"
                     return d
@@ -239,9 +278,17 @@ class Classifier:
         corpus_exact = score >= 0.995
 
         # Compound predicate — first failing leg names the reason.
-        if score < th.threshold:
+        # Context conditioning: an intent the last bot turn invited is
+        # easier to hear (threshold leg only; every other leg stays armed).
+        eff_threshold = th.threshold
+        if (last_bot_intent is not None
+                and intent in EXPECTED_NEXT.get(last_bot_intent, ())):
+            eff_threshold = max(0.70, th.threshold - CONTEXT_DISCOUNT)
+        if score < eff_threshold:
             d.reason = "below_threshold"
             return d
+        if score < th.threshold:
+            d.reason = "context_discount"  # served only thanks to context
         if multi and not corpus_exact:
             d.reason = "multi_intent"   # compound message: two concerns
             return d
@@ -250,6 +297,23 @@ class Classifier:
                 and not ({intent, second_intent} <= FUNNEL)):
             d.reason = "ambiguous_margin"   # in-cluster ties are safe to serve
             return d
+        # Funnel-tie slot preference: in an in-FUNNEL margin tie, when the
+        # message itself carries BOTH slots the sizing question asks for,
+        # serve answer_size_posture — never re-ask what was just given
+        # ("para mi hijo, 1 plaza, boca arriba" must not get the for-whom
+        # template's size question back).
+        if (margin < th.margin and {intent, second_intent} <= FUNNEL
+                and intent != "answer_size_posture"
+                and SIZE_RX.search(text) and POSTURE_RX.search(text)
+                and "answer_size_posture" in (intent, second_intent)):
+            alt = self.contracts.get("answer_size_posture")
+            if alt is not None and alt.audited:
+                d.intent = intent = "answer_size_posture"
+                d.template_id = alt.template_id
+                d.template_version = f"v{alt.version}"
+                d.audited = alt.audited
+                contract = alt
+                d.reason = "funnel_tie_slots"
         if neg_margin < th.negative_margin:
             d.reason = "negative_margin"
             return d

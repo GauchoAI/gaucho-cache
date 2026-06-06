@@ -106,7 +106,20 @@ PROBES: list[tuple[str, str | None, bool]] = [
      "honestamente no tengo una preferencia fuerte. La cama seria una plaza.",
      "answer_size_posture", True),
     ("quiero un colchon de una plaza, duermo de costado", "answer_size_posture", True),
-    ("para mi hijo, cama de 1 plaza, duerme boca arriba", "answer_for_whom", True),
+    # funnel-tie slot preference: both slots given -> never re-ask them
+    ("para mi hijo, cama de 1 plaza, duerme boca arriba", "answer_size_posture", True),
+    # recommendation requests: predictable, templatable (asks the two slots)
+    ("que me recomendas?", "ask_recommendation", True),
+    ("no se cual elegir", "ask_recommendation", True),
+    ("no tengo idea, ayudame a elegir", "ask_recommendation", True),
+    ("cual me conviene?", "ask_recommendation", True),
+    # waiting acks after the bot promises options (red-team find: these
+    # were served thanks_goodbye -> "que descanses" to someone waiting)
+    ("ok espero", "awaiting_reply", True),
+    ("quedo atento", "awaiting_reply", True),
+    ("gracias, quedo a la espera de los detalles", "awaiting_reply", True),
+    # eager continuation must never get a goodbye (red-team find)
+    ("mandame ya", "confirmation", True),
     # demo one-shot 2026-06-06: "dale" after answer_size_posture fell to the
     # LLM lane (web demo skipped the curated lane; acks below uncurated)
     ("perfecto", "confirmation", True),

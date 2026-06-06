@@ -6,4 +6,4 @@ audited: true
 prohibited_topics: []
 required_placeholders: []
 ---
-¡Gracias a vos! Cualquier duda que te surja, escribime nomás que quedo por acá. ¡Que descanses bien! 😴
+¡Gracias a vos! 🙌 Cualquier cosa que necesites, escribime nomás — sigo por acá.

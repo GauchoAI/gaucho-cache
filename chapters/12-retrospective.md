@@ -49,6 +49,8 @@ This chapter is the ledger of both columns.
 | Compound guard vetoed an exact corpus member (s=1.000) and 2-word fragments ("tiene garantia") | closure non-convergence + probe regression | corpus-exact bypass; two words can't carry two concerns |
 | eval's margin leg and the browser's margin leg never got the social-cluster exemption the classifier had (drift №3 and №4 of the same predicate) | side-by-side read during the corpus-exact port | all three sites synced in one diff; parity is now part of the closure chapter's checklist |
 | Elaborated single-concern answers ("duermo de costado… la cama seria una plaza") vetoed as compounds — want_to_buy ranked second, but it's the same funnel move | the user, one-shot №3 | funnel-advancing cluster {want_to_buy, answer_size_posture, answer_for_whom}: in-cluster crossings are redundant questions at worst, never lies |
+| Judge-labeled ingestions the router files elsewhere became eval confident-wrongs the moment they landed ("Aguardo, tranqui" filed awaiting_reply, routed answer_for_whom) | the eval gate, twice in one campaign | router pre-check in insert_positives: a label the router strongly disputes stays in the LLM lane |
+| Template copy enumerated two slots and silently dropped the rest; then the "fix" (inviting preferences) blew the closure distribution open | the fit judge, then the closure audit | neutral ack ("con todo lo que me contaste"); invitation reverted — every word a template asks with, it must be able to hear the answers to |
 
 The `rawText` row is the most instructive of the second wave: the
 curated-exact lane was tested where it was written (Python) and assumed

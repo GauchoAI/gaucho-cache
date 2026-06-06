@@ -6,4 +6,4 @@ audited: true
 prohibited_topics: []
 required_placeholders: []
 ---
-¡Excelente, con eso ya tengo todo! 🛏️ En base a tu tamaño y cómo dormís te busco las mejores opciones — dame un momento y te muestro lo que más te conviene.
+¡Excelente, gracias por todos los detalles! 🛏️ Con todo lo que me contaste busco las opciones que mejor se adapten — dame un momento y te muestro lo que más te conviene.
