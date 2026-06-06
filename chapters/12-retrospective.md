@@ -51,6 +51,7 @@ This chapter is the ledger of both columns.
 | Elaborated single-concern answers ("duermo de costado… la cama seria una plaza") vetoed as compounds — want_to_buy ranked second, but it's the same funnel move | the user, one-shot №3 | funnel-advancing cluster {want_to_buy, answer_size_posture, answer_for_whom}: in-cluster crossings are redundant questions at worst, never lies |
 | Judge-labeled ingestions the router files elsewhere became eval confident-wrongs the moment they landed ("Aguardo, tranqui" filed awaiting_reply, routed answer_for_whom) | the eval gate, twice in one campaign | router pre-check in insert_positives: a label the router strongly disputes stays in the LLM lane |
 | Template copy enumerated two slots and silently dropped the rest; then the "fix" (inviting preferences) blew the closure distribution open | the fit judge, then the closure audit | neutral ack ("con todo lo que me contaste"); invitation reverted — every word a template asks with, it must be able to hear the answers to |
+| The class-B render's own outro asked "¿querés ver otro estilo?" — and the corpus couldn't hear the yes (renders live outside the closure audit's reach) | the user, one-shot №4 ("Que otro estilo hay?") | alternatives = catalog pagination, product selection ("el pampa") = token match, recommendation slot-gated on a fresh size mention — all deterministic, all pre-classifier |
 
 The `rawText` row is the most instructive of the second wave: the
 curated-exact lane was tested where it was written (Python) and assumed

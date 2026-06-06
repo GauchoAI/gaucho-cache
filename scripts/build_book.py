@@ -287,7 +287,7 @@ let lastBotIntent=null;
 
 // ---- class B: catalog renders (deterministic slot-fill, $0) ------------
 // Mirrors gaucho_cache/serving.py + render.py.
-const BOT={slots:{},recommended:false,offered:false};
+const BOT={slots:{},recommended:false,offered:false,shown:[],selected:null};
 const SIZE_MAP=[[/\\b1\\s*plaza\\s*y\\s*media\\b|\\buna\\s*plaza\\s*y\\s*media\\b|\\b1[,.]5\\s*plazas?\\b/i,"1 plaza y media"],
  [/\\b(2|dos)\\s*plazas?\\b|\\b140\\s*x\\s*190\\b/i,"2 plazas"],
  [/\\b(1|una)\\s*plaza\\b|\\b90\\s*x\\s*190\\b/i,"1 plaza"],
@@ -326,13 +326,34 @@ function bestOffer(price){const m=(D.ladder||[]).reduce((a,b)=>a.multiplier<b.mu
 function renderReco(){
   if(!BOT.slots.size) return null;
   const ps=pickProducts(2); if(!ps.length) return null;
-  BOT.recommended=true;
+  BOT.recommended=true; ps.forEach(p=>BOT.shown.push(p.id));
   const lines=ps.map(p=>{const [lab,off]=bestOffer(p.price);
     return `• <b>${p.name}</b> (${p.firmeza}, ${p.tecnologia}, ${p.altura_cm} cm)${p.on_sale?" 🔥 en oferta":""} — lista ${ars(p.price)}, con ${lab.toLowerCase()}: ${ars(off)}`;});
   return `${RECO_INTRO[SALT].replace("{s}",BOT.slots.size)}<br>${lines.join("<br>")}<br>${RECO_OUTRO[SALT]}`;
 }
+function prodById(id){return (D.catalog||[]).find(p=>p.id===id);}
+function renderAlternatives(){
+  let items=(D.catalog||[]).filter(p=>p.stock_status==="instock"&&!BOT.shown.includes(p.id));
+  if(BOT.slots.size) items=items.filter(p=>p.size===BOT.slots.size);
+  if(!items.length) return `Por ahora eso es lo más fuerte que tengo en ${BOT.slots.size||"esa medida"} 🙈 ¿Querés que veamos opciones de pago de alguno, o te muestro otra medida?`;
+  items=items.sort((a,b)=>((a.on_sale?0:1)-(b.on_sale?0:1))||a.price-b.price).slice(0,2);
+  items.forEach(p=>BOT.shown.push(p.id));
+  const lines=items.map(p=>{const [lab,off]=bestOffer(p.price);
+    return `• <b>${p.name}</b> (${p.firmeza}, ${p.tecnologia}, ${p.altura_cm} cm)${p.on_sale?" 🔥 en oferta":""} — lista ${ars(p.price)}, con ${lab.toLowerCase()}: ${ars(off)}`;});
+  return `¡Claro! Mirá estas otras opciones en ${BOT.slots.size||"tu medida"}: 🛏️<br>${lines.join("<br>")}<br>${RECO_OUTRO[SALT]}`;
+}
+function detectProduct(t){
+  t=t.toLowerCase();
+  if(/\bel\s+primer[oa]?\b|\bla\s+primera?\b|\b1r[oa]\b/.test(t)&&BOT.shown.length>0) return BOT.shown[0];
+  if(/\bel\s+segund[oa]\b|\bla\s+segunda\b|\b2d[oa]\b/.test(t)&&BOT.shown.length>1) return BOT.shown[1];
+  for(const p of (D.catalog||[])){
+    const toks=p.name.split(" ").filter(w=>w.length>3&&!["plaza","plazas","media","queen","king"].includes(w.toLowerCase()));
+    if(toks.some(tok=>t.includes(tok.toLowerCase()))) return p.id;
+  }
+  return null;
+}
 function renderPayments(){
-  const p=pickProducts(1)[0]; BOT.offered=true;
+  const p=(BOT.selected&&prodById(BOT.selected))||pickProducts(1)[0]; BOT.offered=true;
   const lines=(D.ladder||[]).map(m=>{const tot=p.price*m.multiplier;
     return m.cuotas>1?`• ${m.label}: ${m.cuotas}× ${ars(tot/m.cuotas)} (total ${ars(tot)})`:`• ${m.label}: ${ars(tot)}`;});
   return `${PAY_INTRO[SALT].replace("{n}",p.name).replace("{p}",ars(p.price))}<br>${lines.join("<br>")}<br>${PAY_OUTRO[SALT]}`;
@@ -345,7 +366,7 @@ function detectPayment(t){t=(t||"").toLowerCase();
   if(/\\b3\\s*cuotas\\b|\\btres\\s*cuotas\\b|\\bcuotas\\b/.test(t))return "cuotas_3";
   return null;}
 function renderClose(mk){
-  const p=pickProducts(1)[0];
+  const p=(BOT.selected&&prodById(BOT.selected))||pickProducts(1)[0];
   const m=(D.ladder||[]).find(x=>x.method_key===mk)||(D.ladder||[]).reduce((a,b)=>a.multiplier<b.multiplier?a:b);
   const tot=p.price*m.multiplier;
   const per=m.cuotas>1?` (${m.cuotas}× ${ars(tot/m.cuotas)})`:"";
@@ -409,6 +430,36 @@ async function ask(text){
     bubble("bot",`${renderClose(pmEarly)}${meta("answer_payment_choice · catálogo local · $0.00 · class_b_close")}`);
     $("demo-counter").textContent=`${count} decisión(es) — gasto acumulado de API: $0.00 (no hay API)`;
     return;
+  }
+  // slot-gated recommendation: a fresh size slot IS the answer to the sizing question
+  if(BOT.slots.size && !BOT.recommended && text.trim().split(/\s+/).length<=12
+     && /\b(1|una?|2|dos)\s*plazas?\b|\bqueen\b|\bking\b|\b1[,.]5\s*plazas?\b/i.test(text)
+     && !/env[ií]o|garant[ií]a|devoluc|demora|cu[aá]nto\s+tarda|zona|sucursal|local|mercado\s*pago/i.test(text)){
+    const r=renderReco();
+    if(r){
+      count++; lastBotIntent="answer_size_posture";
+      bubble("bot",`${r}${meta("answer_size_posture · catálogo local · $0.00 · class_b_recommend")}`);
+      $("demo-counter").textContent=`${count} decisión(es) — gasto acumulado de API: $0.00 (no hay API)`;
+      return;
+    }
+  }
+  // "¿qué otro estilo hay?" — the recommendation outro's own invitation (pagination)
+  if(BOT.recommended && text.trim().split(/\s+/).length<=10
+     && /otr[oa]s?\s+(estilo|opci[oó]n|opciones|modelo|alternativa)|qu[eé]\s+(otro|m[aá]s)\s+(estilo\s+)?(hay|ten[eé]s)|ver\s+otr[oa]s|mostrame\s+otr[oa]s|algo\s+m[aá]s\s+para\s+ver/i.test(text)){
+    count++; lastBotIntent="answer_size_posture";
+    bubble("bot",`${renderAlternatives()}${meta("ask_recommendation · catálogo local · $0.00 · class_b_alternatives")}`);
+    $("demo-counter").textContent=`${count} decisión(es) — gasto acumulado de API: $0.00 (no hay API)`;
+    return;
+  }
+  // "el primero" / "la pampa" — product selection from what was shown
+  if(BOT.recommended && !pmEarly && text.trim().split(/\s+/).length<=10){
+    const pid=detectProduct(text);
+    if(pid!==null){
+      BOT.selected=pid; count++; lastBotIntent="answer_payment_choice";
+      bubble("bot",`${renderPayments()}${meta("answer_payment_choice · catálogo local · $0.00 · class_b_select")}`);
+      $("demo-counter").textContent=`${count} decisión(es) — gasto acumulado de API: $0.00 (no hay API)`;
+      return;
+    }
   }
   // payment-options ASK after a recommendation: a ladder lookup, not a similarity call
   if(!pmEarly && BOT.recommended && text.trim().split(/\\s+/).length<=10

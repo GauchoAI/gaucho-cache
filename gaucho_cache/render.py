@@ -137,10 +137,12 @@ def _pick(options: list[str], salt: int) -> str:
 
 # ---- class-B renderers -----------------------------------------------------
 def pick_products(size: str | None, firmness_pref: tuple[str, ...] | None,
-                  k: int = 2) -> list[dict]:
+                  k: int = 2, exclude: set[int] | None = None) -> list[dict]:
     """Deterministic ranking: size match is a hard filter when given;
     firmness preference orders; on_sale breaks ties."""
     items = [p for p in catalog()["products"] if p["stock_status"] == "instock"]
+    if exclude:
+        items = [p for p in items if p["id"] not in exclude] or items
     if size:
         items = [p for p in items if p["size"] == size] or items
     def rank(p):
@@ -174,21 +176,22 @@ def render_recommendation(slots: dict, salt: int = 0) -> str | None:
             + "\n" + "\n".join(lines) + "\n" + _pick(RECO_OUTRO, salt))
 
 
-def render_payment_options(slots: dict, salt: int = 0) -> str:
+def render_payment_options(slots: dict, salt: int = 0,
+                           product: dict | None = None) -> str:
     """Cuotas/discount ladder for the recommended (or cheapest matching)
     product — pure arithmetic over the ladder file."""
-    prods = pick_products(slots.get("size"), slots.get("firmness_pref"), k=1)
-    p = prods[0]
+    p = product or pick_products(slots.get("size"),
+                                 slots.get("firmness_pref"), k=1)[0]
     return (_pick(PAY_INTRO, salt).format(name=p["name"], price=_ars(p["price"]))
             + "\n" + "\n".join(payment_lines(p["price"]))
             + "\n" + _pick(PAY_OUTRO, salt))
 
 
 def render_close(slots: dict, method_key: str | None = None,
-                 salt: int = 0) -> str:
+                 salt: int = 0, product: dict | None = None) -> str:
     """The close: confirm the chosen payment and hand the checkout link."""
-    prods = pick_products(slots.get("size"), slots.get("firmness_pref"), k=1)
-    p = prods[0]
+    p = product or pick_products(slots.get("size"),
+                                 slots.get("firmness_pref"), k=1)[0]
     m = next((m for m in ladder() if m["method_key"] == method_key), None)
     if m is None:
         m = min(ladder(), key=lambda x: x["multiplier"])
@@ -214,3 +217,62 @@ def detect_payment_choice(text: str) -> str | None:
     if re.search(r"\b3\s*cuotas\b|\btres\s*cuotas\b|\bcuotas\b", t):
         return "cuotas_3"
     return None
+
+
+ALT_INTRO = [
+    "¡Claro! Mirá estas otras opciones en {size}: 🛏️",
+    "Tengo también estas alternativas en {size}: 🛏️",
+    "Dale, te muestro otro estilo en {size}: 🛏️",
+]
+ALT_EMPTY = [
+    "Por ahora eso es lo más fuerte que tengo en {size} 🙈 ¿Querés que veamos "
+    "opciones de pago de alguno, o te muestro otra medida?",
+]
+
+
+def render_alternatives(slots: dict, shown: set[int], salt: int = 0) -> str:
+    """'¿Qué otro estilo hay?' after a recommendation is pagination,
+    not generation: the next catalog rows, variety-first."""
+    size = slots.get("size")
+    items = [p for p in catalog()["products"]
+             if p["stock_status"] == "instock" and p["id"] not in shown]
+    if size:
+        items = [p for p in items if p["size"] == size]
+    if not items:
+        return _pick(ALT_EMPTY, salt).format(size=size or "esa medida")
+    # variety first: firmness styles the customer has NOT seen yet
+    items = sorted(items, key=lambda p: (0 if p["on_sale"] else 1, p["price"]))[:2]
+    lines = []
+    for p in items:
+        label, off = best_offer(p["price"])
+        sale = " 🔥 en oferta" if p["on_sale"] else ""
+        lines.append(
+            f"• *{p['name']}* ({p['firmeza']}, {p['tecnologia']}, "
+            f"{p['altura_cm']} cm){sale} — lista {_ars(p['price'])}, "
+            f"con {label.lower()}: {_ars(off)}")
+    return (_pick(ALT_INTRO, salt).format(size=size or "tu medida")
+            + "\n" + "\n".join(lines) + "\n" + _pick(RECO_OUTRO, salt))
+
+
+_ORDINALS = [(re.compile(r"\bel\s+primer[oa]?\b|\bla\s+primera?\b|\b1r[oa]\b", re.I), 0),
+             (re.compile(r"\bel\s+segund[oa]\b|\bla\s+segunda\b|\b2d[oa]\b", re.I), 1)]
+
+
+def detect_product_choice(text: str, shown_ids: list[int]) -> int | None:
+    """'el primero' / 'la pampa' after a recommendation → a product id.
+    Name matching over catalog tokens; ordinals over what was shown."""
+    t = text.lower()
+    for rx, idx in _ORDINALS:
+        if rx.search(t) and idx < len(shown_ids):
+            return shown_ids[idx]
+    for p in catalog()["products"]:
+        toks = [w.lower() for w in p["name"].split()
+                if len(w) > 3 and w.lower() not in
+                ("plaza", "plazas", "media", "queen", "king")]
+        if any(tok in t for tok in toks):
+            return p["id"]
+    return None
+
+
+def product_by_id(pid: int) -> dict | None:
+    return next((p for p in catalog()["products"] if p["id"] == pid), None)
