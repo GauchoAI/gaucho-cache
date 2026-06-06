@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 from .classifier import Classifier, StageIndex, load_thresholds
-from .contracts import default_contracts_dir, load_contracts
+from .contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_INDEX = REPO_ROOT / "index" / "slice-v1.npz"
@@ -38,8 +38,14 @@ def main(argv: list[str] | None = None) -> int:
               f"or scripts/hf_sync.py pull)", file=sys.stderr)
         return 2
 
-    contracts = load_contracts(args.contracts,
-                               REPO_ROOT / "data" / "contract_extensions.yaml")
+    extensions = REPO_ROOT / "data" / "contract_extensions.yaml"
+    if args.contracts == DEFAULT_CONTRACTS:
+        # Default run: merchant templates + the global conversational
+        # intents (greet/confirmation/… in data/templates_globals) — same
+        # contract set every other predicate site uses.
+        contracts = load_all_contracts(REPO_ROOT, extensions)
+    else:
+        contracts = load_contracts(args.contracts, extensions)
     clf = Classifier(
         index=StageIndex.load(args.index),
         contracts=contracts,

@@ -122,18 +122,24 @@ def main() -> None:
         ns = float(sims[neg].max()) if neg.any() else -1.0
         return i1, s1, s1 - s2, s1 - ns, (i2, s2)
 
-    def predicate(intent, score, margin, neg_margin, second=None, short=False):
+    def predicate(intent, score, margin, neg_margin, second=None, words=99):
         th = thresholds[intent]
+        SOCIAL = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}
+        corpus_exact = score >= 0.995  # verbatim corpus member (see classifier)
+        short = words <= 3
         if score < th.threshold:
             return "below_threshold"
-        if second is not None:
+        if second is not None and not corpus_exact and words > 2:
+            # two words can't carry two concerns (classifier parity)
             i2, s2 = second
             if (i2 in thresholds and s2 >= 0.75 and s2 >= min(thresholds[i2].threshold, 0.82)
                     and (not short or score - s2 < 0.12)
-                    and not ({intent, i2} <= {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"})):
+                    and not ({intent, i2} <= SOCIAL)):
                 return "multi_intent"  # compound guard (wave-1 finding)
-        if margin < th.margin:
-            return "ambiguous_margin"
+        if margin < th.margin and not corpus_exact:
+            i2 = second[0] if second else ""
+            if not ({intent, i2} <= SOCIAL):  # in-cluster ties are safe (classifier parity)
+                return "ambiguous_margin"
         if neg_margin < th.negative_margin:
             return "negative_margin"
         return ""  # hit
@@ -158,7 +164,7 @@ def main() -> None:
         else:
             confusions[(true, pred)] += 1
         if not predicate(pred, score, margin, neg_margin, second,
-                         len(texts[i].split()) <= 3):
+                         len(texts[i].split())):
             hits += 1
             stat["hits"] += 1
             SOCIAL_CLUSTER = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}
@@ -174,7 +180,7 @@ def main() -> None:
         actual = actuals[i] or "other"
         pred, score, margin, neg_margin, second = route_from_vec(emb[i])
         if not predicate(pred, score, margin, neg_margin, second,
-                         len(texts[i].split()) <= 3):
+                         len(texts[i].split())):
             ok = (pred == actual)     # routed to where it truly belongs
             if not ok and (pred == owner or actual == "other"):
                 neg_hits_wrong.append((texts[i], owner, actual, pred, score))

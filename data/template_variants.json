@@ -74,5 +74,44 @@
   "Tenés acceso a colchones de marcas premium en cualquier tamaño, con envío a todo el territorio y seguimiento del pedido. ¿Preferís que te recomiende uno basado en tu forma de dormir, o preferís contarme qué estás buscando?",
   "Tenemos colchones de primeras marcas, de cualquier medida, con envío a todo el país y la posibilidad de seguir tu pedido. ¿Querés que te sugiera uno según tu manera de dormir, o tenés ya algo en mente?",
   "Nuestra tienda ofrece colchones de marcas de referencia en todos los tamaños, envío a cualquier zona del país y seguimiento del envío. ¿Te parece si te aconsejo uno según tu forma de dormir, o preferís decirme qué buscás?"
+ ],
+ "answer_for_whom": [
+  "¡Buenísimo! 🙌 Para encontrarte el ideal, contame: ¿de qué tamaño es tu cama (1 plaza, 2 plazas, queen, king) y cómo dormís más — de costado, boca arriba o boca abajo?",
+  "¡Excelente! 🙌 Para localizar el colchón ideal, contame: ¿qué tamaño tiene tu cama (1 plaza, 2 plazas, queen o king) y cuál es tu posición de sueño — de costado, boca arriba o boca abajo?",
+  "¡Qué bueno! 🙌 Para que te recomiende el colchón perfecto, necesitá decirme: ¿de cuántas plazas es tu cama (1, 2, queen, king) y cómo preferís dormir — de lado, con la espalda al colchón o boca abajo?",
+  "¡Perfecto! 🙌 Para acertar con el colchón, necesitá que me indiques: ¿qué medida tiene tu cama (una, dos plazas, queen o king) y en qué posición dormís mayormente — de costado, boca arriba o boca abajo?",
+  "¡Genial! 🙌 Para encontrar el modelo que más te convenga, decime: ¿qué ancho tiene tu cama (1 plaza, 2 plazas, queen, king) y cuál es tu postura al dormir — de lado, boca arriba o boca abajo?",
+  "¡Magnífico! 🙌 Para que elijamos el colchón a tu medida, contame: ¿qué tamaño es tu cama (1, 2, queen o king) y cómo te acomodás para dormir — de costado, boca arriba o boca abajo?"
+ ],
+ "answer_payment_choice": [
+  "¡Buenísima elección! 💳 Avancemos con esa forma de pago — ¿confirmamos el pedido?",
+  "¡Genial elección! 💳 Seguimos con ese método de pago, ¿confirmamos el pedido?",
+  "¡Excelente decisión! 💳 Ya podemos avanzar con esa forma de pago, ¿confirmamos el pedido?",
+  "¡Top elección! 💳 Pasemos a la forma de pago elegida, ¿confirmamos el pedido?",
+  "¡Muy buena opción! 💳 Avancemos con esa forma de pago, ¿confirmamos la compra?"
+ ],
+ "answer_size_posture": [
+  "¡Excelente, con eso ya tengo todo! 🛏️ En base a tu tamaño y cómo dormís te busco las mejores opciones — dame un momento y te muestro lo que más te conviene.",
+  "¡Perfecto, ahora tengo todo lo necesario! 🛏️ Con tu medida y cómo dormís, reviso las mejores propuestas — ¿me das un segundo y te muestro lo que más te conviene?",
+  "¡Todo listo, con eso tengo la data completa! 🛏️ Según tu medida y tu hábito de sueño, selecciono las mejores opciones — ¿me das un instante y te muestro lo que más te conviene?"
+ ],
+ "confirmation": [
+  "¡Perfecto! 🙌 Sigamos entonces. ¿Querés que avancemos con el pedido, o tenés alguna otra duda antes?",
+  "¡Genial! 🙌 Continuemos. ¿Querés que pasemos al pedido o tenés alguna consulta antes?",
+  "¡Listo! 🙌 Sigamos adelante. ¿Querés que le demos al pedido o hay algo más que quieras aclarar?",
+  "¡Excelente! 🙌 ¿Te parece bien pasar al pedido, o preferís preguntar algo antes?"
+ ],
+ "declination": [
+  "¡Todo bien! Cualquier cosa me escribís, quedo por acá para lo que necesites 🙂"
+ ],
+ "order_status": [
+  "¡Claro! Pasame tu número de pedido (lo encontrás en el mail de confirmación) y lo reviso ya mismo 📦",
+  "Claro, ¿me pasás tu número de pedido? Lo encontrás en el mail de confirmación y lo reviso al instante 📦"
+ ],
+ "want_to_buy": [
+  "¡Genial, estás en el lugar indicado! 🛏️ Contame qué tamaño buscás (1 plaza, 2 plazas, queen o king) y cómo dormís más — de costado, boca arriba o boca abajo — así te recomiendo el ideal.",
+  "¡Genial, llegaste al sitio correcto! 🛏️ Decime qué medida necesitás (1 plaza, 2 plazas, queen o king) y en qué posición dormís — de costado, boca arriba o boca abajo — para que pueda recomendarte el colchón ideal.",
+  "¡Qué bueno, estás en el lugar perfecto! 🛏️ Contame el tamaño que buscás (1 plaza, 2 plazas, queen o king) y cómo dormís — de costado, boca arriba o boca abajo — y te sugiero el que más te conviene.",
+  "¡Todo bien, llegaste al sitio indicado! 🛏️ Contame qué medida buscás (1 plaza, 2 plazas, queen o king) y en qué posición te acostás — de costado, boca arriba o boca abajo — para recomendarte el colchón perfecto."
  ]
 }

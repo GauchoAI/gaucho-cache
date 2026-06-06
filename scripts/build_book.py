@@ -224,7 +224,8 @@ D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
 const SOCIAL=new Set(["greet","thanks_goodbye","confirmation","declination","answer_for_whom"]);
 
 function normTxt(t){return t.toLowerCase().normalize("NFKD").replace(/[^a-z0-9ñ ]+/g,"").trim();}
-function decide(q, isShort, rawText){
+function decide(q, nWords, rawText){
+  const isShort=nWords<=3;
   const ce=(D.curated_exact||{})[normTxt(rawText||"")];
   if(ce && D.contracts[ce] && D.contracts[ce].audited){
     return {verdict:"serve",reason:"curated_exact",intent:ce,score:1,margin:1,negMargin:1,ms:0.1};
@@ -247,12 +248,13 @@ function decide(q, isShort, rawText){
   const th=D.thresholds[i1]||{threshold:.7,margin:.05,negative_margin:.03};
   const th2=D.thresholds[i2];
   const c=D.contracts[i1]||{};
+  const corpusExact=s1>=0.995; // verbatim corpus member: multi/margin legs don't apply
   let verdict="miss", reason="";
   if(s1<th.threshold) reason="below_threshold";
-  else if(th2 && s2>=0.75 && s2>=Math.min(th2.threshold,D.compound_floor)
+  else if(!corpusExact && nWords>2 && th2 && s2>=0.75 && s2>=Math.min(th2.threshold,D.compound_floor)
           && (!isShort || s1-s2<0.12)
           && !(SOCIAL.has(i1)&&SOCIAL.has(i2))) reason="multi_intent";
-  else if(s1-s2<th.margin) reason="ambiguous_margin";
+  else if(!corpusExact && s1-s2<th.margin && !(SOCIAL.has(i1)&&SOCIAL.has(i2))) reason="ambiguous_margin";
   else if(s1-ns<th.negative_margin) reason="negative_margin";
   else if((c.requires_state||[]).length) reason="precondition_failed";
   else if(!c.audited){ verdict="hit"; reason="template_unaudited"; }
@@ -314,10 +316,10 @@ async function ask(text){
     if(rest.split(/\\s+/).length>=2){ target=rest; saluted=true; }
   }
   const out=await extractor(target,{pooling:"mean",normalize:true});
-  let d=decide(Array.from(out.data), target.trim().split(/\\s+/).length<=3);
+  let d=decide(Array.from(out.data), target.trim().split(/\\s+/).length, target);
   if(saluted && d.verdict!=="serve"){
     const out2=await extractor(text,{pooling:"mean",normalize:true});
-    d=decide(Array.from(out2.data), false, text);
+    d=decide(Array.from(out2.data), text.trim().split(/\\s+/).length, text);
   } else if(saluted && d.verdict==="serve" && d.intent!=="greet"){
     d.salutation=true;
   }

@@ -100,6 +100,19 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("dale", "confirmation", True),
     ("ok", "confirmation", True),
     ("si", "confirmation", True),
+    # demo one-shot 2026-06-06: "dale" after answer_size_posture fell to the
+    # LLM lane (web demo skipped the curated lane; acks below uncurated)
+    ("perfecto", "confirmation", True),
+    ("genial", "confirmation", True),
+    ("bárbaro", "confirmation", True),
+    ("de una", "confirmation", True),
+    ("está bien", "confirmation", True),
+    ("me parece bien", "confirmation", True),
+    ("sí dale", "confirmation", True),
+    ("ok perfecto", "confirmation", True),
+    ("buenísimo", "confirmation", True),
+    ("dale dale", "confirmation", True),
+    ("ok dale", "confirmation", True),
     ("mmm", None, False),
     # --- MUST REFUSE: out of catalog ------------------------------------------
     ("¿venden sommiers?", None, False),

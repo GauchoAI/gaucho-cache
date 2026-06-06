@@ -161,8 +161,10 @@ class Classifier:
         MULTI_GAP = 0.12   # a true compound carries BOTH concerns strongly;
                            # a dominant top1 with a distant second is just
                            # short-fragment embedding noise ("Como va?")
-        short = len(text.split()) <= 3   # fragments embed promiscuously;
+        words = len(text.split())
+        short = words <= 3               # fragments embed promiscuously;
         multi = (len(ranked) > 1         # real compounds are long (2 clauses)
+                 and words > 2           # two words can't carry two concerns
                  and ranked[1][1] >= 0.75  # a real second concern is strong
                  and ranked[1][1] >= min(
                      self._thresholds_for(ranked[1][0]).threshold,
@@ -221,14 +223,23 @@ class Classifier:
             d.template_version = f"v{contract.version}"
             d.audited = contract.audited
 
+        # Corpus-exact bypass: a verbatim match to a corpus positive is the
+        # strongest evidence possible — the multi/margin legs exist for
+        # ambiguous compounds, not for rows the corpus itself contains
+        # ("el descuento me parece lo más práctico" at s=1.0 was vetoed as
+        # price-compound). Negative-margin stays armed: only curated rows
+        # bypass that.
+        corpus_exact = score >= 0.995
+
         # Compound predicate — first failing leg names the reason.
         if score < th.threshold:
             d.reason = "below_threshold"
             return d
-        if multi:
+        if multi and not corpus_exact:
             d.reason = "multi_intent"   # compound message: two concerns
             return d
-        if margin < th.margin and not ({intent, second_intent} <= SOCIAL):
+        if (margin < th.margin and not corpus_exact
+                and not ({intent, second_intent} <= SOCIAL)):
             d.reason = "ambiguous_margin"   # in-cluster ties are safe to serve
             return d
         if neg_margin < th.negative_margin:

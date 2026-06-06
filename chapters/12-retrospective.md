@@ -40,12 +40,24 @@ This chapter is the ledger of both columns.
 | Pushes silently failing (origin stale at commit 1) | clone test from GitHub | explicit refspec + fetch-verify after every push |
 | A `git add -A` in the wrong repo published WIP to main | immediate output review | force-with-lease restore; `git -C` discipline memorized |
 | **Demo shipped broken (shadowed `const m` killed the module)** | **the user clicking send** | rename + rule: re-verify in a real browser after EVERY JS edit, before every push |
+| Web demo's main path never passed `rawText` into `decide()` — the curated-exact lane was dead code for every typed message ("dale" at score 1.00 vetoed by the multi-intent guard) | the user, three messages into a real conversation | pass the text through; drive the fixed demo in a real browser before pushing |
+| CLI loaded only merchant templates (`load_contracts`), so every global intent reported `no_template` and the curated lane never fired there either | tracing the same "dale" through the Python stack | CLI defaults to `load_all_contracts` — the same contract set every other predicate site uses |
+| "perfecto", "genial", "bárbaro", "de una" — uncurated bare acks | same demo session | 12 new curated constitution rows + 11 new probe-gate rows |
+| Closure proven on one sample leaked ~40% on the next (the audit regenerates answers each run) | re-running the closure audit after the fix | judge-in-the-loop closure: coverable unheard answers are ingested as positives (`register='closure'`); novel/compound replies are CORRECT LLM-lane falls, not failures |
+| declination threshold 0.892 — strangled by thanks_goodbye hard negatives seeded before the social cluster existed (in-cluster = harmless by doctrine) | tracing why the closure loop wouldn't converge | retire 84 in-cluster social negatives; recalibration drops declination to 0.693, hit rate 12%→49%, confident-wrong still 0 |
+| First closure campaign ingested label-only: "Sí, pasame a la gente, porfa" under confirmation = cheerful proceed-ack to someone demanding a human | reading the ingestion log | template-fit judge gates ingestion; re-audit dropped 116/329 rows as serving traps |
+| Compound guard vetoed an exact corpus member (s=1.000) and 2-word fragments ("tiene garantia") | closure non-convergence + probe regression | corpus-exact bypass; two words can't carry two concerns |
+| eval's margin leg and the browser's margin leg never got the social-cluster exemption the classifier had (drift №3 and №4 of the same predicate) | side-by-side read during the corpus-exact port | all three sites synced in one diff; parity is now part of the closure chapter's checklist |
 
-The last row is the freshest and the most instructive: after a session
-of verified shipping, one unverified patch — pushed on the strength of
-an earlier verification — broke the only thing a visitor touches first.
-Gates only protect what they cover; the demo's send button is now part
-of the manual pre-push checklist, and should become an automated one.
+The `rawText` row is the most instructive of the second wave: the
+curated-exact lane was tested where it was written (Python) and assumed
+where it was rewritten (JS). Three predicate re-implementations now
+exist — classifier, eval, browser — and every divergence between them
+has eventually been found by exactly one person: the user, typing the
+most ordinary message imaginable. Gates only protect what they cover;
+the demo's send button is now part of the manual pre-push checklist,
+and the browser conversation above is driven end-to-end before any
+push that touches the demo.
 
 ## The pattern
 
