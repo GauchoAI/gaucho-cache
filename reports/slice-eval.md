@@ -1,15 +1,15 @@
 # P0.5 slice evaluation — embedding-only (mini-E2)
 
 - Model: `sentence-transformers/paraphrase-multilingual-mpnet-base-v2`
-- Index: 1489 train positives + 1297 hard negatives; 384 held-out positives evaluated
+- Index: 1504 train positives + 1297 hard negatives; 388 held-out positives evaluated
 
 ## Headline (gate: serving accuracy ≥99%, confident_wrong = 0; raw routing informational — social-pair and below-threshold confusions never reach a customer)
 
 | Metric | Value |
 |---|---|
-| Routing accuracy (top-1, informational) | 92.4% |
+| Routing accuracy (top-1, informational) | 92.5% |
 | **Serving accuracy (correct intent when served)** | **100.0%** |
-| Hit rate (compound predicate) | 48.4% |
+| Hit rate (compound predicate) | 48.2% |
 | Confident-wrong rate | **0.00%** (0) |
 | Adversarial negatives confidently mis-served | 45 / 1297 |
 
@@ -19,10 +19,10 @@
 |---|---|---|---|---|---|
 | answer_for_whom | ✓ | 22 | 95% | 77% | 0 |
 | answer_payment_choice | ✓ | 17 | 88% | 35% | 0 |
-| answer_size_posture | ✓ | 20 | 95% | 35% | 0 |
+| answer_size_posture | ✓ | 22 | 91% | 32% | 0 |
 | bot_skepticism | ✓ | 19 | 84% | 68% | 0 |
 | brand_trust | ✗ | 19 | 89% | 74% | 0 |
-| confirmation | ✓ | 22 | 91% | 55% | 0 |
+| confirmation | ✓ | 24 | 96% | 54% | 0 |
 | declination | ✓ | 21 | 90% | 48% | 0 |
 | firmness_doubt | ✗ | 17 | 88% | 24% | 0 |
 | greet | ✓ | 13 | 85% | 46% | 0 |
@@ -47,7 +47,7 @@
 | size_fit ↔ firmness_doubt | 1 | 2 |
 | brand_trust ↔ bot_skepticism | 0 | 0 |
 
-Other confusions: answer_for_whom→confirmation×1, answer_payment_choice→price×2, answer_size_posture→price×1, bot_skepticism→confirmation×1, bot_skepticism→greet×1, bot_skepticism→shipping_zone×1, brand_trust→firmness_doubt×1, brand_trust→size_fit×1, confirmation→firmness_doubt×1, confirmation→price×1, declination→confirmation×1, declination→thanks_goodbye×1, greet→size_fit×1, greet→thanks_goodbye×1, order_status→out_of_stock_reservation×2, out_of_stock_reservation→order_status×2, out_of_stock_reservation→shipping_time×1, return_policy→confirmation×1, thanks_goodbye→answer_size_posture×1, thanks_goodbye→declination×1, want_to_buy→answer_for_whom×1, want_to_buy→answer_size_posture×1
+Other confusions: answer_for_whom→confirmation×1, answer_payment_choice→price×2, answer_size_posture→price×2, bot_skepticism→confirmation×1, bot_skepticism→greet×1, bot_skepticism→shipping_zone×1, brand_trust→firmness_doubt×1, brand_trust→size_fit×1, confirmation→answer_for_whom×1, declination→confirmation×1, declination→thanks_goodbye×1, greet→size_fit×1, greet→thanks_goodbye×1, order_status→out_of_stock_reservation×2, out_of_stock_reservation→order_status×2, out_of_stock_reservation→shipping_time×1, return_policy→confirmation×1, thanks_goodbye→answer_size_posture×1, thanks_goodbye→declination×1, want_to_buy→answer_for_whom×1, want_to_buy→answer_size_posture×1
 
 ## Adversarial negatives confidently mis-served
 

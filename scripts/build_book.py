@@ -223,7 +223,12 @@ D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
   else (NEG[it]=NEG[it]||[]).push(i); });
 const SOCIAL=new Set(["greet","thanks_goodbye","confirmation","declination","answer_for_whom"]);
 
-function decide(q, isShort){
+function normTxt(t){return t.toLowerCase().normalize("NFKD").replace(/[^a-z0-9ñ ]+/g,"").trim();}
+function decide(q, isShort, rawText){
+  const ce=(D.curated_exact||{})[normTxt(rawText||"")];
+  if(ce && D.contracts[ce] && D.contracts[ce].audited){
+    return {verdict:"serve",reason:"curated_exact",intent:ce,score:1,margin:1,negMargin:1,ms:0.1};
+  }
   const t0=performance.now();
   const best={};
   for(const [it,i] of POS){
@@ -312,7 +317,7 @@ async function ask(text){
   let d=decide(Array.from(out.data), target.trim().split(/\\s+/).length<=3);
   if(saluted && d.verdict!=="serve"){
     const out2=await extractor(text,{pooling:"mean",normalize:true});
-    d=decide(Array.from(out2.data), false);
+    d=decide(Array.from(out2.data), false, text);
   } else if(saluted && d.verdict==="serve" && d.intent!=="greet"){
     d.salutation=true;
   }

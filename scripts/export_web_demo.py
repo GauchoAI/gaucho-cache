@@ -72,6 +72,8 @@ def main() -> None:
         "variants": variants,
         "scenarios": SCENARIOS,
         "compound_floor": 0.82,
+        "curated_exact": json.loads((REPO / "data" / "curated_exact.json").read_text())
+            if (REPO / "data" / "curated_exact.json").exists() else {},
     }
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")

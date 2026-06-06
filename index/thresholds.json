@@ -10,7 +10,7 @@
     "negative_margin": 0.03
   },
   "answer_size_posture": {
-    "threshold": 0.8864519190788269,
+    "threshold": 0.8864517998695374,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -45,7 +45,7 @@
     "negative_margin": 0.03
   },
   "order_status": {
-    "threshold": 0.6970799160003662,
+    "threshold": 0.6970798563957215,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -70,7 +70,7 @@
     "negative_margin": 0.03
   },
   "shipping_zone": {
-    "threshold": 0.7869237852096558,
+    "threshold": 0.7869236660003662,
     "margin": 0.05,
     "negative_margin": 0.03
   },

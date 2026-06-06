@@ -55,7 +55,7 @@ class BatchClient:
                     spend.record(self.activity,
                                  u.prompt_tokens if u else 0,
                                  u.completion_tokens if u else 0)
-                    return r.choices[0].message.content.strip()
+                    return (r.choices[0].message.content or "").strip()
                 except spend.BudgetExceeded:
                     raise
                 except Exception:  # noqa: BLE001 — retry then surface

@@ -33,6 +33,16 @@ def main() -> None:
     print(f"Embedding {len(texts)} variants with {DEFAULT_MODEL} …")
     emb = Embedder().encode(texts)
 
+    import json, re, unicodedata
+    def norm(t):
+        t = unicodedata.normalize("NFKD", t.lower())
+        return re.sub(r"[^a-z0-9ñ ]+", "", t).strip()
+    cur = {norm(r[0]): r[1] for r in conn.execute(
+        """SELECT text, COALESCE(NULLIF(judged_intent,''),intent) FROM variants
+           WHERE stage=? AND kind='positive' AND dropped=0 AND register='curated'""",
+        (STAGE,))}
+    (REPO / "data" / "curated_exact.json").write_text(
+        json.dumps(cur, ensure_ascii=False))
     OUT.parent.mkdir(exist_ok=True)
     StageIndex(emb, intents, kinds, actuals).save(OUT)
     n_pos = int((kinds == "positive").sum())

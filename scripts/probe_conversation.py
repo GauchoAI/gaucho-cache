@@ -55,6 +55,8 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("para mi pareja", "answer_for_whom", True),
     ("es para otra persona", "answer_for_whom", True),
     ("es un regalo", "answer_for_whom", True),
+    ("de costado", "answer_size_posture", True),
+    ("2 plazas", "answer_size_posture", True),
     # --- thanks / farewells ------------------------------------------------
     ("gracias!", "thanks_goodbye", True),
     ("mil gracias, genial!", "thanks_goodbye", True),

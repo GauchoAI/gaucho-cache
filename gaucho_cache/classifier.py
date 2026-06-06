@@ -32,6 +32,22 @@ SALUTATION_RX = re.compile(
     r"[\s,!.:;]*", re.IGNORECASE)
 
 
+import json as _json
+import unicodedata as _ud
+_CURATED_EXACT = None
+
+def _norm(t: str) -> str:
+    t = _ud.normalize("NFKD", t.lower())
+    return re.sub(r"[^a-z0-9ñ ]+", "", t).strip()
+
+def curated_exact() -> dict:
+    global _CURATED_EXACT
+    if _CURATED_EXACT is None:
+        p = Path(__file__).resolve().parent.parent / "data" / "curated_exact.json"
+        _CURATED_EXACT = _json.loads(p.read_text()) if p.exists() else {}
+    return _CURATED_EXACT
+
+
 def strip_salutation(text: str) -> str | None:
     """Return the concern part of a salutation-prefixed message, or None
     if the message is pure salutation / has no meaningful remainder."""
@@ -170,6 +186,16 @@ class Classifier:
     def classify(self, text: str, *, stage: str,
                  state_fields: set[str] | None = None,
                  _decomposed: bool = False) -> CacheDecision:
+        # Curated exact lane: a verbatim match to a human-curated row is
+        # constitutional — similarity noise cannot veto it.
+        hit = curated_exact().get(_norm(text))
+        if hit and (c := self.contracts.get(hit)) is not None and c.audited:
+            return CacheDecision(decision="hit", stage=stage, intent=hit,
+                                 score=1.0, margin=1.0, negative_margin=1.0,
+                                 template_id=c.template_id,
+                                 template_version=f"v{c.version}",
+                                 audited=True, preconditions_passed=True,
+                                 serve_eligible=True, reason="curated_exact")
         # Salutation decomposition: greeting + concern → route the concern.
         if not _decomposed:
             rest = strip_salutation(text)
