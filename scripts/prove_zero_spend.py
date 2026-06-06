@@ -49,7 +49,7 @@ import numpy as np  # noqa: E402
 
 from gaucho_cache import dataset  # noqa: E402
 from gaucho_cache.classifier import Classifier, StageIndex, load_thresholds  # noqa: E402
-from gaucho_cache.contracts import default_contracts_dir, load_contracts  # noqa: E402
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts  # noqa: E402
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
@@ -62,7 +62,7 @@ HOLDOUT_EVERY = 5
 
 
 def main() -> None:
-    contracts = load_contracts(CONTRACTS_DIR,
+    contracts = load_all_contracts(REPO,
                                REPO / "data" / "contract_extensions.yaml")
     clf = Classifier(StageIndex.load(INDEX), contracts,
                      load_thresholds(THRESHOLDS))

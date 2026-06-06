@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import spend
 from gaucho_cache.cerebras import BatchClient
-from gaucho_cache.contracts import default_contracts_dir, load_contracts
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
 VARIANTS = REPO / "data" / "template_variants.json"
@@ -39,7 +39,7 @@ Output JSON: {{"verdict":"ok"|"reject","reason":"..."}}"""
 
 
 async def main() -> None:
-    contracts = load_contracts(default_contracts_dir(REPO),
+    contracts = load_all_contracts(REPO,
                                REPO / "data" / "contract_extensions.yaml")
     book = "\n\n".join(f"[{c.category}] {c.body}" for c in contracts.values())
     pools = json.loads(VARIANTS.read_text(encoding="utf-8"))

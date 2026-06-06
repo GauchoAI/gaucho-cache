@@ -21,13 +21,16 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache.classifier import StageIndex, load_thresholds
-from gaucho_cache.contracts import default_contracts_dir, load_contracts
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
 OUT = REPO / "web" / "demo-data.json"
 WEB_MODEL = "Xenova/paraphrase-multilingual-mpnet-base-v2"
 
 SCENARIOS = [
+    ("👋 Hola", "Hola!"),
+    ("¿Qué venden?", "que venden exactamente?"),
+    ("Gracias y chau", "mil gracias, genial!"),
     ("Hit limpio: garantía", "tiene garantia?"),
     ("Hit: zona de envío", "envian a salta capital?"),
     ("Hit: demora, con lunfardo", "el envio cuanto demora?"),
@@ -43,7 +46,7 @@ SCENARIOS = [
 def main() -> None:
     index = StageIndex.load(REPO / "index" / "slice-v1.npz")
     thresholds = load_thresholds(REPO / "index" / "thresholds.json")
-    contracts = load_contracts(default_contracts_dir(REPO),
+    contracts = load_all_contracts(REPO,
                                REPO / "data" / "contract_extensions.yaml")
     variants = json.loads(
         (REPO / "data" / "template_variants.json").read_text(encoding="utf-8"))

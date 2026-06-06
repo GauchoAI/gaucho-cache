@@ -152,6 +152,18 @@ def load_contracts(contracts_dir: Path,
     return contracts
 
 
+def load_all_contracts(repo_root: Path,
+                       extensions_path: Path | None = None) -> dict[str, MatchContract]:
+    """Merchant objection templates + the global conversational intents
+    (greet / thanks / store-info, owned cache-side under
+    data/templates_globals/ until the merchant overlay adopts them)."""
+    contracts = load_contracts(default_contracts_dir(repo_root), extensions_path)
+    globals_dir = repo_root / "data" / "templates_globals"
+    if globals_dir.exists():
+        contracts.update(load_contracts(globals_dir, extensions_path))
+    return contracts
+
+
 def load_intent_specs(path: Path) -> list[IntentSpec]:
     """Load the slice taxonomy YAML (list of IntentSpec dicts)."""
     raw = yaml.safe_load(path.read_text(encoding="utf-8"))

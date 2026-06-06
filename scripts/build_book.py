@@ -189,7 +189,7 @@ ever.</p>
 <button id="demo-send" style="padding:10px 18px;border:0;border-radius:8px;
 background:var(--accent);color:#fff;font-weight:bold;cursor:pointer">→</button>
 </div>
-<div id="demo-out" style="margin-top:14px"></div>
+<div id="demo-thread" style="margin-top:14px;display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto"></div>
 <p id="demo-counter" style="color:var(--soft);font-size:14px"></p>
 </div>
 <script>window.DEMO_DATA = __DEMO_DATA__;</script>
@@ -234,7 +234,7 @@ function decide(q){
   const c=D.contracts[i1]||{};
   let verdict="miss", reason="";
   if(s1<th.threshold) reason="below_threshold";
-  else if(th2 && s2>=Math.min(th2.threshold,D.compound_floor)) reason="multi_intent (mensaje compuesto)";
+  else if(th2 && s2>=Math.min(th2.threshold,D.compound_floor) && !( (i1==="greet"||i1==="thanks_goodbye") && (i2==="greet"||i2==="thanks_goodbye") )) reason="multi_intent (mensaje compuesto)";
   else if(s1-s2<th.margin) reason="ambiguous_margin";
   else if(s1-ns<th.negative_margin) reason="negative_margin (patrón impostor conocido)";
   else if((c.requires_state||[]).length) reason="precondition_failed (estado de stock desconocido)";
@@ -253,26 +253,40 @@ async function init(){
   extractor=await pipeline("feature-extraction",D.model,{dtype:"q8",
     progress_callback:p=>{ if(p.status==="progress"&&p.file?.endsWith(".onnx"))
       status(`⏳ modelo: ${(p.progress||0).toFixed(0)}%`); }});
-  status("✅ modelo listo — el bot corre en esta pestaña. Probá los escenarios o escribí lo que quieras.");
-  $("demo-send").disabled=false;
+  status("✅ modelo listo — el bot corre en esta pestaña. Decile hola.");
+  $("demo-send").disabled=false; welcome();
+}
+function bubble(side, html){
+  const b=document.createElement("div");
+  b.style.cssText=side==="user"
+    ?"align-self:flex-end;max-width:80%;background:#dcf2e6;border-radius:14px 14px 2px 14px;padding:9px 14px"
+    :"align-self:flex-start;max-width:85%;background:#fff;border:1px solid var(--line);border-radius:14px 14px 14px 2px;padding:9px 14px";
+  b.innerHTML=html;
+  $("demo-thread").appendChild(b);
+  $("demo-thread").scrollTop=$("demo-thread").scrollHeight;
+}
+function welcome(){
+  const g=(D.variants["greet"]||[])[0];
+  if(g) bubble("bot",`🤖 ${g}<div style="color:var(--soft);font-size:12px;margin-top:4px">plantilla <code>greet</code> · servida localmente · $0.00</div>`);
 }
 async function ask(text){
   if(!extractor||!text.trim()) return;
+  $("demo-input").value="";
+  bubble("user",text);
   status("…");
   const out=await extractor(text,{pooling:"mean",normalize:true});
   const d=decide(Array.from(out.data));
   count++;
-  const color=d.verdict==="serve"?"#0b6e4f":d.verdict==="hit"?"#9a6b00":"#a33";
-  const label=d.verdict==="serve"?"SERVE":d.verdict==="hit"?"HIT (no-serve)":"MISS";
-  $("demo-out").innerHTML=`
-   <div style="border:1px solid var(--line);border-radius:10px;padding:14px 18px;background:#fff">
-   <div><span style="color:${color};font-weight:bold">${label}</span>
-   <span style="color:var(--soft)"> · intent <code>${d.intent}</code> · score ${d.score.toFixed(3)}
-   · margin ${d.margin.toFixed(3)} · neg ${d.negMargin.toFixed(3)}
-   · <strong>${d.ms.toFixed(1)} ms · $0.00</strong></span></div>
-   ${d.reason?`<div style="color:var(--soft);font-size:14px">razón: ${d.reason} → este turno iría al LLM de fallback</div>`:""}
-   ${d.reply?`<div style="margin-top:10px;padding:10px 14px;background:#eef7f3;border-radius:10px">🤖 ${d.reply}</div>`:""}
-   </div>`;
+  const meta=`<div style="color:var(--soft);font-size:12px;margin-top:4px">`+
+    `<code>${d.intent}</code> · s ${d.score.toFixed(2)} · m ${d.margin.toFixed(2)}`+
+    ` · ${d.ms.toFixed(1)} ms · $0.00${d.reason?` · ${d.reason}`:""}</div>`;
+  if(d.reply){
+    bubble("bot",`🤖 ${d.reply}${meta}`);
+  } else if(d.verdict==="hit"){
+    bubble("bot",`<em style="color:#9a6b00">— ruteado a <code>${d.intent}</code>, pero la plantilla espera re-auditoría humana: acá contestaría el LLM de fallback —</em>${meta}`);
+  } else {
+    bubble("bot",`<em style="color:var(--soft)">— el caché prefiere callar (${d.reason}): acá contestaría el LLM de fallback, gastando centavos en vez de mentir —</em>${meta}`);
+  }
   status("✅ listo");
   $("demo-counter").textContent=
     `${count} decisión(es) en esta sesión — gasto acumulado de API: $0.00 (no hay API)`;

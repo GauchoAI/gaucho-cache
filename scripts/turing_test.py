@@ -35,7 +35,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import spend
 from gaucho_cache.cerebras import BatchClient
 from gaucho_cache.classifier import Embedder, StageIndex, load_thresholds
-from gaucho_cache.contracts import default_contracts_dir, load_contracts
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
@@ -83,7 +83,7 @@ async def main() -> None:
     a = ap.parse_args()
     rng = random.Random(SEED)
 
-    contracts = load_contracts(default_contracts_dir(REPO), EXTENSIONS)
+    contracts = load_all_contracts(REPO, EXTENSIONS)
     book = "\n\n".join(f"[{c.category}] {c.body}" for c in contracts.values())
     index = StageIndex.load(INDEX)
     thresholds = load_thresholds(THRESHOLDS)
@@ -112,7 +112,8 @@ async def main() -> None:
         th2 = thresholds.get(i2)
         c = contracts.get(i1)
         if (th is None or c is None or s1 < th.threshold
-                or (th2 is not None and s2 >= min(th2.threshold, 0.82))  # compound
+                or (th2 is not None and s2 >= min(th2.threshold, 0.82)
+                    and not ({i1, i2} <= {"greet", "thanks_goodbye"}))  # compound
                 or s1 - s2 < th.margin or s1 - ns < th.negative_margin
                 or not c.preconditions_pass(stage=STAGE,
                                             state_fields=set())[0]

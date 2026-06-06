@@ -96,3 +96,32 @@ intents:
       they will lose a promotion while waiting for restock.
     confusables: [shipping_time]
     template_file: out_of_stock_reservation.md
+
+  # --- Global conversational intents (any stage; demo conversation layer) ---
+  - stage: objection
+    intent: greet
+    meaning: >
+      The customer opens the chat with a greeting or small talk carrying
+      NO concern yet: hola, buenas, qué tal, good morning style openers,
+      maybe asking if anyone is there to start the conversation.
+    confusables: [thanks_goodbye, bot_skepticism]
+    template_file: greet.md
+
+  - stage: objection
+    intent: thanks_goodbye
+    meaning: >
+      The customer thanks the assistant or closes the conversation:
+      gracias, genial, perfecto entonces, nos vemos, hasta luego, dale
+      gracias — gratitude or farewell with no pending question.
+    confusables: [greet]
+    template_file: thanks_goodbye.md
+
+  - stage: objection
+    intent: what_do_you_sell
+    meaning: >
+      The customer asks what the store offers in general: what do you
+      sell, do you only sell mattresses, what sizes or kinds exist, what
+      is this store about — catalog-overview curiosity, not a specific
+      product question.
+    confusables: [brand_trust]
+    template_file: what_do_you_sell.md

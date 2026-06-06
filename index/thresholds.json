@@ -1,6 +1,6 @@
 {
   "bot_skepticism": {
-    "threshold": 0.7138481330871582,
+    "threshold": 0.7138480734825134,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -10,7 +10,12 @@
     "negative_margin": 0.03
   },
   "firmness_doubt": {
-    "threshold": 0.8465829086303711,
+    "threshold": 0.8465827894210816,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "greet": {
+    "threshold": 0.8311273050308228,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -30,12 +35,12 @@
     "negative_margin": 0.03
   },
   "shipping_time": {
-    "threshold": 0.7547300052642822,
+    "threshold": 0.7543102693557739,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "shipping_zone": {
-    "threshold": 0.7869236660003662,
+    "threshold": 0.786923725605011,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -44,8 +49,18 @@
     "margin": 0.05,
     "negative_margin": 0.03
   },
+  "thanks_goodbye": {
+    "threshold": 0.7617497038841248,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
   "warranty": {
     "threshold": 0.8718620729446411,
+    "margin": 0.05,
+    "negative_margin": 0.03
+  },
+  "what_do_you_sell": {
+    "threshold": 0.7810435485839844,
     "margin": 0.05,
     "negative_margin": 0.03
   }

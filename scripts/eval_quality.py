@@ -41,7 +41,7 @@ from openai import AsyncOpenAI
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import dataset
 from gaucho_cache.classifier import Classifier, StageIndex, load_thresholds
-from gaucho_cache.contracts import default_contracts_dir, load_contracts
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
@@ -110,7 +110,7 @@ async def main() -> None:
         sys.exit("CEREBRAS_API_KEY not set")
     rng = random.Random(SEED)
 
-    contracts = load_contracts(CONTRACTS_DIR, EXTENSIONS)
+    contracts = load_all_contracts(REPO, EXTENSIONS)
     book = "\n\n".join(f"[{c.category}] {c.body}"
                        for c in contracts.values())
     clf = Classifier(StageIndex.load(INDEX), contracts,

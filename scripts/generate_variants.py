@@ -26,7 +26,7 @@ from openai import AsyncOpenAI
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import dataset
-from gaucho_cache.contracts import (default_contracts_dir, load_contracts,
+from gaucho_cache.contracts import (default_contracts_dir, load_all_contracts, load_contracts,
                                     load_intent_specs)
 
 REPO = Path(__file__).resolve().parent.parent
@@ -134,7 +134,7 @@ async def main() -> None:
         sys.exit("CEREBRAS_API_KEY not set")
 
     specs = load_intent_specs(INTENTS_YAML)
-    contracts = load_contracts(CONTRACTS_DIR)
+    contracts = load_all_contracts(REPO)
     meanings = {s.intent: s.meaning for s in specs}
     conn = dataset.connect(DB_PATH)
     client = AsyncOpenAI(api_key=api_key, base_url=BASE_URL)

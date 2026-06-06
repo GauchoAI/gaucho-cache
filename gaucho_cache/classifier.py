@@ -23,6 +23,7 @@ from .contracts import CacheDecision, MatchContract
 
 DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 DEFAULT_THRESHOLDS = {"threshold": 0.70, "margin": 0.05, "negative_margin": 0.03}
+SOCIAL = {"greet", "thanks_goodbye"}  # mutually-safe social intents
 
 
 @dataclass
@@ -123,6 +124,8 @@ class Classifier:
         COMPOUND_FLOOR = 0.82
         multi = (len(ranked) > 1 and ranked[1][1] >= min(
             self._thresholds_for(ranked[1][0]).threshold, COMPOUND_FLOOR))
+        if multi and {top1_intent, ranked[1][0]} <= SOCIAL:
+            multi = False  # greet vs thanks is one nicety, not two concerns
 
         # Nearest hard negative attached to the winning intent.
         neg = (self.index.kinds == "negative") & (self.index.intents == top1_intent)

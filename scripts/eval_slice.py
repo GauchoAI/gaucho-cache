@@ -29,7 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import dataset
 from gaucho_cache.classifier import (DEFAULT_MODEL, Classifier, Embedder,
                                      StageIndex, Thresholds)
-from gaucho_cache.contracts import default_contracts_dir, load_contracts
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
@@ -72,7 +72,7 @@ def main() -> None:
     train = ~holdout
 
     index = StageIndex(emb[train], intents[train], kinds[train], actuals[train])
-    contracts = load_contracts(CONTRACTS_DIR)
+    contracts = load_all_contracts(REPO)
 
     # ---- calibrate per-intent thresholds on train ---------------------------
     # An intent's threshold sits above the best score its OWN hard
@@ -127,7 +127,8 @@ def main() -> None:
             return "below_threshold"
         if second is not None:
             i2, s2 = second
-            if i2 in thresholds and s2 >= min(thresholds[i2].threshold, 0.82):
+            if (i2 in thresholds and s2 >= min(thresholds[i2].threshold, 0.82)
+                    and not ({intent, i2} <= {"greet", "thanks_goodbye"})):
                 return "multi_intent"  # compound guard (wave-1 finding)
         if margin < th.margin:
             return "ambiguous_margin"

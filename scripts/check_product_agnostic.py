@@ -28,7 +28,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from gaucho_cache.contracts import (default_contracts_dir, load_contracts,
+from gaucho_cache.contracts import (default_contracts_dir, load_all_contracts, load_contracts,
                                     load_intent_specs)
 
 REPO = Path(__file__).resolve().parent.parent
@@ -49,7 +49,7 @@ PLACEHOLDER = re.compile(r"\{\{\s*(\w+)\s*\}\}|\{(\w+)\}")
 
 
 def main() -> None:
-    contracts = load_contracts(CONTRACTS_DIR)
+    contracts = load_all_contracts(REPO)
     slice_intents = {s.intent for s in load_intent_specs(INTENTS_YAML)}
 
     violations: list[tuple[str, str, str]] = []

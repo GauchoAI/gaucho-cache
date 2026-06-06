@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gaucho_cache import dataset, spend
 from gaucho_cache.cerebras import BatchClient
 from gaucho_cache.classifier import Embedder, StageIndex, load_thresholds
-from gaucho_cache.contracts import default_contracts_dir, load_contracts, load_intent_specs
+from gaucho_cache.contracts import default_contracts_dir, load_all_contracts, load_contracts, load_intent_specs
 
 REPO = Path(__file__).resolve().parent.parent
 DB_PATH = REPO / "data" / "slice.sqlite"
@@ -96,7 +96,7 @@ async def main() -> None:
     texts = [r[2] for r in rows]
     print(f"wave {a.wave}: {len(rows)} messages; ledger ${spend.spent():.2f}")
 
-    contracts = load_contracts(default_contracts_dir(REPO), EXTENSIONS)
+    contracts = load_all_contracts(REPO, EXTENSIONS)
     specs = load_intent_specs(REPO / "data" / "intents_slice.yaml")
     meanings = {s.intent: s.meaning for s in specs}
     index = StageIndex.load(INDEX)
@@ -121,7 +121,8 @@ async def main() -> None:
         th = thresholds.get(i1)
         th2 = thresholds.get(i2)
         c = contracts.get(i1)
-        multi = th2 is not None and s2 >= min(th2.threshold, 0.82)  # compound guard
+        multi = (th2 is not None and s2 >= min(th2.threshold, 0.82)
+                 and not ({i1, i2} <= {"greet", "thanks_goodbye"}))  # compound guard
         if (th is None or s1 < th.threshold or multi
                 or s1 - s2 < th.margin
                 or s1 - ns < th.negative_margin or c is None):
