@@ -64,6 +64,11 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("el envio cuanto demora?", "shipping_time", True),
     ("sos un bot?", "bot_skepticism", True),
     ("hay alguien real ahi?", "bot_skepticism", True),
+    # --- salutation decomposition: greeting + servable concern ---------------
+    ("hola, tiene garantia?", "warranty", True),
+    ("buenas! envian a salta capital?", "shipping_zone", True),
+    ("Holaaa sos un bot?", "bot_skepticism", True),
+    ("buen día, el envio cuanto demora?", "shipping_time", True),
     # --- MUST REFUSE: greeting + concern compounds ---------------------------
     ("hola, cuanto sale el king?", None, False),
     ("hola, ¿tenés almohadas?", None, False),

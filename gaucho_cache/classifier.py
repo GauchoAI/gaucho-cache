@@ -19,7 +19,27 @@ from pathlib import Path
 
 import numpy as np
 
+import re
+
 from .contracts import CacheDecision, MatchContract
+
+# Real-traffic finding (COCO dataset): ~2/3 of first messages are a
+# salutation + a concern. Decompose: strip the greeting, route the
+# remainder — the reply layer acknowledges the greeting.
+SALUTATION_RX = re.compile(
+    r"^(holi+s*|hola+|buenas( tardes| noches)?|buen d[ií]a|buenos d[ií]as)"
+    r"[\s,!.:;]*((c[oó]mo|como) (va|est[aá]s|est[aá]n|andan|andas)\??)?"
+    r"[\s,!.:;]*", re.IGNORECASE)
+
+
+def strip_salutation(text: str) -> str | None:
+    """Return the concern part of a salutation-prefixed message, or None
+    if the message is pure salutation / has no meaningful remainder."""
+    m = SALUTATION_RX.match(text.strip())
+    if not m or m.end() == 0:
+        return None
+    rest = text.strip()[m.end():].strip(" ,.!¡¿?:;")
+    return rest if len(rest.split()) >= 2 else None
 
 DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 DEFAULT_THRESHOLDS = {"threshold": 0.70, "margin": 0.05, "negative_margin": 0.03}
@@ -147,7 +167,17 @@ class Classifier:
                 neg_actual, multi)
 
     def classify(self, text: str, *, stage: str,
-                 state_fields: set[str] | None = None) -> CacheDecision:
+                 state_fields: set[str] | None = None,
+                 _decomposed: bool = False) -> CacheDecision:
+        # Salutation decomposition: greeting + concern → route the concern.
+        if not _decomposed:
+            rest = strip_salutation(text)
+            if rest:
+                d = self.classify(rest, stage=stage,
+                                  state_fields=state_fields, _decomposed=True)
+                if d.decision == "hit":
+                    d.reason = (d.reason + "; " if d.reason else "") + "salutation_stripped"
+                    return d
         intent, score, margin, neg_margin, neg_actual, multi = self.route(text)
         th = self._thresholds_for(intent)
         contract = self.contracts.get(intent)

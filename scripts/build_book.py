@@ -296,12 +296,26 @@ async function init(){
   status("✅ listo");
   $("demo-send").disabled=false; welcome();
 }
+const SAL_RX=/^(holi+s*|hola+|buenas( tardes| noches)?|buen d[ií]a|buenos d[ií]as)[\\s,!.:;]*((c[oó]mo|como) (va|est[aá]s|est[aá]n|andas)\\??)?[\\s,!.:;]*/i;
 async function ask(text){
   if(!extractor||!text.trim()) return;
   $("demo-input").value="";
   bubble("user",text);
-  const out=await extractor(text,{pooling:"mean",normalize:true});
-  const d=decide(Array.from(out.data), text.trim().split(/\\s+/).length<=3);
+  // salutation decomposition: greet + concern → route the concern
+  let target=text, saluted=false;
+  const m=text.trim().match(SAL_RX);
+  if(m && m[0].length>0){
+    const rest=text.trim().slice(m[0].length).replace(/^[\\s,.!¡¿?:;]+|[\\s,.!¡¿?:;]+$/g,"");
+    if(rest.split(/\\s+/).length>=2){ target=rest; saluted=true; }
+  }
+  const out=await extractor(target,{pooling:"mean",normalize:true});
+  let d=decide(Array.from(out.data), target.trim().split(/\\s+/).length<=3);
+  if(saluted && d.verdict!=="serve"){
+    const out2=await extractor(text,{pooling:"mean",normalize:true});
+    d=decide(Array.from(out2.data), false);
+  } else if(saluted && d.verdict==="serve" && d.intent!=="greet"){
+    d.salutation=true;
+  }
   count++;
   const m=`${d.intent} · s ${d.score.toFixed(2)} · ${d.ms.toFixed(0)} ms · $0.00`+(d.reason?` · ${d.reason}`:"");
   if(d.verdict==="serve"){
@@ -309,6 +323,7 @@ async function ask(text){
     if(d.intent==="greet" && lastBotIntent==="greet"){
       r=GREET_AGAIN[Math.floor(Math.random()*GREET_AGAIN.length)];
     } else { r=pickReply(d.intent); }
+    if(d.salutation) r="¡Hola! "+r.charAt(0).toLowerCase()+r.slice(1);
     lastBotIntent=d.intent;
     bubble("bot",`${r}${meta(m)}`);
   } else if(d.verdict==="hit"){
