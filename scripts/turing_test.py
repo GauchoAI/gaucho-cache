@@ -101,7 +101,7 @@ async def main() -> None:
     neg_masks = {it: (index.kinds == "negative") & (index.intents == it)
                  for it in intent_masks}
 
-    def serve_intent(q):
+    def serve_intent(q, short=False):
         sims = index.embeddings @ q
         best = {it: float(sims[m].max()) for it, m in intent_masks.items()}
         ranked = sorted(best.items(), key=lambda kv: kv[1], reverse=True)
@@ -113,6 +113,7 @@ async def main() -> None:
         c = contracts.get(i1)
         if (th is None or c is None or s1 < th.threshold
                 or (th2 is not None and s2 >= min(th2.threshold, 0.82)
+                    and (not short or s1 - s2 < 0.12)
                     and not ({i1, i2} <= {"greet", "thanks_goodbye"}))  # compound
                 or s1 - s2 < th.margin or s1 - ns < th.negative_margin
                 or not c.preconditions_pass(stage=STAGE,
@@ -122,7 +123,7 @@ async def main() -> None:
         return i1
 
     servable = [(texts[i], si) for i in range(len(texts))
-                if (si := serve_intent(emb[i]))]
+                if (si := serve_intent(emb[i], len(texts[i].split()) <= 3))]
     rng.shuffle(servable)
     sample = servable[: a.pairs]
     print(f"{len(servable)} servable; judging {len(sample)} blind pairs; "

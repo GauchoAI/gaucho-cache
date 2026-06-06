@@ -223,7 +223,7 @@ D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
   else (NEG[it]=NEG[it]||[]).push(i); });
 const SOCIAL=new Set(["greet","thanks_goodbye"]);
 
-function decide(q){
+function decide(q, isShort){
   const t0=performance.now();
   const best={};
   for(const [it,i] of POS){
@@ -245,6 +245,7 @@ function decide(q){
   let verdict="miss", reason="";
   if(s1<th.threshold) reason="below_threshold";
   else if(th2 && s2>=Math.min(th2.threshold,D.compound_floor)
+          && (!isShort || s1-s2<0.12)
           && !(SOCIAL.has(i1)&&SOCIAL.has(i2))) reason="multi_intent";
   else if(s1-s2<th.margin) reason="ambiguous_margin";
   else if(s1-ns<th.negative_margin) reason="negative_margin";
@@ -256,6 +257,10 @@ function decide(q){
 }
 
 const lastServed={};
+const GREET_AGAIN=["¡Hola de nuevo! 😄 Contame, ¿qué estás buscando?",
+ "¡Buenas! ¿En qué te puedo ayudar?","Acá estoy 👂 decime nomás.",
+ "¡Hola! ¿Seguimos? Contame qué necesitás."];
+let lastBotIntent=null;
 function pickReply(intent){
   const pool=D.variants[intent]||[];
   if(!pool.length) return null;
@@ -277,6 +282,7 @@ function bubble(side, html){
 }
 const meta=t=>`<div style="color:#8a948e;font-size:10.5px;margin-top:3px;font-family:var(--mono)">${t}</div>`;
 function welcome(){
+  lastBotIntent="greet";
   const g=pickReply("greet");
   if(g) bubble("bot",`${g}${meta("greet · plantilla local · $0.00")}`);
 }
@@ -295,11 +301,15 @@ async function ask(text){
   $("demo-input").value="";
   bubble("user",text);
   const out=await extractor(text,{pooling:"mean",normalize:true});
-  const d=decide(Array.from(out.data));
+  const d=decide(Array.from(out.data), text.trim().split(/\\s+/).length<=3);
   count++;
   const m=`${d.intent} · s ${d.score.toFixed(2)} · ${d.ms.toFixed(0)} ms · $0.00`+(d.reason?` · ${d.reason}`:"");
   if(d.verdict==="serve"){
-    const r=pickReply(d.intent);
+    let r;
+    if(d.intent==="greet" && lastBotIntent==="greet"){
+      r=GREET_AGAIN[Math.floor(Math.random()*GREET_AGAIN.length)];
+    } else { r=pickReply(d.intent); }
+    lastBotIntent=d.intent;
     bubble("bot",`${r}${meta(m)}`);
   } else if(d.verdict==="hit"){
     bubble("bot",`<em style="color:#9a6b00">plantilla en re-auditoría — acá contestaría el LLM de fallback</em>${meta(m)}`);

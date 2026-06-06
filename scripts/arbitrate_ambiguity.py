@@ -60,6 +60,9 @@ BOUNDARIES = """- price: cost, discounts, installments/cuotas, payment options, 
 - shipping_time: WHEN an orderable item arrives, delays, deadlines. Restock timing → out_of_stock_reservation. Coverage of their area → shipping_zone.
 - shipping_zone: WHETHER delivery reaches their location (town, CP, province).
 - out_of_stock_reservation: restock timing, reserving a unit, keeping a promo while waiting.
+- greet: opens the conversation (hola, buenas, como va, que tal, holis) with NO concern attached.
+- thanks_goodbye: gratitude or farewell closing the chat (gracias, joya gracias, chau, nos vemos).
+- what_do_you_sell: asks what the store offers in general (que venden, solo colchones?, que marcas).
 - other: a real concern none of the above covers.
 - ambiguous: fragment too vague to assign, OR a compound message carrying two or more distinct concerns.
 

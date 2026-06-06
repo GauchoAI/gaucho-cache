@@ -111,7 +111,7 @@ async def main() -> None:
     neg_masks = {it: (index.kinds == "negative") & (index.intents == it)
                  for it in intent_masks}
 
-    def decide(q):
+    def decide(q, short=False):
         sims = index.embeddings @ q
         best = {it: float(sims[m].max()) for it, m in intent_masks.items()}
         ranked = sorted(best.items(), key=lambda kv: kv[1], reverse=True)
@@ -122,6 +122,7 @@ async def main() -> None:
         th2 = thresholds.get(i2)
         c = contracts.get(i1)
         multi = (th2 is not None and s2 >= min(th2.threshold, 0.82)
+                 and (not short or s1 - s2 < 0.12)
                  and not ({i1, i2} <= {"greet", "thanks_goodbye"}))  # compound guard
         if (th is None or s1 < th.threshold or multi
                 or s1 - s2 < th.margin
@@ -132,7 +133,8 @@ async def main() -> None:
             return ("hit_no_serve", i1)
         return ("serve", i1)
 
-    decisions = [decide(emb[i]) for i in range(len(rows))]
+    decisions = [decide(emb[i], len(texts[i].split()) <= 3)
+                 for i in range(len(rows))]
 
     # ---- raw scoring ---------------------------------------------------------
     served = [(i, d[1]) for i, d in enumerate(decisions) if d[0] == "serve"]

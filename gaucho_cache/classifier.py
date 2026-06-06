@@ -122,8 +122,15 @@ class Classifier:
         # even when that intent's calibrated threshold sits higher
         # (battle wave-3 finding: "¿precio y garantia?").
         COMPOUND_FLOOR = 0.82
-        multi = (len(ranked) > 1 and ranked[1][1] >= min(
-            self._thresholds_for(ranked[1][0]).threshold, COMPOUND_FLOOR))
+        MULTI_GAP = 0.12   # a true compound carries BOTH concerns strongly;
+                           # a dominant top1 with a distant second is just
+                           # short-fragment embedding noise ("Como va?")
+        short = len(text.split()) <= 3   # fragments embed promiscuously;
+        multi = (len(ranked) > 1         # real compounds are long (2 clauses)
+                 and ranked[1][1] >= min(
+                     self._thresholds_for(ranked[1][0]).threshold,
+                     COMPOUND_FLOOR)
+                 and (not short or top1 - ranked[1][1] < MULTI_GAP))
         if multi and {top1_intent, ranked[1][0]} <= SOCIAL:
             multi = False  # greet vs thanks is one nicety, not two concerns
 

@@ -24,6 +24,7 @@ recalibrate. Error on *fresh* traffic falls monotonically:
 | 3 | 29,940 | 43 / 2,577 (1.67%) | 0.27% |
 | 4 | 19,897 | 21 / 1,677 (1.25%) | 0.23% |
 | 5 | 19,898 | **17 / 1,426 (1.19%, CI 0.75–1.90%)** | **0.14%** |
+| 6 (after the conversational layer: 13 intents) | 9,918 | **14 / 1,227 (1.14%)** | **0.04%** |
 
 The held-out variant gate stayed PASS (95.7% / 0 confident-wrong)
 through every recalibration. The ~1.2% asymptote on independent traffic
