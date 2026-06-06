@@ -222,6 +222,7 @@ const POS=[],NEG={};
 D.intents.forEach((it,i)=>{ if(D.kinds[i]==="positive") POS.push([it,i]);
   else (NEG[it]=NEG[it]||[]).push(i); });
 const SOCIAL=new Set(["greet","thanks_goodbye","confirmation","declination","answer_for_whom"]);
+const FUNNEL=new Set(["want_to_buy","answer_size_posture","answer_for_whom"]); // one funnel move, not two concerns
 
 function normTxt(t){return t.toLowerCase().normalize("NFKD").replace(/[^a-z0-9ñ ]+/g,"").trim();}
 function decide(q, nWords, rawText){
@@ -253,8 +254,9 @@ function decide(q, nWords, rawText){
   if(s1<th.threshold) reason="below_threshold";
   else if(!corpusExact && nWords>2 && th2 && s2>=0.75 && s2>=Math.min(th2.threshold,D.compound_floor)
           && (!isShort || s1-s2<0.12)
-          && !(SOCIAL.has(i1)&&SOCIAL.has(i2))) reason="multi_intent";
-  else if(!corpusExact && s1-s2<th.margin && !(SOCIAL.has(i1)&&SOCIAL.has(i2))) reason="ambiguous_margin";
+          && !(SOCIAL.has(i1)&&SOCIAL.has(i2))
+          && !(FUNNEL.has(i1)&&FUNNEL.has(i2))) reason="multi_intent";
+  else if(!corpusExact && s1-s2<th.margin && !(SOCIAL.has(i1)&&SOCIAL.has(i2)) && !(FUNNEL.has(i1)&&FUNNEL.has(i2))) reason="ambiguous_margin";
   else if(s1-ns<th.negative_margin) reason="negative_margin";
   else if((c.requires_state||[]).length) reason="precondition_failed";
   else if(!c.audited){ verdict="hit"; reason="template_unaudited"; }

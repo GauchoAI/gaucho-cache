@@ -100,6 +100,13 @@ PROBES: list[tuple[str, str | None, bool]] = [
     ("dale", "confirmation", True),
     ("ok", "confirmation", True),
     ("si", "confirmation", True),
+    # demo one-shot 2026-06-06 #2: elaborated single-concern answers were
+    # vetoed as compounds (second intent = want_to_buy, same funnel move)
+    ("Yo suelo dormir de costado, o boca abajo, pero a veces boca arriba, "
+     "honestamente no tengo una preferencia fuerte. La cama seria una plaza.",
+     "answer_size_posture", True),
+    ("quiero un colchon de una plaza, duermo de costado", "answer_size_posture", True),
+    ("para mi hijo, cama de 1 plaza, duerme boca arriba", "answer_for_whom", True),
     # demo one-shot 2026-06-06: "dale" after answer_size_posture fell to the
     # LLM lane (web demo skipped the curated lane; acks below uncurated)
     ("perfecto", "confirmation", True),

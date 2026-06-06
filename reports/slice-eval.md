@@ -9,17 +9,17 @@
 |---|---|
 | Routing accuracy (top-1, informational) | 91.1% |
 | **Serving accuracy (correct intent when served)** | **100.0%** |
-| Hit rate (compound predicate) | 45.6% |
+| Hit rate (compound predicate) | 48.7% |
 | Confident-wrong rate | **0.00%** (0) |
-| Adversarial negatives confidently mis-served | 51 / 1190 |
+| Adversarial negatives confidently mis-served | 52 / 1190 |
 
 ## Per intent
 
 | Intent | audited | n | top-1 | hits | confident-wrong |
 |---|---|---|---|---|---|
-| answer_for_whom | ✓ | 29 | 90% | 62% | 0 |
+| answer_for_whom | ✓ | 29 | 90% | 66% | 0 |
 | answer_payment_choice | ✓ | 45 | 91% | 13% | 0 |
-| answer_size_posture | ✓ | 79 | 95% | 32% | 0 |
+| answer_size_posture | ✓ | 79 | 95% | 41% | 0 |
 | bot_skepticism | ✓ | 21 | 81% | 62% | 0 |
 | brand_trust | ✗ | 19 | 89% | 74% | 0 |
 | confirmation | ✓ | 39 | 87% | 69% | 0 |
@@ -34,7 +34,7 @@
 | shipping_zone | ✓ | 20 | 90% | 30% | 0 |
 | size_fit | ✗ | 20 | 95% | 40% | 0 |
 | thanks_goodbye | ✓ | 21 | 90% | 90% | 0 |
-| want_to_buy | ✓ | 21 | 90% | 33% | 0 |
+| want_to_buy | ✓ | 21 | 90% | 71% | 0 |
 | warranty | ✓ | 24 | 100% | 21% | 0 |
 | what_do_you_sell | ✓ | 20 | 100% | 60% | 0 |
 
@@ -51,6 +51,7 @@ Other confusions: answer_for_whom→answer_size_posture×1, answer_for_whom→co
 
 ## Adversarial negatives confidently mis-served
 
+- `quiero un colchon para mi` — not-answer_for_whom (actually other), served `want_to_buy` (0.850)
 - `¿Tienen reseñas de clientes reales sobre el colchón?` — not-answer_for_whom (actually other), served `brand_trust` (0.895)
 - `¿Me pueden indicar la hora estimada de entrega?` — not-answer_for_whom (actually other), served `shipping_time` (0.877)
 - `¿Puedo pagar con transfer bancario?` — not-answer_for_whom (actually other), served `answer_payment_choice` (0.856)
@@ -70,6 +71,5 @@ Other confusions: answer_for_whom→answer_size_posture×1, answer_for_whom→co
 - `¿Cuál es la política de devoluciones?` — not-declination (actually other), served `return_policy` (0.903)
 - `¿Cuándo repondrán el stock del colchón king size?` — not-declination (actually other), served `out_of_stock_reservation` (0.820)
 - `¿Cuándo reponen los colchones de espuma firme? Necesito saber si habrá disponibilidad pronto.` — not-firmness_doubt (actually other), served `out_of_stock_reservation` (0.871)
-- `Quisiera saber cuántas opiniones reales hay de clientes que probaron el colchón firme, ¿pueden compartirlas?` — not-firmness_doubt (actually other), served `brand_trust` (0.794)
 
 ## Gate: **PASS**

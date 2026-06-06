@@ -119,6 +119,16 @@ was vetoed as a price-compound. Two predicate refinements came out:
   fires on ≤2-word fragments ("tiene garantia", "sos un bot"). The
   battle-tested compound that created the guard — "¿precio y
   garantía?" — is three words *with a conjunction*, and stays blocked.
+- **The funnel-advancing cluster**: the user then one-shot the demo a
+  third time — "duermo de costado, o boca abajo… la cama seria una
+  plaza" was vetoed as a compound because *want_to_buy* ranked second
+  at 0.81. But purchase intent + its own details is ONE move in the
+  sales dance, not two concerns. {want_to_buy, answer_size_posture,
+  answer_for_whom} now forms a second mutually-safe cluster, with the
+  same privileges and the same justification as the social one: every
+  in-cluster template asks for or acknowledges the same funnel step, so
+  a crossing is at worst a redundant question, never a lie. A genuine
+  second concern (shipping, price) sits outside and still vetoes.
 
 One more receipt from the same session: the first closure campaign
 ingested under a label-only judge, and re-auditing those rows with the

@@ -129,17 +129,19 @@ def main() -> None:
         short = words <= 3
         if score < th.threshold:
             return "below_threshold"
+        FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom"}
         if second is not None and not corpus_exact and words > 2:
             # two words can't carry two concerns (classifier parity)
             i2, s2 = second
             if (i2 in thresholds and s2 >= 0.75 and s2 >= min(thresholds[i2].threshold, 0.82)
                     and (not short or score - s2 < 0.12)
-                    and not ({intent, i2} <= SOCIAL)):
+                    and not ({intent, i2} <= SOCIAL)
+                    and not ({intent, i2} <= FUNNEL)):  # one funnel move
                 return "multi_intent"  # compound guard (wave-1 finding)
         if margin < th.margin and not corpus_exact:
             i2 = second[0] if second else ""
-            if not ({intent, i2} <= SOCIAL):  # in-cluster ties are safe (classifier parity)
-                return "ambiguous_margin"
+            if not ({intent, i2} <= SOCIAL) and not ({intent, i2} <= FUNNEL):
+                return "ambiguous_margin"  # in-cluster ties are safe (classifier parity)
         if neg_margin < th.negative_margin:
             return "negative_margin"
         return ""  # hit
@@ -168,7 +170,12 @@ def main() -> None:
             hits += 1
             stat["hits"] += 1
             SOCIAL_CLUSTER = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}
-            if pred != true and not ({pred, true} <= SOCIAL_CLUSTER):
+            FUNNEL_CLUSTER = {"want_to_buy","answer_size_posture","answer_for_whom"}
+            # In-cluster confusions never lie: social crossings are mutual
+            # niceties; funnel crossings ask/ack the same purchase step
+            # (worst case a redundant question, classifier doctrine parity).
+            if pred != true and not ({pred, true} <= SOCIAL_CLUSTER
+                                     or {pred, true} <= FUNNEL_CLUSTER):
                 confident_wrong.append((texts[i], true, pred, score))
                 stat["wrong"] += 1
 

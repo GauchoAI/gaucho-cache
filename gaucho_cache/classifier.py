@@ -60,6 +60,12 @@ def strip_salutation(text: str) -> str | None:
 DEFAULT_MODEL = "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"
 DEFAULT_THRESHOLDS = {"threshold": 0.70, "margin": 0.05, "negative_margin": 0.03}
 SOCIAL = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom"}  # safe cluster
+# Funnel-advancing cluster: purchase intent + its own details ("quiero un
+# colchón de 1 plaza, duermo de costado") is ONE move in the sales dance,
+# not two concerns — serving the more-informed template advances correctly.
+# A genuine second concern (shipping, price…) is outside the cluster and
+# still vetoes.
+FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom"}
 
 
 @dataclass
@@ -170,8 +176,9 @@ class Classifier:
                      self._thresholds_for(ranked[1][0]).threshold,
                      COMPOUND_FLOOR)
                  and (not short or top1 - ranked[1][1] < MULTI_GAP))
-        if multi and {top1_intent, ranked[1][0]} <= SOCIAL:
-            multi = False  # greet vs thanks is one nicety, not two concerns
+        if multi and ({top1_intent, ranked[1][0]} <= SOCIAL
+                      or {top1_intent, ranked[1][0]} <= FUNNEL):
+            multi = False  # one nicety / one funnel move, not two concerns
 
         # Nearest hard negative attached to the winning intent.
         neg = (self.index.kinds == "negative") & (self.index.intents == top1_intent)
@@ -239,7 +246,8 @@ class Classifier:
             d.reason = "multi_intent"   # compound message: two concerns
             return d
         if (margin < th.margin and not corpus_exact
-                and not ({intent, second_intent} <= SOCIAL)):
+                and not ({intent, second_intent} <= SOCIAL)
+                and not ({intent, second_intent} <= FUNNEL)):
             d.reason = "ambiguous_margin"   # in-cluster ties are safe to serve
             return d
         if neg_margin < th.negative_margin:
