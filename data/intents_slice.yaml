@@ -103,7 +103,7 @@ intents:
     meaning: >
       The customer opens the chat with a greeting or small talk carrying
       NO concern yet: hola, buenas, qué tal, good morning style openers,
-      maybe asking if anyone is there to start the conversation.
+      NOT asking whether a human/anyone is there (that is bot_skepticism).
     confusables: [thanks_goodbye, bot_skepticism]
     template_file: greet.md
 

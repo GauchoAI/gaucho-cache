@@ -1,15 +1,15 @@
 # P0.5 slice evaluation — embedding-only (mini-E2)
 
 - Model: `sentence-transformers/paraphrase-multilingual-mpnet-base-v2`
-- Index: 952 train positives + 904 hard negatives; 245 held-out positives evaluated
+- Index: 926 train positives + 904 hard negatives; 238 held-out positives evaluated
 
 ## Headline (gate: serving accuracy ≥99%, confident_wrong = 0; raw routing informational — social-pair and below-threshold confusions never reach a customer)
 
 | Metric | Value |
 |---|---|
-| Routing accuracy (top-1, informational) | 91.0% |
+| Routing accuracy (top-1, informational) | 92.9% |
 | **Serving accuracy (correct intent when served)** | **100.0%** |
-| Hit rate (compound predicate) | 51.0% |
+| Hit rate (compound predicate) | 51.3% |
 | Confident-wrong rate | **0.00%** (0) |
 | Adversarial negatives confidently mis-served | 22 / 904 |
 
@@ -17,14 +17,14 @@
 
 | Intent | audited | n | top-1 | hits | confident-wrong |
 |---|---|---|---|---|---|
-| bot_skepticism | ✓ | 20 | 80% | 65% | 0 |
+| bot_skepticism | ✓ | 19 | 84% | 68% | 0 |
 | brand_trust | ✗ | 19 | 89% | 74% | 0 |
 | firmness_doubt | ✗ | 17 | 88% | 24% | 0 |
-| greet | ✓ | 21 | 76% | 57% | 0 |
+| greet | ✓ | 14 | 93% | 64% | 0 |
 | out_of_stock_reservation | ✓ | 15 | 73% | 33% | 0 |
 | price | ✗ | 19 | 100% | 84% | 0 |
 | return_policy | ✗ | 17 | 94% | 12% | 0 |
-| shipping_time | ✓ | 18 | 100% | 44% | 0 |
+| shipping_time | ✓ | 19 | 100% | 42% | 0 |
 | shipping_zone | ✓ | 19 | 95% | 58% | 0 |
 | size_fit | ✗ | 19 | 95% | 42% | 0 |
 | thanks_goodbye | ✓ | 21 | 100% | 86% | 0 |
@@ -38,9 +38,9 @@
 | shipping_time ↔ shipping_zone | 0 | 1 |
 | warranty ↔ return_policy | 0 | 0 |
 | size_fit ↔ firmness_doubt | 1 | 2 |
-| brand_trust ↔ bot_skepticism | 0 | 1 |
+| brand_trust ↔ bot_skepticism | 0 | 0 |
 
-Other confusions: bot_skepticism→greet×2, bot_skepticism→shipping_zone×1, brand_trust→firmness_doubt×1, brand_trust→size_fit×1, greet→bot_skepticism×1, greet→shipping_time×1, greet→thanks_goodbye×2, greet→what_do_you_sell×1, out_of_stock_reservation→return_policy×1, out_of_stock_reservation→shipping_time×2, out_of_stock_reservation→thanks_goodbye×1, return_policy→price×1, what_do_you_sell→firmness_doubt×1, what_do_you_sell→size_fit×1
+Other confusions: bot_skepticism→greet×2, bot_skepticism→shipping_zone×1, brand_trust→firmness_doubt×1, brand_trust→size_fit×1, greet→thanks_goodbye×1, out_of_stock_reservation→return_policy×1, out_of_stock_reservation→shipping_time×2, out_of_stock_reservation→thanks_goodbye×1, return_policy→price×1, what_do_you_sell→firmness_doubt×1, what_do_you_sell→size_fit×1
 
 ## Adversarial negatives confidently mis-served
 
