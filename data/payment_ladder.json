@@ -1,0 +1,10 @@
+{
+  "_provenance": "Modeled on agentic-crm merchants/laferia/data/payment_methods.json (multiplier ladder). Conversion-eligible methods mirror the gym's _CONVERSION_PAYMENT_METHODS doctrine.",
+  "methods": [
+    {"method_key": "efectivo", "label": "Contado efectivo (50% OFF)", "multiplier": 0.50, "cuotas": 1, "conversion_eligible": true},
+    {"method_key": "debito", "label": "Débito (50% OFF)", "multiplier": 0.50, "cuotas": 1, "conversion_eligible": true},
+    {"method_key": "transferencia", "label": "Transferencia (45% OFF)", "multiplier": 0.55, "cuotas": 1, "conversion_eligible": true},
+    {"method_key": "cuotas_3", "label": "3 cuotas sin interés (40% OFF)", "multiplier": 0.60, "cuotas": 3, "conversion_eligible": true},
+    {"method_key": "cuotas_6", "label": "6 cuotas sin interés (35% OFF)", "multiplier": 0.65, "cuotas": 6, "conversion_eligible": true}
+  ]
+}

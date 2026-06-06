@@ -75,6 +75,8 @@ def main() -> None:
         "compound_floor": 0.82,
         "expected_next": {k: list(v) for k, v in EXPECTED_NEXT.items()},
         "context_discount": CONTEXT_DISCOUNT,
+        "catalog": json.loads((REPO / "data" / "catalog.json").read_text())["products"],
+        "ladder": json.loads((REPO / "data" / "payment_ladder.json").read_text())["methods"],
         "curated_exact": json.loads((REPO / "data" / "curated_exact.json").read_text())
             if (REPO / "data" / "curated_exact.json").exists() else {},
     }

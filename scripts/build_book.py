@@ -284,6 +284,76 @@ const GREET_AGAIN=["¡Hola de nuevo! 😄 Contame, ¿qué estás buscando?",
  "¡Buenas! ¿En qué te puedo ayudar?","Acá estoy 👂 decime nomás.",
  "¡Hola! ¿Seguimos? Contame qué necesitás."];
 let lastBotIntent=null;
+
+// ---- class B: catalog renders (deterministic slot-fill, $0) ------------
+// Mirrors gaucho_cache/serving.py + render.py.
+const BOT={slots:{},recommended:false,offered:false};
+const SIZE_MAP=[[/\\b1\\s*plaza\\s*y\\s*media\\b|\\buna\\s*plaza\\s*y\\s*media\\b|\\b1[,.]5\\s*plazas?\\b/i,"1 plaza y media"],
+ [/\\b(2|dos)\\s*plazas?\\b|\\b140\\s*x\\s*190\\b/i,"2 plazas"],
+ [/\\b(1|una)\\s*plaza\\b|\\b90\\s*x\\s*190\\b/i,"1 plaza"],
+ [/\\bqueen\\b|\\b160\\s*x\\s*200\\b/i,"queen"],
+ [/\\bking\\b|\\b180\\s*x\\s*200\\b|\\b200\\s*x\\s*200\\b/i,"king"]];
+const FIRM_RX=[[/\\bextra\\s*firme\\b|\\bbien\\s+firme\\b|\\bdur[oa]\\b/i,["firme"]],
+ [/\\bfirme\\b/i,["firme","medio firme"]],
+ [/\\bbland[oa]\\b|\\bsuave\\b|\\bsoft\\b/i,["blando"]],
+ [/\\bmedi[oa]\\b/i,["medio","medio firme"]]];
+const POST_RX=[[/\\bde\\s+costado\\b|\\bde\\s+lado\\b|\\bfetal\\b/i,["blando","medio"]],
+ [/\\bboca\\s+abajo\\b/i,["firme","medio firme"]],
+ [/\\bboca\\s+arriba\\b|\\bde\\s+espaldas?\\b/i,["medio","firme"]]];
+function extractSlots(t){
+  for(const [rx,size] of SIZE_MAP){ if(rx.test(t)){BOT.slots.size=size;break;} }
+  for(const [rx,p] of FIRM_RX){ if(rx.test(t)){BOT.slots.pref=p;return;} }
+  for(const [rx,p] of POST_RX){ if(rx.test(t)){BOT.slots.pref=BOT.slots.pref||p;return;} }
+}
+const ars=n=>"$"+Math.round(n).toLocaleString("es-AR");
+function pickProducts(k){
+  let items=(D.catalog||[]).filter(p=>p.stock_status==="instock");
+  if(BOT.slots.size){const f=items.filter(p=>p.size===BOT.slots.size); if(f.length) items=f;}
+  const pref=BOT.slots.pref||[];
+  items=items.slice().sort((a,b)=>{
+    const ra=pref.length?(pref.includes(a.firmeza)?0:pref.some(x=>a.firmeza.includes(x))?1:2):0;
+    const rb=pref.length?(pref.includes(b.firmeza)?0:pref.some(x=>b.firmeza.includes(x))?1:2):0;
+    return ra-rb||((a.on_sale?0:1)-(b.on_sale?0:1))||a.price-b.price;});
+  return items.slice(0,k);
+}
+function bestOffer(price){const m=(D.ladder||[]).reduce((a,b)=>a.multiplier<b.multiplier?a:b);return [m.label,price*m.multiplier];}
+function renderReco(){
+  if(!BOT.slots.size) return null;
+  const ps=pickProducts(2); if(!ps.length) return null;
+  BOT.recommended=true;
+  const lines=ps.map(p=>{const [lab,off]=bestOffer(p.price);
+    return `• <b>${p.name}</b> (${p.firmeza}, ${p.tecnologia}, ${p.altura_cm} cm)${p.on_sale?" 🔥 en oferta":""} — lista ${ars(p.price)}, con ${lab.toLowerCase()}: ${ars(off)}`;});
+  return `Estas son mis recomendaciones para tu cama ${BOT.slots.size}: 🛏️<br>${lines.join("<br>")}<br>¿Te paso las opciones de pago de alguno, o querés ver otro estilo?`;
+}
+function renderPayments(){
+  const p=pickProducts(1)[0]; BOT.offered=true;
+  const lines=(D.ladder||[]).map(m=>{const tot=p.price*m.multiplier;
+    return m.cuotas>1?`• ${m.label}: ${m.cuotas}× ${ars(tot/m.cuotas)} (total ${ars(tot)})`:`• ${m.label}: ${ars(tot)}`;});
+  return `Para el <b>${p.name}</b> (lista ${ars(p.price)}) tenés: 💳<br>${lines.join("<br>")}<br>¿Con cuál te queda cómodo? Apenas elijas te paso el link para cerrarlo.`;
+}
+function detectPayment(t){t=(t||"").toLowerCase();
+  if(/\\befectivo\\b|\\bcontado\\b/.test(t))return "efectivo";
+  if(/\\bd[eé]bito\\b/.test(t))return "debito";
+  if(/\\btransferencia\\b|\\btransfer\\b/.test(t))return "transferencia";
+  if(/\\b6\\s*cuotas\\b|\\bseis\\s*cuotas\\b/.test(t))return "cuotas_6";
+  if(/\\b3\\s*cuotas\\b|\\btres\\s*cuotas\\b|\\bcuotas\\b/.test(t))return "cuotas_3";
+  return null;}
+function renderClose(mk){
+  const p=pickProducts(1)[0];
+  const m=(D.ladder||[]).find(x=>x.method_key===mk)||(D.ladder||[]).reduce((a,b)=>a.multiplier<b.multiplier?a:b);
+  const tot=p.price*m.multiplier;
+  const per=m.cuotas>1?` (${m.cuotas}× ${ars(tot/m.cuotas)})`:"";
+  return `¡Listo! 🎉 Te reservo el <b>${p.name}</b> con ${m.label.toLowerCase()}: ${ars(tot)}${per}. Completá el pago acá y queda confirmado: <a href="#" onclick="return false">laferia.example/checkout/${p.sku}?pago=${m.method_key}</a> 🧾 — cualquier cosa me escribís por acá.`;
+}
+const FUNNEL_B=new Set(["answer_size_posture","ask_recommendation","want_to_buy","answer_for_whom"]);
+const ACK_B=new Set(["confirmation","awaiting_reply"]);
+function classBReply(intent, rawText){
+  if(FUNNEL_B.has(intent)&&BOT.slots.size){const r=renderReco();if(r){lastBotIntent="answer_size_posture";return [r,"class_b_recommend"];}}
+  if(intent==="answer_payment_choice"&&BOT.recommended){lastBotIntent="answer_payment_choice";return [renderPayments(),"class_b_payments"];}
+  if(ACK_B.has(intent)&&BOT.recommended&&!BOT.offered){lastBotIntent="answer_payment_choice";return [renderPayments(),"class_b_payments"];}
+  if(intent==="price"&&BOT.recommended){lastBotIntent="answer_payment_choice";return [renderPayments(),"class_b_payments"];}
+  return null;
+}
 function pickReply(intent){
   const pool=D.variants[intent]||[];
   if(!pool.length) return null;
@@ -324,6 +394,24 @@ async function ask(text){
   if(!extractor||!text.trim()) return;
   $("demo-input").value="";
   bubble("user",text);
+  extractSlots(text);
+  // the close is slot-gated, not similarity-gated (serving.py parity):
+  // a stated payment choice after a recommendation means one thing.
+  const pmEarly=detectPayment(text);
+  if(pmEarly && BOT.recommended && text.trim().split(/\\s+/).length<=8){
+    count++; lastBotIntent="close";
+    bubble("bot",`${renderClose(pmEarly)}${meta("answer_payment_choice · catálogo local · $0.00 · class_b_close")}`);
+    $("demo-counter").textContent=`${count} decisión(es) — gasto acumulado de API: $0.00 (no hay API)`;
+    return;
+  }
+  // payment-options ASK after a recommendation: a ladder lookup, not a similarity call
+  if(!pmEarly && BOT.recommended && text.trim().split(/\\s+/).length<=10
+     && /opciones\\s+de\\s+pago|formas?\\s+de\\s+pago|c[oó]mo\\s+(se\\s+)?paga|c[oó]mo\\s+puedo\\s+pagar|medios\\s+de\\s+pago/i.test(text)){
+    count++; lastBotIntent="answer_payment_choice";
+    bubble("bot",`${renderPayments()}${meta("answer_payment_choice · catálogo local · $0.00 · class_b_payments")}`);
+    $("demo-counter").textContent=`${count} decisión(es) — gasto acumulado de API: $0.00 (no hay API)`;
+    return;
+  }
   // salutation decomposition: greet + concern → route the concern
   let target=text, saluted=false;
   const sm=text.trim().match(SAL_RX);
@@ -342,13 +430,14 @@ async function ask(text){
   count++;
   const m=`${d.intent} · s ${d.score.toFixed(2)} · ${d.ms.toFixed(0)} ms · $0.00`+(d.reason?` · ${d.reason}`:"");
   if(d.verdict==="serve"){
-    let r;
-    if(d.intent==="greet" && lastBotIntent==="greet"){
-      r=GREET_AGAIN[Math.floor(Math.random()*GREET_AGAIN.length)];
-    } else { r=pickReply(d.intent); }
-    if(d.salutation) r="¡Hola! "+r.charAt(0).toLowerCase()+r.slice(1);
-    lastBotIntent=d.intent;
-    bubble("bot",`${r}${meta(m)}`);
+    let r, mm=m;
+    const cb=classBReply(d.intent, text);
+    if(cb){ r=cb[0]; mm=`${d.intent} · catálogo local · $0.00 · ${cb[1]}`; }
+    else if(d.intent==="greet" && lastBotIntent==="greet"){
+      r=GREET_AGAIN[Math.floor(Math.random()*GREET_AGAIN.length)]; lastBotIntent=d.intent;
+    } else { r=pickReply(d.intent); lastBotIntent=d.intent; }
+    if(d.salutation && !cb) r="¡Hola! "+r.charAt(0).toLowerCase()+r.slice(1);
+    bubble("bot",`${r}${meta(mm)}`);
   } else if(d.verdict==="hit"){
     bubble("bot",`<em style="color:#9a6b00">plantilla en re-auditoría — acá contestaría el LLM de fallback</em>${meta(m)}`);
   } else {
