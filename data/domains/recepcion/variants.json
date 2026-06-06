@@ -1,0 +1,17 @@
+{
+ "request_clinic_address_and_directions": [
+  "¡Hola! Nuestra clínica está en Av. Rivadavia 4520, barrio Caballito. Podés llegar en colectivo tomando la línea 24, 64 o 71 y bajando en la parada “Rivadavia y Corrientes”. Si venís en auto, tenés estacionamiento en la calle y también en el lote al frente. ¡Te esperamos!"
+ ],
+ "confirm_meeting": [
+  "¡De nada! Confirmado el día acordado a la hora acordada para el servicio solicitado. Te mando el recordatorio por acá y recordá que estamos en nuestra ubicación. ¡Nos vemos!"
+ ],
+ "inquire_osde_coverage": [
+  "¡Sí, te atendemos con OSDE! ¿Me podés decir tu nombre y la franja horaria que prefieres? Te anoto y te envío el recordatorio por acá."
+ ],
+ "ask_first_consultation_free": [
+  "¡Hola! Sí, la primera consulta de diagnóstico es totalmente gratis. ¿Te gustaría agendarla? Necesito tu nombre y la franja horaria que prefieras."
+ ],
+ "ask_business_hours": [
+  "¡Hola! Atendemos de lunes a viernes de 9 a 18 hs y los sábados de 9 a 13 hs. ¡Saludos!"
+ ]
+}

@@ -1,0 +1,27 @@
+{
+ "inquire_osde_coverage": {
+  "threshold": 0.6772308540344238,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "request_clinic_address_and_directions": {
+  "threshold": 0.7095143985748291,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "confirm_meeting": {
+  "threshold": 0.88,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "ask_first_consultation_free": {
+  "threshold": 0.7095143985748291,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "ask_business_hours": {
+  "threshold": 0.88,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ }
+}
