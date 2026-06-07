@@ -187,7 +187,17 @@ SERVICE = {
 MEDIA_RX = re.compile(r"message type can.?t be displayed|no.?t supported yet",
                       re.I)
 BARE_ACK = {"oki", "ok", "oka", "okok", "dale", "listo", "joya", "buenísimo",
-            "perfecto", "genial", "ah", "ahh", "aa", "si", "sí", "ya"}
+            "perfecto", "genial", "ah", "ahh", "aa", "si", "sí", "ya",
+            # multi-word affirmations slip a single-token set ("Si si")
+            "si si", "sisi", "si si", "dale dale", "ok ok", "si claro",
+            "ah ok", "ok dale", "si si si", "buenísimo gracias"}
+
+# a concern RIDING an order number — a problem/question beyond plain status —
+# must forward: the canned status lookup would answer the wrong question.
+RIDING_CONCERN_RX = re.compile(
+    r"preventa|vuelvo a preguntar|sigo sin|reclam|no me (ha )?lleg|"
+    r"producto.*(problema|preventa|agotad)|defect|equivocad|"
+    r"hay un problema|me mandaron un mail", re.I)
 
 
 NO_FLOW_RX = re.compile(
@@ -248,6 +258,11 @@ def serve_service(intent: str, text: str, *, continuation: bool = False
     if NO_FLOW_RX.search(t):
         return None                       # out-of-graph concern → forward
     oid = extract_order_id(text)
+    # a concern riding an order number (preventa, a problem, "vuelvo a
+    # preguntar") → forward: the canned status lookup answers the wrong
+    # question and would state an assumed/false status.
+    if RIDING_CONCERN_RX.search(t):
+        return None
     if not oid and CLOSER_RX.search(t):
         return None                       # closer/waiting ack → forward (even
         #                                   mid-flow: "lo espero" ends the turn)

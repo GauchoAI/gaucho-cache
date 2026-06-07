@@ -1,15 +1,15 @@
 {
- "served": 65,
+ "served": 62,
  "total": 124,
  "topic_tot": {
   "thanks_closing": 13,
   "greeting": 11,
-  "purchase_intent": 3,
+  "purchase_intent": 2,
   "product_question": 5,
   "complaint_problem": 12,
   "other": 20,
   "restock_availability": 6,
-  "shipping_coordination": 17,
+  "shipping_coordination": 18,
   "order_status": 18,
   "exchange_return": 16,
   "payment_discount": 3
@@ -19,12 +19,12 @@
   "greeting": 10,
   "complaint_problem": 7,
   "other": 6,
-  "shipping_coordination": 6,
-  "purchase_intent": 1,
-  "order_status": 12,
+  "shipping_coordination": 7,
+  "order_status": 10,
   "exchange_return": 10,
-  "restock_availability": 2,
+  "restock_availability": 1,
   "payment_discount": 2,
-  "product_question": 1
+  "product_question": 1,
+  "purchase_intent": 0
  }
 }
