@@ -1,5 +1,5 @@
 {
- "served": 56,
+ "served": 57,
  "total": 124,
  "topic_tot": {
   "thanks_closing": 13,
@@ -18,7 +18,7 @@
   "thanks_closing": 9,
   "greeting": 10,
   "other": 4,
-  "shipping_coordination": 3,
+  "shipping_coordination": 4,
   "order_status": 11,
   "exchange_return": 11,
   "complaint_problem": 4,

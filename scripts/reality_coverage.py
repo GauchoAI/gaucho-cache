@@ -125,6 +125,17 @@ async def main() -> None:
                 last = "order_status"
             cd = clf.classify(msg[:200], stage="cocoshoes-service",
                               last_bot_intent=last)
+            # greeting-masked service: a salutation opener can dominate the
+            # embedding ("Holaa, alguna novedad?" → greeting@0.99) while the
+            # real concern is a service request. Strip the greeting and, if
+            # the remainder routes into the service cluster, prefer it.
+            if cd.intent in ("greeting", "thanks_closing"):
+                from gaucho_cache.classifier import strip_salutation
+                rest = strip_salutation(msg)
+                if rest:
+                    cd2 = clf.classify(rest[:200], stage="cocoshoes-service")
+                    if cd2.serve_eligible and cd2.intent in svc.SERVICE_CLUSTER:
+                        cd = cd2
             srv = None
             # continuation: bot asked for a ref, customer now gives the
             # number (or a short reply) → serve the pending intent's flow
@@ -227,6 +238,30 @@ async def main() -> None:
         judged = await asyncio.gather(*(
             reserve(m, rsn, i) for (_c, m, _p, sv, i, rsn) in results if sv))
         served_correct = sum(judged)
+
+        # the OTHER half of correctness: was a FORWARDED turn correctly
+        # forwarded (genuinely needed a live LLM — deep sizing consult, novel
+        # complaint, conversational glue) or WRONGLY forwarded (a fixed
+        # template could have answered it = real recall debt)? A $0 cache
+        # that forwards the genuinely-novel is behaving CORRECTLY.
+        FWD_JUDGE = ("You decide if a shoe-store customer message could be "
+                     "answered by a FIXED templated reply (order-status / "
+                     "exchange / shipping / restock / greeting / thanks / "
+                     "store-hours / payment-info) or genuinely needs a live "
+                     "agent (deep size/fit advice, a specific novel problem, "
+                     "or it's conversational glue with nothing to answer). "
+                     'Output ONLY JSON {"templatable": true|false}.')
+
+        async def jfwd(msg):
+            try:
+                v = await client.chat_json(FWD_JUDGE, f'Message: "{msg}"',
+                                           temperature=0.0)
+                return bool(v.get("templatable")) if isinstance(v, dict) else False
+            except Exception:
+                return False
+        fwd_msgs = [m for (_c, m, _p, sv, _i, _r) in results if not sv]
+        fwd_templatable = sum(await asyncio.gather(*(jfwd(m) for m in fwd_msgs)))
+        correctly_forwarded = len(fwd_msgs) - fwd_templatable
         import os as _os
         if _os.environ.get("SHOW_WRONG"):
             print("\n--- served-but-WRONG (floor breaches) ---")
@@ -246,11 +281,20 @@ async def main() -> None:
     goalmark = int(40 * GOAL)
     bar = bar[:goalmark] + "|" + bar[goalmark + 1:]
     if svc is not None:
-        print(f"served-AND-CORRECT (the GOAL metric): {served_correct}/"
-              f"{len(turns)} = {crate:.0%}  (goal {GOAL:.0%})")
+        right = served_correct + correctly_forwarded   # did the right thing
+        wrong_served = served - served_correct          # lies
+        missed = fwd_templatable                         # recall debt
+        print(f"served-AND-CORRECT ($0 share): {served_correct}/{len(turns)} "
+              f"= {crate:.0%}  (goal {GOAL:.0%})")
         print(f"  [{bar}]")
-        print(f"  raw served {rate:.0%} | served-but-WRONG (floor breach): "
-              f"{served-served_correct} | forwarded: {miss}\n")
+        print(f"\n  CORRECT BEHAVIOUR (served-right + forwarded-rightly): "
+              f"{right}/{len(turns)} = {right/len(turns):.0%}")
+        print(f"    ├─ served at $0, correct ...... {served_correct}")
+        print(f"    ├─ forwarded, correctly (novel) {correctly_forwarded}")
+        print(f"    ├─ LIES (served wrong) ......... {wrong_served}  ← floor=0")
+        print(f"    └─ MISSED (templatable, forwarded) {missed}  ← recall debt")
+        print(f"\n  $0 ceiling = templatable share = "
+              f"{(served_correct+missed)/len(turns):.0%} of real traffic\n")
     else:
         print(f"served at $0: {served}/{len(turns)} = {rate:.0%}  "
               f"(goal {GOAL:.0%})")

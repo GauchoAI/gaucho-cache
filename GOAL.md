@@ -44,6 +44,21 @@ cost cents — forcing them into templates is how a cache starts lying.
 a global service graph carries the spine; the paid lane carries the
 genuinely novel.
 
+## Completion criterion, made precise (ch. 28)
+
+Measuring real traffic showed "80% served" was a guess at the
+templatable share. The judge measures it: **~74% of real traffic is
+templatable**; the rest genuinely needs a live agent, and forwarding it
+is *correct behaviour*, not failure. So "done" is three numbers:
+
+1. **Lies → 0** (served-but-wrong; the floor).
+2. **$0 share → the templatable ceiling** (~74% on COCO).
+3. **Correct behaviour → ~100%** (serve where templatable, forward
+   where novel, never lie).
+
+Current (held-out COCO service): correct-behaviour **64%**, $0 share
+**42%**, lies **5**, ceiling **74%**.
+
 ## The floors (must hold at every step or the gain doesn't count)
 
 1. **Parity** — served turns judged ≥ Cerebras (in-context judge).
