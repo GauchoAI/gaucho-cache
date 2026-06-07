@@ -1,0 +1,32 @@
+{
+ "provide_reference_number": {
+  "threshold": 0.4399401438236237,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "greeting": {
+  "threshold": 0.7980598998069763,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "positive_feedback": {
+  "threshold": 0.8331713271141052,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "thank_you": {
+  "threshold": 0.8331713271141052,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "schedule_try_on": {
+  "threshold": 0.6424669218063355,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ },
+ "ask_for_updates": {
+  "threshold": 0.5900553059577942,
+  "margin": 0.05,
+  "negative_margin": 0.03
+ }
+}

@@ -82,6 +82,28 @@ provenance. What's missing is naming and automating the passes:
   fixed data/catalog.json + data/payment_ladder.json — already the
   spec's declared sources, but the path is hardcoded not spec-driven).
 
+
+## F. Real-traffic coverage (the reframe — chapter 24) ★ PRIORITY
+
+Measured: cache serves 32% of real COCO traffic at $0; the sales funnel
+is 2% of real behaviour. The business is post-sale SERVICE.
+
+- [done] `scripts/reality_coverage.py` — permanent gate: real traffic
+  decomposed by topic, uncovered subgraphs named + ranked. The formal
+  "graph and to what degree explored" the user asked for.
+- [done] `scripts/ingest_coco.py` + distiller upgrade: mine slotted
+  templated flows from a real transcript dump (the store authored them).
+- [todo] Build the GLOBAL service graph (two-tier base): order_status,
+  exchange_return, shipping_coordination, restock, complaint — as
+  templated flows + class-B order-DB lookups (mock order DB like the
+  catalog). Certify each via the situation matrix.
+- [todo] Re-measure reality_coverage after each subgraph → drive the
+  real-traffic $0 curve up. THIS is the zero-dollar number that counts.
+- [todo] Mock order DB (data/orders.json) for the <order_id>/<status>/
+  <eta> slots, mirroring data/catalog.json.
+- [todo] Agentic observer: a loop that watches reality_coverage across
+  runs, surfaces the next uncovered subgraph, proposes the distill.
+
 ## Done (the foundation, chapters 1–20)
 
 corpus & predicate · calibration archaeology · closure loop · red team

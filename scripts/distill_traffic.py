@@ -49,20 +49,27 @@ NAME_PROMPT = """These customer messages were clustered together:
 If they all express ONE intent, name it (snake_case, specific). If the
 cluster mixes intents, coherent=false."""
 
-REUSE_SYS = ("You audit a reply for verbatim reusability. Output ONLY JSON "
-             '{"reusable": true|false, "cleaned": "<the reply, generalized '
-             'if needed>", "why": "..."}.')
+REUSE_SYS = ("You synthesize ONE reusable, templated reply for a cluster of "
+             "customer messages, learning the FLOW and TONE from how a live "
+             "store actually answered. Output ONLY the reply text itself "
+             "(one message, may use <slot> placeholders), or exactly SKIP if "
+             "the cluster is too incoherent to answer with one templated flow.")
 REUSE_PROMPT = """Customers send messages like:
 {examples}
 
-The live agent once answered one of them:
-"{reply}"
+The live store answered messages in this cluster with replies like:
+{reply}
 
-Could this exact reply (or a lightly generalized version of it) be sent
-VERBATIM to every message above, every time, without ever being wrong?
-Reject if it contains specifics that vary per customer (names, dates,
-order numbers, one-time amounts). If a small edit makes it reusable
-(dropping a name, neutralizing a date), return that as "cleaned"."""
+Write ONE clean reply that could serve EVERY message in this cluster.
+Match the store's warm WhatsApp tone, but:
+- replace anything customer-specific with an <slot> placeholder —
+  <name>, <order_id>, <eta>, <status>, <size>, <tracking> — and list the
+  slots (angle brackets, never curly braces). (Slots are filled later by a backend lookup; you
+  are authoring the FLOW, not a concrete answer.)
+- if the cluster's right move is to ASK for a missing detail (e.g. "pasame
+  el numero de pedido"), that question IS the reusable reply, no slots.
+- reusable=false ONLY if the cluster is too incoherent to answer with one
+  templated flow."""
 
 
 def greedy_clusters(vecs: np.ndarray, texts: list[str]) -> list[list[int]]:
@@ -122,16 +129,15 @@ async def main() -> None:
         if not (isinstance(v, dict) and v.get("coherent")):
             return None
         intent = str(v.get("intent", "")).strip()
-        # most central provider reply = canonical answer candidate
-        rvecs = emb.encode([replies[i] for i in cluster])
-        sims = rvecs @ rvecs.T
-        central = cluster[int(np.argmax(sims.mean(axis=1)))]
-        rj = await client.chat_json(
-            REUSE_SYS, REUSE_PROMPT.format(examples=ex, reply=replies[central]),
-            temperature=0.0)
-        if not (isinstance(rj, dict) and rj.get("reusable")):
+        # several real replies as STYLE/FLOW evidence — the template is
+        # synthesized clean with slots, not copied from the noisiest one
+        sample = "\n".join(f'- "{replies[i][:160]}"' for i in cluster[:5])
+        body = (await client.chat(
+            REUSE_SYS, REUSE_PROMPT.format(examples=ex, reply=sample),
+            temperature=0.2, max_tokens=300)).strip().strip('"')
+        if not body or body.upper().startswith("SKIP") or len(body) < 8:
             return None
-        return intent, cluster, str(rj.get("cleaned") or replies[central])
+        return intent, cluster, body
 
     curated = [c for c in await asyncio.gather(*(curate(c) for c in clusters))
                if c]

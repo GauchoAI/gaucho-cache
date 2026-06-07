@@ -1,0 +1,20 @@
+{
+ "ask_for_updates": [
+  "¿Podés indicarme a qué pedido o producto te referís"
+ ],
+ "positive_feedback": [
+  "¡Hola <name>! 😊 Gracias por tu mensaje. ¿Hay algo más en lo que podamos ayudarte hoy?"
+ ],
+ "thank_you": [
+  "¡Hola <name>! Gracias por tu mensaje 😊. ¿En qué más podemos ayudarte?"
+ ],
+ "provide_reference_number": [
+  "¡Genial, <name>! Gracias por enviarnos el número de pedido <order_id>. Lo estamos revisando y pronto te confirmaremos el <status> y la fecha estimada"
+ ],
+ "greeting": [
+  "Hola, gracias por comunicarte con atención al público. En este momento todo nuestro equipo se encuentra en receso ✨  \n🕣 Nuestros horarios de atención son:  \nLunes..."
+ ],
+ "schedule_try_on": [
+  "¡Perfecto! Te detallo"
+ ]
+}
