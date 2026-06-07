@@ -26,17 +26,15 @@ top-down within a column unless redirected.
 ## B. Agentic interface (MCP)
 
 - [todo] MCP server exposing: `domain_status`, `reply`, `train`,
-  `certify`, `matrix_report`, `spec_template`.
-- [todo] **Conversational onboarding**: an agent interviews the owner
-  (what's your funnel? which stages? which facts are constitutional?
-  what may never be promised?) and emits a **domain spec markdown**
-  (frontmatter: stages, intents seed, fact files, prohibited promises,
-  certification targets) that the owner signs; `train(spec)` consumes
-  it. The 9-stage sales FSM becomes one example spec, the dental
-  receptionist another.
-- [todo] Spec frontmatter is the single source for: FSM stages,
-  EXPECTED_NEXT context map, class-B fact sources (catalog/ladder
-  equivalents), red-line list for the safety benchmark.
+  `certify`, `matrix_report`, `spec_template`. (interview + facade exist;
+  remaining work is the transport wrapper.)
+- [done] **Conversational onboarding**: `spec.INTERVIEW` (the questions)
+  + `spec.spec_template()` (blank spec) + `DomainSpec` (the signable
+  markdown). Owner signs `signed_by`; `Domain.from_spec()` loads it.
+- [done] Spec frontmatter is THE single source: stages, expected_next
+  (intent-keyed context map), safe_clusters, fact_sources, red_lines,
+  certify targets. `data/specs/sales.md` (signed, the flagship 9-stage)
+  and `data/specs/recepcion.md` (distilled draft).
 
 ## C. Cache evolution protocol (the "is it just a KV store?" answer)
 
@@ -75,11 +73,14 @@ provenance. What's missing is naming and automating the passes:
 
 ## E. Custom funnels / FSM configurability
 
-- [todo] FSM-as-data: stages, expected-next, class-B render hooks
-  loaded from the domain spec (today: EXPECTED_NEXT and serving.py are
-  mattress-shaped constants).
-- [todo] Port the agentic-crm 9-stage salesman FSM as the flagship
-  spec; receptionist spec as the minimal one.
+- [done] FSM-as-data: `spec.apply_fsm()` installs a spec's expected_next
+  + safe_clusters into the live predicate. The sales spec reproduces the
+  hand-edited constants EXACTLY (proof they were always just data).
+- [done] agentic-crm 9-stage funnel ported as `data/specs/sales.md`
+  (flagship, signed); `recepcion.md` the minimal one.
+- [todo] class-B render hooks from fact_sources (today render.py reads
+  fixed data/catalog.json + data/payment_ladder.json — already the
+  spec's declared sources, but the path is hardcoded not spec-driven).
 
 ## Done (the foundation, chapters 1–20)
 

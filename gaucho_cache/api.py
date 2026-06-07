@@ -96,6 +96,19 @@ class Domain:
     def mattress_slice(cls) -> "Domain":
         return cls("mattress-slice")
 
+    @classmethod
+    def from_spec(cls, name_or_path) -> "Domain":
+        """Load a domain from its signed markdown spec — the single source
+        for stages, context map, fact sources and red lines."""
+        from .spec import DomainSpec
+        spec = DomainSpec.load(name_or_path)
+        # the flagship sales spec IS the mattress slice, expressed as data
+        dom = cls("mattress-slice" if spec.name == "sales" else spec.name)
+        dom.spec = spec
+        return dom
+
+    spec = None  # populated by from_spec
+
     # ---- runtime --------------------------------------------------------
     def runtime(self) -> Runtime:
         return Runtime(self)
