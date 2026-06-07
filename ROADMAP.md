@@ -47,19 +47,18 @@ here: curated/generated/closure/redteam/matrix/density), `judged_intent`
 evidence counters (agreements/disagreements per template), traffic
 provenance. What's missing is naming and automating the passes:
 
-- [todo] **Compaction pass**: merge near-duplicate positives (cosine ≥
-  .97 same intent → keep one, sum provenance weight); prune rows that
-  never participated in a serve margin (dead weight slows brute-force
-  and skews quantiles); re-run gates after every compaction.
-- [todo] **Annotation schema** formalized as row frontmatter (yaml in
-  one TEXT column): provenance, evidence, last-hit timestamp, audit
-  state — so any external tool can read the cache's self-knowledge.
-- [todo] **Training triggers**: the runtime already logs misses; add
-  the rule "K similar misses within window → enqueue distill round for
-  that neighborhood" (the proxy's traffic table makes this a query).
-  Budget-capped, gate-protected (the pipeline halt-wire).
-- [todo] Nightly flywheel: compaction → closure loop → matrix →
-  report; one cron, ledgered.
+- [done] **Compaction** (`evolution.compact`): byte-exact dedup by
+  default (provably margin-neutral); semantic/boundary-protected mode
+  behind the flywheel gate. ch.22 found dense corpora tolerate no
+  aggressive merge — the deliverable is safety, not size.
+- [done] **Annotation** (`evolution.annotate`): row self-knowledge as
+  frontmatter (provenance/state/arbitration), readable by tools/agents.
+- [done] **Training triggers** (`evolution.triggers`): clusters
+  forwarded misses from proxy traffic into ≥K neighbourhoods = training
+  tasks. Budget-capped by the caller.
+- [done] **Flywheel** (`scripts/evolve_cache.py`): compact → rebuild →
+  gate → AUTO-ROLLBACK on any moved boundary. Guarantee: evolution can
+  never lower a gate. (closure/matrix chaining = future cron wiring.)
 
 ## D. Hardening / adversarial safety (the next experiment)
 
