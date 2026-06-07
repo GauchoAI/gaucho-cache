@@ -1,0 +1,8 @@
+{
+  "_provenance": "Mock merchant facts for the demo (same pattern as catalog.json/orders.json). A real deploy swaps this for the merchant's signed spec facts; the <slot> contract is identical. COCO hints used where present (Sat close ~13h).",
+  "store": "COCO Shoes",
+  "hours": "lunes a viernes de 9 a 18 h y sábados de 9 a 13 h",
+  "pickup": "Sí, podés retirar en el local en el horario de atención (lun-vie 9-18, sáb 9-13); avisanos y te lo dejamos preparado.",
+  "payment": "Aceptamos efectivo, débito, transferencia y tarjeta en cuotas. El pago en efectivo o transferencia suele tener el mejor precio; al confirmar el pedido te pasamos el detalle exacto.",
+  "shipping_cost": "El costo de envío se calcula según tu zona al confirmar el pedido; hacemos envíos por Correo Argentino y Andreani, y también está la opción de retiro en el local."
+}

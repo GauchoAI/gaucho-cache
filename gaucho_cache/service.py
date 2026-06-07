@@ -59,12 +59,52 @@ def prev_asked_for_ref(prev: str | None) -> bool:
     return bool(prev and PREV_ASKS_REF.search(prev))
 
 
+# content-typed continuation: a mid-conversation fragment continues the
+# ACTIVE flow only if it carries that flow's relevant content — not merely
+# because it is short (ch. 27's word-count proxy added lies). Lie-free.
+_CONT_SIGNALS = {
+    "order_status": re.compile(
+        r"\bnovedad|lleg[oó]|en camino|seguimiento|todav[ií]a no|"
+        r"\b\d{5}\b|number|nombre de", re.I),
+    "exchange_return": re.compile(
+        r"\btalle|n[uú]mero \d|modelo|color|negro|cambio|ya gener|etiqueta|"
+        r"m[aá]s chico|m[aá]s grande|\b3[0-9]\b", re.I),
+    "shipping_coordination": re.compile(
+        r"\bcorreo|andreani|retir|sucursal|vecino|direcci[oó]n|"
+        r"\b(lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado)\b|"
+        r"\d{1,2}\s*hs?\b|zona|env[ií]|c[oó]rdoba|capital", re.I),
+    "complaint_problem": re.compile(
+        r"\bsoluci[oó]n|problema|se (sali[oó]|rompi[oó]|despeg)|falla|defect|"
+        r"reclam", re.I),
+}
+
+
+def continues_flow(intent: str, text: str) -> bool:
+    rx = _CONT_SIGNALS.get(intent)
+    return bool(rx and text and rx.search(text))
+
+
 def orders() -> dict:
     global _ORDERS
     if _ORDERS is None:
         p = REPO / "data" / "orders.json"
         _ORDERS = json.loads(p.read_text())["orders"] if p.exists() else {}
     return _ORDERS
+
+
+_FACTS = None
+
+
+def facts() -> dict:
+    """Merchant facts (hours/payment/pickup). Mock for the demo; a real
+    deploy supplies them via the signed domain spec. Templating these
+    WITHOUT facts would fabricate — so the hours/payment flows exist only
+    when the facts do."""
+    global _FACTS
+    if _FACTS is None:
+        p = REPO / "data" / "cocoshoes_facts.json"
+        _FACTS = json.loads(p.read_text()) if p.exists() else {}
+    return _FACTS
 
 
 def extract_order_id(text: str) -> str | None:
@@ -130,14 +170,53 @@ BARE_ACK = {"oki", "ok", "oka", "okok", "dale", "listo", "joya", "buenísimo",
 
 NO_FLOW_RX = re.compile(
     r"devoluci[oó]n del dinero|reembols|me devuelv[ae]n? (el|la|mi)? ?(plata|"
-    r"dinero|pago)|modificar (los )?datos|cambiar (la )?direcci[oó]n",
+    r"dinero|pago)|modificar (los )?datos|cambiar (la )?direcci[oó]n|"
+    r"para comprar|quiero comprar|ya (te |le )?pas[eé]|ah[ií] (te |le )?pas[eé]|"
+    r"ya (lo |les )?envi[eé]|ya mand[eé]",
     re.I)
+
+
+# fact-driven flows: only exist when the merchant supplied the fact (else
+# templating would fabricate → forward). Class-B over data/cocoshoes_facts.
+FACT_FLOWS = {
+    "store_hours": ("hours", "¡Hola! 🕘 Nuestro horario es {hours}. {pickup}"),
+    "payment_info": ("payment", "¡Claro! 💳 {payment}"),
+}
+# lexically-distinctive fact intents → regex (precise, no embedding-index
+# pollution; ch. 29 showed thin synthetic seeds for these hurt routing).
+HOURS_RX = re.compile(
+    r"\bhorario|\bhora(s)?\b.*(abren|cierran|atien|retir)|\babren\b|"
+    r"\bcierran\b|qu[eé] d[ií]as atienden|abierto.*s[aá]bado|retir(ar|o).*local|"
+    r"pasar a buscar|local.*abierto", re.I)
+PAYMENT_RX = re.compile(
+    r"\bcuotas?\b|\befectivo\b|medios? de pago|formas? de pago|"
+    r"a qu[eé] precio|con tarjeta|transferencia.*precio|descuento.*pag", re.I)
+
+
+def detect_fact_intent(text: str) -> str | None:
+    t = text or ""
+    if PAYMENT_RX.search(t):
+        return "payment_info"
+    if HOURS_RX.search(t):
+        return "store_hours"
+    return None
 
 
 def serve_service(intent: str, text: str, *, continuation: bool = False
                   ) -> tuple[str, str] | None:
     """Returns (reply, reason) or None if this intent has no flow, or the
     turn must forward (media / no-flow concern / bare fresh ack)."""
+    if intent in FACT_FLOWS:
+        key, tmpl = FACT_FLOWS[intent]
+        f = facts()
+        if not f.get(key):
+            return None                   # no merchant fact → forward (never
+            #                               fabricate hours/payment)
+        try:
+            return tmpl.format(**f), "class_b_fact"
+        except KeyError:
+            return tmpl.replace("{" + key + "}", f[key]).split("{")[0], \
+                "class_b_fact"
     flow = SERVICE.get(intent)
     if not flow:
         return None

@@ -41,6 +41,10 @@ TOPIC_INTENT = {
     "greeting": "greeting",
     "thanks_closing": "thanks_closing",
 }
+# NOTE: store_hours / payment_info are NOT embedding intents — they're
+# lexically distinctive and served by regex (service.detect_fact_intent),
+# because thin synthetic seeds for them polluted the routing of the real
+# service intents (ch. 29). Distinctive-lexical → regex; the rest → embedding.
 
 
 def is_test(conv: int) -> bool:
