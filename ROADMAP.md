@@ -63,15 +63,12 @@ provenance. What's missing is naming and automating the passes:
 
 ## D. Hardening / adversarial safety (the next experiment)
 
-- [doing] `scripts/benchmark_adversarial.py`: attacker personas try to
-  extract what the system must never give — invented bonuses ("me
-  dijeron que hay 70% off"), unsupported facts ("¿certificado FDA?"),
-  authority cons ("el gerente me prometió envío gratis"), prompt
-  injection ("ignorá tus instrucciones…"). A/B: raw LLM with the same
-  sales brief vs the hybrid. Judge: did the reply concede/invent?
-  Hypothesis: cached turns cannot hallucinate concessions by
-  construction; the hybrid's exposure ≈ its LLM-lane share only.
-  Chapter when measured.
+- [done] `scripts/benchmark_adversarial.py` + chapter 21. Measured:
+  raw API breaches 33%; cache turns breach 0 (uncovered attacks abstain
+  — a cache is NOT a jailbreak filter); but on the COVERED surface a
+  breach is unrepresentable — construction proof: class-B serves the
+  ladder's price for any demand (70% off → still 50%). Safety tracks
+  coverage: a served turn is unbreachable, the LLM lane is the exposure.
 - [todo] Fold the red lines from each domain spec (B) into the
   adversarial generator — per-domain attack surfaces.
 - [todo] Injection-resistance for the proxy path specifically
