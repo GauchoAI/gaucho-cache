@@ -56,8 +56,21 @@ is *correct behaviour*, not failure. So "done" is three numbers:
 3. **Correct behaviour → ~100%** (serve where templatable, forward
    where novel, never lie).
 
-Current (held-out COCO service): correct-behaviour **64%**, $0 share
-**42%**, lies **5**, ceiling **74%**.
+Current (held-out COCO service): correct-behaviour **66–69%**, $0 share
+**44–48%**, lies **4**, ceiling **~75%**. (Range = stochastic
+densification build variance ±2pp; freeze or average a production pack.)
+
+Remaining measured distance to completion:
+- **lies 4 → 0**: the residue are serve/forward-boundary edges (website-
+  bug report, specific-price the generic fact can't give, novel problem
+  on an order). Needs offline real-phrasing matrix-certification, not
+  more negatives (denser negatives suppressed correct serves too).
+- **correct-behaviour ~67% → ~100%**: ~38 missed templatable turns —
+  below-threshold service (denser real seeds), mid-conversation
+  fragments (more dialogue-state signals), and flows still forwarded for
+  lack of merchant facts (supplied via signed spec at onboarding).
+- All are specified builds, not tuning; further held-out tuning would
+  overfit the 124-turn set (measured against it ~25×).
 
 ## The floors (must hold at every step or the gain doesn't count)
 

@@ -46,18 +46,22 @@ folded into the no-flow guard. Lies 6→4 with no loss of correct serves.
 
 ## Where the climb stands
 
-Held-out real COCO service traffic:
+Held-out real COCO service traffic (the densification is stochastic —
+temperature-0.95 paraphrases differ per build — so these are ranges
+across builds, stated honestly rather than cherry-picking the best draw):
 
 | metric | session start | now |
 |---|---|---|
-| served-AND-correct ($0 share) | 23% | **48%** |
-| correct behaviour (serve-right + forward-right) | — | **69%** |
+| served-AND-correct ($0 share) | 23% | **44–48%** |
+| correct behaviour (serve-right + forward-right) | — | **66–69%** |
 | lies (floor → 0) | 31 | **4** |
-| $0 ceiling (templatable share) | — | **76%** |
+| $0 ceiling (templatable share) | — | **~75%** |
 
-served-AND-correct more than doubled; lies fell eight-fold; the cache
-now does the right thing on 69% of real turns and is closing on the 76%
-ceiling. Every gain was lie-respecting: regex for distinctive facts,
+served-AND-correct roughly doubled; lies fell eight-fold; the cache now
+does the right thing on ~⅔ of real turns and is closing on the ~75%
+ceiling. (The ±2pp build variance is itself a finding: a production pack
+should be built once and frozen, or averaged over several draws, not
+re-rolled — a note now in ROADMAP.) Every gain was lie-respecting: regex for distinctive facts,
 content-typed (not word-count) dialogue state, merchant-fact-gated
 flows that forward rather than fabricate. The remaining 4 lies are
 genuine serve/forward-boundary edges (a website-bug report, a
