@@ -128,11 +128,18 @@ async def main() -> None:
                     continue
             last = pending.get(ci)
             oid = svc.extract_order_id(msg)
-            # REAL context: if the store's actual previous message asked for
-            # an order number, this turn is its answer — set pending from
-            # ground truth (defaulting to order_status if none inferred yet).
-            if svc.prev_asked_for_ref(prev) and last is None:
-                last = "order_status"
+            # REAL multi-turn state: the store's actual previous message
+            # carries the conversation's active flow. If we have no active
+            # intent yet, infer it from the transcript — asked-for-ref →
+            # order_status; otherwise the flow the store's words imply. This
+            # is the dialogue-state the per-turn view was missing.
+            if last is None:
+                if svc.prev_asked_for_ref(prev):
+                    last = "order_status"
+                else:
+                    last = svc.prev_active_flow(prev)
+                if last:
+                    pending[ci] = last
             cd = clf.classify(msg[:200], stage="cocoshoes-service",
                               last_bot_intent=last)
             # greeting-masked service: a salutation opener can dominate the

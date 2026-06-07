@@ -59,6 +59,28 @@ def prev_asked_for_ref(prev: str | None) -> bool:
     return bool(prev and PREV_ASKS_REF.search(prev))
 
 
+# infer the conversation's active service flow from the store's REAL prev
+# message (the transcript is multi-turn; the store's words carry the state).
+_PREV_FLOW = {
+    "exchange_return": re.compile(r"cambio|cambiar|talle|etiqueta|devolu", re.I),
+    "shipping_coordination": re.compile(
+        r"env[ií]|despach|cadet|correo|andreani|direcci[oó]n|retir", re.I),
+    "order_status": re.compile(
+        r"pedido|seguimiento|en camino|estado|demora|novedad", re.I),
+    "complaint_problem": re.compile(r"disculp|lament|deriv|soluci[oó]n|reclam", re.I),
+}
+
+
+def prev_active_flow(prev: str | None) -> str | None:
+    """Which service flow the store's last message implies (active state)."""
+    if not prev:
+        return None
+    for intent, rx in _PREV_FLOW.items():
+        if rx.search(prev):
+            return intent
+    return None
+
+
 # content-typed continuation: a mid-conversation fragment continues the
 # ACTIVE flow only if it carries that flow's relevant content — not merely
 # because it is short (ch. 27's word-count proxy added lies). Lie-free.

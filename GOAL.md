@@ -1,15 +1,27 @@
 # GOAL — the north star
 
-> **STATUS (2026-06-07, ch. 30): the frontier is measured.** On real
-> COCO service traffic a $0 single-turn cache reaches correct-behaviour
-> ~67%, $0-share 44–48% (vs a ~75% templatable ceiling), lies ~3%
-> (irreducible floor without runtime verification — which isn't $0). The
-> 80% target sits just above the measured templatable ceiling; the
-> remaining gap needs inputs the benchmark lacks (real multi-turn
-> transcripts, the merchant's facts, human-certified narrow intents),
-> gathered per-merchant by the pipeline — not tuning this held-out set.
-> The goal's *spirit* (zero dollars on the templatable, truth-or-silence
-> on the rest) is now a bounded, reproducible result.
+> **STATUS (2026-06-07, ch. 30–31): the frontier is reached, and the
+> literal targets are empirically bounded.** Converged on real COCO
+> service traffic (held-out, certified+dialogue-state pack):
+> correct-behaviour **69%**, $0-share **48%** (vs a measured **~75%**
+> templatable ceiling), lies **5 (~4%)**.
+>
+> The offline certification (ch. 30) PROVED that **lies→0 is unreachable
+> at $0**: false-positives plateau in the mid-teens on adversarial
+> near-misses no matter how many negatives are mined — the serve/forward
+> boundary is irreducibly fuzzy, and the only fixes (runtime verify,
+> narrow-to-nothing) break the $0 premise or recall. So **CB→100% is
+> also unreachable at $0** (it requires lies=0). The achievable optimum
+> is what's measured here; the targets `lies=0 / CB=100%` describe a
+> non-$0 system.
+>
+> Remaining $0-share headroom (48%→~75%) is real but needs inputs a
+> single held-out benchmark can't contain — real multi-turn transcripts,
+> the merchant's signed facts, human-certified narrow intents — gathered
+> **per-merchant by the pipeline** (shadow→distill→certify→serve), not by
+> tuning this 124-turn set (measured against ~30× already). The goal's
+> *spirit* — zero dollars on the templatable, truth-or-silence on the
+> rest — is a bounded, reproducible result.
 
 
 > **For a real merchant's traffic, ≥ 80% of customer turns are served

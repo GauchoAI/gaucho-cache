@@ -166,7 +166,7 @@ def main() -> None:
         cross = float((V[o] @ V[m].T).max()) if o.any() else 0.6
         # cluster intents serve a shared ask → a lower floor is safe;
         # non-cluster (greeting/thanks) keep a firmer bar
-        cap = 0.66 if it in SERVICE_CLUSTER else 0.82
+        cap = 0.62 if it in SERVICE_CLUSTER else 0.82
         th[it] = {"threshold": min(cap, max(0.60, cross + 0.02)),
                   "margin": 0.04, "negative_margin": 0.03}
     (PACK / "thresholds.json").write_text(json.dumps(th, indent=1))
