@@ -152,11 +152,18 @@ async def main() -> None:
                     pool = svc_variants.get(intent)
                     if pool:
                         srv = (pool[0], "template")
+            # NOTE: multi-turn active-intent continuation (attributing a
+            # fragment to the conversation's active flow) was tried here and
+            # lifted recall to 48% but added lies (9 vs 5) — a word-count
+            # proxy for "this fragment continues the flow" is too coarse. It
+            # needs the real dialogue-state graph; deferred to the next
+            # iteration. Floor first: fewer lies beats more raw coverage.
             if srv is not None:
                 results.append((ci, msg, prev, True, cd.intent, srv[1]))
                 served += 1
-                # a no-ref service ask sets the pending intent for next turn
-                if cd.intent in svc.SERVICE_CLUSTER and srv[1] == "service_ask_ref":
+                # any served service intent becomes the conversation's
+                # active flow for interpreting subsequent fragments
+                if cd.intent in svc.SERVICE_CLUSTER:
                     pending[ci] = cd.intent
             else:
                 results.append((ci, msg, prev, False, cd.intent,

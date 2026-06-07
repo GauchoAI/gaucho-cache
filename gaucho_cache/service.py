@@ -147,8 +147,9 @@ def serve_service(intent: str, text: str, *, continuation: bool = False
     if NO_FLOW_RX.search(t):
         return None                       # out-of-graph concern → forward
     oid = extract_order_id(text)
-    if not continuation and not oid and CLOSER_RX.search(t):
-        return None                       # closer/waiting ack → forward
+    if not oid and CLOSER_RX.search(t):
+        return None                       # closer/waiting ack → forward (even
+        #                                   mid-flow: "lo espero" ends the turn)
     if (not continuation and t.lower().strip(" .!¡?") in BARE_ACK
             and not oid):
         return None                       # bare FRESH ack → not a request
