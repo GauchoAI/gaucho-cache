@@ -120,16 +120,39 @@ def main() -> None:
         ngen = len(set(generated.get(it, [])))
         print(f"  {it:24s} {nreal} real + {ngen} gen")
 
-    vecs = Embedder().encode(texts)
+    # REAL hard negatives: train turns whose topic has NO service flow
+    # (other / payment / purchase / product / wholesale) must never serve a
+    # service template. Attach each to its nearest positive's intent so the
+    # negative-margin leg suppresses that neighbourhood — pre-certification
+    # from real data, at zero runtime cost.
+    neg_texts = list(dict.fromkeys(
+        r["msg"][:200] for r in train
+        if TOPIC_INTENT.get(r["topic"]) is None and len(r["msg"].split()) >= 2))
+
+    emb = Embedder()
+    vecs = emb.encode(texts)
     PACK.mkdir(parents=True, exist_ok=True)
-    StageIndex(vecs, np.array(intents), np.array(["positive"] * len(intents)),
-               np.array([""] * len(intents))).save(PACK / "index.npz")
+    all_v, all_i, all_k, all_a = (list(vecs), list(intents),
+                                  ["positive"] * len(intents),
+                                  [""] * len(intents))
+    if neg_texts:
+        nv = emb.encode(neg_texts)
+        pos_v = np.array(vecs)
+        for j in range(len(neg_texts)):
+            owner = intents[int((pos_v @ nv[j]).argmax())]
+            all_v.append(nv[j]); all_i.append(owner)
+            all_k.append("negative"); all_a.append("other")
+        print(f"+ {len(neg_texts)} REAL hard negatives (non-service train turns)")
+    StageIndex(np.array(all_v), np.array(all_i), np.array(all_k),
+               np.array(all_a)).save(PACK / "index.npz")
 
     # thresholds: above what intents OUTSIDE the same safe-cluster reach
     # in. Sibling service intents don't inflate the threshold — confusing
     # them on the opener is harmless (they all ask for the order number).
     from gaucho_cache.service import SERVICE_CLUSTER
-    V, I = vecs, np.array(intents)
+    posmask = np.array(all_k) == "positive"
+    V = np.array(all_v)[posmask]
+    I = np.array(all_i)[posmask]
     th = {}
     for it in sorted(set(intents)):
         m = I == it

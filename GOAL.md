@@ -11,8 +11,23 @@
 turns answered from cache at $0. Measured by `scripts/reality_coverage.py`
 against a merchant's real logs (merchant #1 = COCO Shoes, 444 turns).
 
-- Baseline (2026-06-07): **32%**
-- Target: **≥ 80%**
+- Baseline (2026-06-07): **32%** (sales cache, raw served)
+- Target: **≥ 80%** (served-AND-correct — a lie is not coverage)
+
+### Progress log
+
+- **2026-06-07** — corrected the metric to **served-AND-correct** (parity
+  judge on every serve; ch. 25). Built the COCO **service graph** from
+  real customer phrasings, held-out 30% split (ch. 25–26). Held-out
+  real-traffic served-AND-correct: **23% → 29–33%**, lies 31 → 3–10.
+  Key wall found (ch. 26): **$0 forbids runtime verification**, so
+  correctness must be pre-certified offline — the remaining lies are the
+  signature of an *uncertified* corpus serving live. Next: run the
+  matrix-certification loop (ch. 19) on each service subgraph (FP=0 on
+  fresh probes) before it serves, then re-measure the real curve.
+  Open issue: matrix probe-generation is template-derived; for service
+  intents it must generate from real customer phrasings to certify
+  honestly.
 
 100% is the wrong target: ~17% of real traffic is genuinely bespoke
 (novel complaints, wholesale negotiation, true one-offs). Those *should*
