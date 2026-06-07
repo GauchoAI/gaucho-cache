@@ -1,0 +1,23 @@
+{
+ "order_status": [
+  "¡Claro! 😊 Pasame tu número de pedido (lo encontrás en el mail de confirmación) y te digo al toque en qué estado está."
+ ],
+ "exchange_return": [
+  "¡Por supuesto! 🔁 Para gestionar el cambio pasame tu número de pedido y el talle nuevo que necesitás, y te genero la etiqueta."
+ ],
+ "shipping_coordination": [
+  "¡Dale! 🚚 Pasame tu número de pedido y coordinamos el envío — puede recibirlo un familiar o vecino, y si necesitás cambiar la dirección o la franja, lo vemos."
+ ],
+ "restock_availability": [
+  "¡Gracias por avisarnos! 🙌 Decime el modelo y el talle que buscás y te anoto para avisarte apenas vuelva a entrar en stock."
+ ],
+ "complaint_problem": [
+  "Lamento mucho lo que pasó 🙏 Contame tu número de pedido y el detalle, y lo derivo al equipo para resolverlo cuanto antes."
+ ],
+ "greeting": [
+  "¡Hola! 😊 ¿En qué te puedo ayudar — un pedido, un cambio, o algo más?"
+ ],
+ "thanks_closing": [
+  "¡Gracias a vos! 🤎 Cualquier cosa, escribime por acá."
+ ]
+}

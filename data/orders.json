@@ -1,0 +1,215 @@
+{
+ "_provenance": "Mock order DB; ids harvested from COCO transcripts, statuses fictional. Real deploy swaps for the merchant's order system; the <slot> contract is identical.",
+ "orders": {
+  "27200": {
+   "order_id": "27200",
+   "status": "en preparación",
+   "eta": "1-2 días hábiles",
+   "tracking": "AR2720000",
+   "carrier": "Andreani"
+  },
+  "29819": {
+   "order_id": "29819",
+   "status": "despachado",
+   "eta": "2-3 días hábiles",
+   "tracking": "AR2981901",
+   "carrier": "Andreani"
+  },
+  "31957": {
+   "order_id": "31957",
+   "status": "en camino",
+   "eta": "hoy",
+   "tracking": "AR3195702",
+   "carrier": "Andreani"
+  },
+  "32372": {
+   "order_id": "32372",
+   "status": "en sucursal para retiro",
+   "eta": "mañana",
+   "tracking": "AR3237203",
+   "carrier": "Andreani"
+  },
+  "32690": {
+   "order_id": "32690",
+   "status": "entregado",
+   "eta": "esta semana",
+   "tracking": "AR3269004",
+   "carrier": "Andreani"
+  },
+  "32939": {
+   "order_id": "32939",
+   "status": "demorado en correo",
+   "eta": "el lunes",
+   "tracking": "AR3293905",
+   "carrier": "Andreani"
+  },
+  "33047": {
+   "order_id": "33047",
+   "status": "en preparación",
+   "eta": "1-2 días hábiles",
+   "tracking": "AR3304706",
+   "carrier": "Andreani"
+  },
+  "33061": {
+   "order_id": "33061",
+   "status": "despachado",
+   "eta": "2-3 días hábiles",
+   "tracking": "AR3306107",
+   "carrier": "Andreani"
+  },
+  "33113": {
+   "order_id": "33113",
+   "status": "en camino",
+   "eta": "hoy",
+   "tracking": "AR3311308",
+   "carrier": "Andreani"
+  },
+  "33183": {
+   "order_id": "33183",
+   "status": "en sucursal para retiro",
+   "eta": "mañana",
+   "tracking": "AR3318309",
+   "carrier": "Andreani"
+  },
+  "33238": {
+   "order_id": "33238",
+   "status": "entregado",
+   "eta": "esta semana",
+   "tracking": "AR33238010",
+   "carrier": "Andreani"
+  },
+  "33245": {
+   "order_id": "33245",
+   "status": "demorado en correo",
+   "eta": "el lunes",
+   "tracking": "AR33245011",
+   "carrier": "Andreani"
+  },
+  "33309": {
+   "order_id": "33309",
+   "status": "en preparación",
+   "eta": "1-2 días hábiles",
+   "tracking": "AR33309012",
+   "carrier": "Andreani"
+  },
+  "33355": {
+   "order_id": "33355",
+   "status": "despachado",
+   "eta": "2-3 días hábiles",
+   "tracking": "AR33355013",
+   "carrier": "Andreani"
+  },
+  "33363": {
+   "order_id": "33363",
+   "status": "en camino",
+   "eta": "hoy",
+   "tracking": "AR33363014",
+   "carrier": "Andreani"
+  },
+  "33370": {
+   "order_id": "33370",
+   "status": "en sucursal para retiro",
+   "eta": "mañana",
+   "tracking": "AR33370015",
+   "carrier": "Andreani"
+  },
+  "33394": {
+   "order_id": "33394",
+   "status": "entregado",
+   "eta": "esta semana",
+   "tracking": "AR33394016",
+   "carrier": "Andreani"
+  },
+  "33404": {
+   "order_id": "33404",
+   "status": "demorado en correo",
+   "eta": "el lunes",
+   "tracking": "AR33404017",
+   "carrier": "Andreani"
+  },
+  "33421": {
+   "order_id": "33421",
+   "status": "en preparación",
+   "eta": "1-2 días hábiles",
+   "tracking": "AR33421018",
+   "carrier": "Andreani"
+  },
+  "33453": {
+   "order_id": "33453",
+   "status": "despachado",
+   "eta": "2-3 días hábiles",
+   "tracking": "AR33453019",
+   "carrier": "Andreani"
+  },
+  "33458": {
+   "order_id": "33458",
+   "status": "en camino",
+   "eta": "hoy",
+   "tracking": "AR33458020",
+   "carrier": "Andreani"
+  },
+  "33462": {
+   "order_id": "33462",
+   "status": "en sucursal para retiro",
+   "eta": "mañana",
+   "tracking": "AR33462021",
+   "carrier": "Andreani"
+  },
+  "33511": {
+   "order_id": "33511",
+   "status": "entregado",
+   "eta": "esta semana",
+   "tracking": "AR33511022",
+   "carrier": "Andreani"
+  },
+  "33922": {
+   "order_id": "33922",
+   "status": "demorado en correo",
+   "eta": "el lunes",
+   "tracking": "AR33922023",
+   "carrier": "Andreani"
+  },
+  "34038": {
+   "order_id": "34038",
+   "status": "en preparación",
+   "eta": "1-2 días hábiles",
+   "tracking": "AR34038024",
+   "carrier": "Andreani"
+  },
+  "34067": {
+   "order_id": "34067",
+   "status": "despachado",
+   "eta": "2-3 días hábiles",
+   "tracking": "AR34067025",
+   "carrier": "Andreani"
+  },
+  "34080": {
+   "order_id": "34080",
+   "status": "en camino",
+   "eta": "hoy",
+   "tracking": "AR34080026",
+   "carrier": "Andreani"
+  },
+  "34096": {
+   "order_id": "34096",
+   "status": "en sucursal para retiro",
+   "eta": "mañana",
+   "tracking": "AR34096027",
+   "carrier": "Andreani"
+  },
+  "36000": {
+   "order_id": "36000",
+   "status": "entregado",
+   "eta": "esta semana",
+   "tracking": "AR36000028",
+   "carrier": "Andreani"
+  },
+  "36446": {
+   "order_id": "36446",
+   "status": "demorado en correo",
+   "eta": "el lunes",
+   "tracking": "AR36446029",
+   "carrier": "Andreani"
+  }
+ }
+}

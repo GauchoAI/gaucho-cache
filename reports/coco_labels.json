@@ -1,0 +1,2222 @@
+[
+ {
+  "conv": 0,
+  "msg": "Gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 1,
+  "msg": "Holaaa",
+  "topic": "greeting"
+ },
+ {
+  "conv": 1,
+  "msg": "Lo quierooo",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 1,
+  "msg": "Me sale que no hay talles para elegir",
+  "topic": "product_question"
+ },
+ {
+  "conv": 2,
+  "msg": "Hola!  Buen día. \nQuería comentarles que compré unas notas hace un mes. Este fin de semana fui al campo y para sacar la tierra de la suela (más allá del\nCepillo les pasé una rejilla húmeda y se ha desteñido la suela. Por\nLo que la bota parece vieja y queda muy feo",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 2,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 2,
+  "msg": "Este es el modelo",
+  "topic": "product_question"
+ },
+ {
+  "conv": 3,
+  "msg": "Hola! Te consulto, compré unos borsegos ayer y quisiera cambiarlas por otro modelo , se puede? \nEl modelo Dallas en 39 color negro",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 3,
+  "msg": "Aboné en efectivo y tenía promo ayer , en qué precio me van a quedar ahora?para abonar la diferencia",
+  "topic": "payment_discount"
+ },
+ {
+  "conv": 4,
+  "msg": "Hola chicas",
+  "topic": "greeting"
+ },
+ {
+  "conv": 4,
+  "msg": "Perdón la molestia",
+  "topic": "other"
+ },
+ {
+  "conv": 4,
+  "msg": "Tendrán alguna novedad?",
+  "topic": "product_question"
+ },
+ {
+  "conv": 4,
+  "msg": "Hola chicas buenas tardes",
+  "topic": "greeting"
+ },
+ {
+  "conv": 4,
+  "msg": "La dirección de Andreani es",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 4,
+  "msg": "25 de mayo este 1303",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 4,
+  "msg": "Perdón",
+  "topic": "other"
+ },
+ {
+  "conv": 4,
+  "msg": "San Juan",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 4,
+  "msg": "Ahí busco los datos a ver si aparecen",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 4,
+  "msg": "Bueno genial",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 4,
+  "msg": "Gracias chicas ❤️❤️❤️",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 4,
+  "msg": "Que tengan lindo día",
+  "topic": "greeting"
+ },
+ {
+  "conv": 5,
+  "msg": "Hola como va saben caudno les ingresan en 39",
+  "topic": "order_status"
+ },
+ {
+  "conv": 6,
+  "msg": "Hola buenas tardes ! Re len vi que mi pedido ya esta con ustedes. El envío de Correo andreani N° 360002981927200\n\nPudieron verlo? Gracias",
+  "topic": "order_status"
+ },
+ {
+  "conv": 6,
+  "msg": "Gracias !! \nSabes si tiene mucho tiempo de demora?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 6,
+  "msg": "Hola buenas tardes! queria saber si pudieron ver analizar mi caso. Gracias",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 6,
+  "msg": "Okey, gracias ! \nAguardo el número de seguimiento \nSaludos",
+  "topic": "order_status"
+ },
+ {
+  "conv": 6,
+  "msg": "San Martín 351",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 6,
+  "msg": "Perdón !! \nAVENIDA COLON N° 547",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 6,
+  "msg": "UNIDAD POSTAL: BAHIA BLANCA UP 15\nAVENIDA COLON N° 547\nBAHIA BLANCA\n\n\nSucursal, el código postal es: 8000",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 6,
+  "msg": "No se, eso decía la página. \nPero por las dudas sino mándalo acá ! \n\n*SUCURSAL: BAHIA BLANCA\nCALLE MORENO N° 34\nBAHIA BLANCA*",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 6,
+  "msg": "Código postal 8000",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 6,
+  "msg": "Gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 7,
+  "msg": "Buen día. Enviado. Por favor me avisas cuando me haces el envío del cambio",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 7,
+  "msg": "Y te quería hacer una consulta. Te pedí 37 para el cambio. estaba usando 38 pero estos fueron enormes. Crees que 37 también será grande sino prefiero 36. La horma es muy grande?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 7,
+  "msg": "Mándame 37 como habíamos quedado",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 7,
+  "msg": "Buen día. Tenés idea cuando lo despachan?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 7,
+  "msg": "gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 7,
+  "msg": "Buenas noches. Quería saber si llegó mi paquete de cambio ahí?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 7,
+  "msg": "Gracias!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 7,
+  "msg": "Buenas tardes",
+  "topic": "greeting"
+ },
+ {
+  "conv": 7,
+  "msg": "Pudieron enviar mi cambio?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 7,
+  "msg": "Muchas gracias!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 8,
+  "msg": "Voy",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 8,
+  "msg": "El martes sale",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 8,
+  "msg": "Quedó perfecta",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 8,
+  "msg": "Se la enviemos de nuevo a correo arg que es lo más económico, córtale el cartón para que no se raspen 🙌🏾",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 9,
+  "msg": "hola! buenas que tal? queria saber si me podrian facilitar el envio, ya que por la facultad y el trabajo se me complica retirar la compra personalmente.",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 9,
+  "msg": "gracias :)",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 9,
+  "msg": "si obvio, es 33245",
+  "topic": "order_status"
+ },
+ {
+  "conv": 10,
+  "msg": "Hola! Alguna novedad sobre las botas ?",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 10,
+  "msg": "??",
+  "topic": "other"
+ },
+ {
+  "conv": 10,
+  "msg": "Uuh , espero que no se tarde tanto , ya que me voy de viaje en dos semanas !",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 11,
+  "msg": "hola! buen día! les consulto por las botas que quedaron reservadas para saber cuándo van a estar aproximadamente",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 11,
+  "msg": "no hay problema muchas gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 11,
+  "msg": "Hola! cuánto me sale enviarlo a nueva córdoba? tránsito cáceres de allende 426 c.p. 5000",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 11,
+  "msg": "holaaa dale envíenme por favor",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 12,
+  "msg": "Hola como estas?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 12,
+  "msg": "Hay novedades de mi pedido?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 12,
+  "msg": "Si me llego. Entendi que eran 10 dias habiles para que llegue. No hay problema, gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 12,
+  "msg": "Hola, seria posible qje me lo dejen despues de las 16? Porque a esa hora salgo de trabajar",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 12,
+  "msg": "Gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 13,
+  "msg": "Y cuándo será efectivo el envío aproximadamente?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 13,
+  "msg": "No, prefiero esperar el modelo California.",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 13,
+  "msg": "Te consulto, la horma del modelo California es estándar, porque yo calzo número 36 y tengo miedo que el 36 sea un poco grande.",
+  "topic": "product_question"
+ },
+ {
+  "conv": 13,
+  "msg": "Entonces prefiero número 35. Tenés en ese número el modelo California?",
+  "topic": "product_question"
+ },
+ {
+  "conv": 13,
+  "msg": "Geniallll buenísimo!!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 13,
+  "msg": "Gestioname el cambio por favor entonces!!!👏👏🙏",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 13,
+  "msg": "No importa, prefiero esperar a la semana que viene entonces el modelo California, y en número 35 por favor!! 🙏",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 13,
+  "msg": "Mil gracias!!👍",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 13,
+  "msg": "Hola buenas tardes!!! Quisiera saber si para el día viernes ya podré recibir mi pedido ya que es para un regalo.",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 14,
+  "msg": "Buen día",
+  "topic": "greeting"
+ },
+ {
+  "conv": 14,
+  "msg": "Sigo sin recibir novedades de mi pedido",
+  "topic": "order_status"
+ },
+ {
+  "conv": 14,
+  "msg": "Ya pasaron los 10 días hábiles",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 15,
+  "msg": "Holiss como están? Buen día, una consulta quería saber del 1 al 10 cuales son las posibilidades de que esta semana entren las botas y me lleguen? 😬",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 16,
+  "msg": "hola! cómo estan? queria saber una fecha de llegada estimada",
+  "topic": "order_status"
+ },
+ {
+  "conv": 16,
+  "msg": "del pedido 33061",
+  "topic": "order_status"
+ },
+ {
+  "conv": 16,
+  "msg": "gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 16,
+  "msg": "muchas gracias!N",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 16,
+  "msg": "Hola! Como estan? Queria volver a consultar por el estado de mi pedido! Ya pasaron 48hs y no me llegó el mail de seguimiento (pedido 33061) \nGracias!",
+  "topic": "order_status"
+ },
+ {
+  "conv": 16,
+  "msg": "okii me quedo tranquila, perdon la insistencia es que nunca compre por su página 😅",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 17,
+  "msg": "Buenas! Okeii, cuanto suelen demorar en darles respuesta?\nSi pueden, me podrian enviar los $20.000 que habia transferido por la diferencia de precios entre los productos del cambio, asi despues no nos olvidamos y solo resta lo de GoCuotas.\n\nMi alias es: constanza.rio\nBanco Santander",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 17,
+  "msg": "Hola chicas, ya me llegaron! Faltarian los $20.000 que les envie por transferencia nomas. Graciass",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 18,
+  "msg": "Hola buenos días",
+  "topic": "greeting"
+ },
+ {
+  "conv": 18,
+  "msg": "Quería saber si hay alguna novedad del pedido 🥰",
+  "topic": "order_status"
+ },
+ {
+  "conv": 18,
+  "msg": "Okei gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 19,
+  "msg": "Holaa! Que tal 🤍\nLa verdad que prefiero esperar a que esten en stock las dallas, no me molesta en absoluto esperar 🤞🏻\nNecesito talle 39! Me gustan todos los colores asi que de ultima la primera que salga en 39",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 19,
+  "msg": "Y necesito saber si uds me pasan la etiquets y les pago para enviarles las botas que tengo yo o como hago para la devolución!",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Buenisimo! Te hago una consulta. Me dice que pasaron mas de 30 días de la compra en el link. Podría hacerse una excepción? Vista que mi compra si bien figuraba el stock en la web, fué un error y por eso se demoró el despacho y bueno, aparte me gustaría seguir comprandoles otras botas 🥺",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Claro! Pero mirá, aca esta el mail del tracking. No pasaron 30\ndías desde que lo recibí. Ni si quiera pasaron los 30 días desde que se despachó! Por eso me llama la atencion",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 19,
+  "msg": "Pero si cambio por el mismo par en un talle mas (39) si está en stock?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Siii!",
+  "topic": "order_status"
+ },
+ {
+  "conv": 19,
+  "msg": "Osea se cumple que pasó un mes exacto de que lo compré. Por eso el sistema me estará tirando esto",
+  "topic": "order_status"
+ },
+ {
+  "conv": 19,
+  "msg": "Dale! Muchas graciassss",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 19,
+  "msg": "Perfecto! Quiero cambiarlas por las Dallas en Negro y talle 39",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Ahi pude avanzar en la gestión de la devolucion, pero no me permite seleccionar el SKU o Modelo que quiero ya que no está en Stock",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Claro, pero, no hay talle de la bota que yo necesito en los modelos que quiero",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 19,
+  "msg": "Osea que no la podria cambiar por nada me estas diciendo basicamente",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Ok, pero despues especifico que el modelo que quiero esta en preventa?",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 19,
+  "msg": "Por ej si selecciono Dallas Talle 35 wue esta en stock, y despues aviso en el detalle del mensaje que es para el Talle 39 cuando este disponible",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Ya pedi la devolucion del dinero",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Como feedback, deberian si hacen pauta paga por meta y google ads, deberian procurar no quebrar stock. Que tu cliente *quiera* comprarte y no pueda es de las cosas que hacen muy mala la reputación de tu marca. Es bastante mala la experiencia de compra para alguien que no es de Cordoba y ya decidió que queria comprar.",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 19,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 19,
+  "msg": "Porque como cliente, por mas voluntad que le puse, ya no voy a volver a comprar y es una lastima porque quería las botas.",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 19,
+  "msg": "Buenisimo! En cuanto a la etiqueta para el envio, me la tienen que dar uds no? Yo tiré la bolsa con los detalles de dirección.",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 19,
+  "msg": "Gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 20,
+  "msg": "Hola! Como estas? Escribo porque el 21 de mayo me llego este mail y queria consultar sobre el envio, muchas gracias!",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 20,
+  "msg": "Hola! Buenas tardes, sii lo recibi hace una hora, mil gracias ❤️‍🩹❤️‍🩹",
+  "topic": "order_status"
+ },
+ {
+  "conv": 21,
+  "msg": "Buen día justo me fijé en la página de Andreani que lo retiraron",
+  "topic": "order_status"
+ },
+ {
+  "conv": 21,
+  "msg": "Qué bueno que llegó todo bien",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 21,
+  "msg": "Genial ojalá estén para esta semana 🙏",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 21,
+  "msg": "Gracias por avisar",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 21,
+  "msg": "Aguardo novedades",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 21,
+  "msg": "Buen día, ¿ cómo va ? Vi en la página que ya están disponibles los borcegos oregon vintage en talle 37. Quisiera saber aproximadamente cuando me envían el mismo",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 21,
+  "msg": "Esto vi. Que antes figuraban que había existencia",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 21,
+  "msg": "Ah ok entiendo.   Bueno voy a ver esta semana sino ingresan cual alternativa hay en tienda",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 21,
+  "msg": "Gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 22,
+  "msg": "Hola!! Cómo estás?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 22,
+  "msg": "Me llegaron los borcegos, Pero me van grandes. Me guíe por la tabla de la web que decía que el talle 39 tenía 25 cm y en realidad son grandes 🙁",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Cómo cambio el talle?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Quedo a la espera",
+  "topic": "other"
+ },
+ {
+  "conv": 22,
+  "msg": "Hola",
+  "topic": "greeting"
+ },
+ {
+  "conv": 22,
+  "msg": "Es el número 33309",
+  "topic": "order_status"
+ },
+ {
+  "conv": 22,
+  "msg": "Quisiera cambiar por un talle menos",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Hoy hago el envío para hacer el cambio",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Dale",
+  "topic": "other"
+ },
+ {
+  "conv": 22,
+  "msg": "Es que ayer escribí, pero no tuve respuesta",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 22,
+  "msg": "Aguardo respuesta",
+  "topic": "other"
+ },
+ {
+  "conv": 22,
+  "msg": "Hola. Consulta yo quiero recibir el mismo producto Pero un talle menos. Cómo podría hacer?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Sisi. Por eso. Es que talle 38 no deja seleccionar",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 22,
+  "msg": "🥹",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Y otra consulta. No tienen fecha de ingreso?",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 22,
+  "msg": "Hola. Cómo están ?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 22,
+  "msg": "Ya genere el cambio por un talle menos en color negro de los borcegos Taylor.",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 22,
+  "msg": "Me confirman si lo genere bien? Nuevo num de pedido 34096",
+  "topic": "order_status"
+ },
+ {
+  "conv": 22,
+  "msg": "Solo los llevo al correo?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 22,
+  "msg": "elegi la opcion de Correo Argentino",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 22,
+  "msg": "Quedo a la espera de la etiqueta",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 23,
+  "msg": "Hola",
+  "topic": "greeting"
+ },
+ {
+  "conv": 23,
+  "msg": "Hola, quisiera saber informacion sobre el pedido #33453",
+  "topic": "order_status"
+ },
+ {
+  "conv": 23,
+  "msg": "Ya han pasado mas de 10 dias hábiles y aun mi pedido no sale",
+  "topic": "order_status"
+ },
+ {
+  "conv": 24,
+  "msg": "Muchas gracias!!🧡🧡🧡🧡",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 24,
+  "msg": "Gracias!!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 24,
+  "msg": "Hola!!",
+  "topic": "greeting"
+ },
+ {
+  "conv": 24,
+  "msg": "Quería consultar si tienen en stock de los mocasines marrones en talle 37!",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 24,
+  "msg": "Me compré talle 38 y, como son preventa, me quedan un poco más flojitos, así que quería ver de probarme en talle 37 si es q tienen stock!",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 25,
+  "msg": "Hola! Alguna novedad del pedido ?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 25,
+  "msg": "Dale gracias! Sino si es mas facil y rapido lo busco",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 25,
+  "msg": "Dale buenisimo gracias!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 25,
+  "msg": "Hola! Como estan ? Podre ir a retirar mi pedido ?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 25,
+  "msg": "Hola!! Como andan? Vos sabes que una bota de las negras me vino la plantilla arrugada y despues queria consultar porque compramos las texanas gastadas y estan negras!!",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 25,
+  "msg": "Dale perfecto",
+  "topic": "other"
+ },
+ {
+  "conv": 25,
+  "msg": "Me llego en estos dias entonces",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 25,
+  "msg": "Gracias!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 26,
+  "msg": "Hola buenos días, me contacto para coordinar cambio de talle de pedido #32939, me pedí una talle 37 como siempre me pido en todo tipo de zapatos de otras marcas pero me quedo súper enorme o no se fue un error de fabricación la 37 que me enviaron mide 27 cm de largo. Mi pie mide 23 cm siempre suelo pedir 23,5 o 24cm. Me indicarían pasos a seguir 🙏🏻",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 26,
+  "msg": "Después vi en la página pero se me ocurre que 23,3 me quedaría medio ajustado o me voy por esas porque siempre suelo pedir 5cm más. Son demasiado hermosas las botas me quise morir cuando vi que eran enormes 🥹",
+  "topic": "product_question"
+ },
+ {
+  "conv": 26,
+  "msg": "Muchas gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 26,
+  "msg": "Consulta en este punto está bien la dirección que les pongo?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 26,
+  "msg": "Soy de otra provincia y no sabría bien que sucursal les quedaría mejor",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 26,
+  "msg": "Me ayudan con esto porfiiii",
+  "topic": "other"
+ },
+ {
+  "conv": 26,
+  "msg": "Ahhh perfecto gracias 🙏🏻",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 26,
+  "msg": "Ya está completo el formulario",
+  "topic": "other"
+ },
+ {
+  "conv": 26,
+  "msg": "Hola buen día el formulario ya está completo",
+  "topic": "other"
+ },
+ {
+  "conv": 26,
+  "msg": "Para cambio no me sale disponible el Dakota vintage 35, pero si aparece disponible para la página",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 26,
+  "msg": "Y como hago en ese caso con el talle la que compré también era preventa",
+  "topic": "product_question"
+ },
+ {
+  "conv": 26,
+  "msg": "Que macana porque cuando complete en formulario el sábado estaba disponible la unidad",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 26,
+  "msg": "Ya complete el nuevo formulario y pague la diferencia de envío, adjunté el comprobante pero ahora me dice que vuelva a adjuntar no sé si acá en el chat",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 26,
+  "msg": "Si lo adjunte",
+  "topic": "order_status"
+ },
+ {
+  "conv": 26,
+  "msg": "Tengo que completar de nuevo?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 26,
+  "msg": "Volví a chequear y me sigue saliendo en stock la Dakota vintage en 35",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 26,
+  "msg": "Qué raro porque en la página si sale",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 26,
+  "msg": "Entré desde el celu y la compu en ambos me aparece",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 26,
+  "msg": "Bueno no importa igual ya seleccione la otra, debe ser que no está actualizando nomas en el mío, gracias seguro estaremos en contacto ☺️",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 26,
+  "msg": "Este?",
+  "topic": "other"
+ },
+ {
+  "conv": 26,
+  "msg": "Aún no me llegó ese Mail",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 26,
+  "msg": "Ya lo recibí gracias ☺️",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 26,
+  "msg": "Si ahí va",
+  "topic": "order_status"
+ },
+ {
+  "conv": 26,
+  "msg": "Con este",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 26,
+  "msg": "Dale genial, mañana se los envío 🚚",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 26,
+  "msg": "Hola buenos días, el envío se encuentra en sucursal, no sé si hacen seguimiento yo me olvide de avisarles que ya les había enviado",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 27,
+  "msg": "Buen día chicas",
+  "topic": "greeting"
+ },
+ {
+  "conv": 27,
+  "msg": "Todo bien ? La semana pasada fui a dejar pagar una carrerita! Y quedaron en confírmame que se haga el pedido",
+  "topic": "order_status"
+ },
+ {
+  "conv": 27,
+  "msg": "Alguna novedad ?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 27,
+  "msg": "Exacto",
+  "topic": "product_question"
+ },
+ {
+  "conv": 27,
+  "msg": "Chocolate",
+  "topic": "product_question"
+ },
+ {
+  "conv": 27,
+  "msg": "Y un llaveroto de perro salchicha",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 27,
+  "msg": "No sé es por encargué",
+  "topic": "order_status"
+ },
+ {
+  "conv": 27,
+  "msg": "Y aún no hay fecha de ingreso ?",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 27,
+  "msg": "Buenasss",
+  "topic": "greeting"
+ },
+ {
+  "conv": 28,
+  "msg": "Hola! Compre unas botas y me quedan grandes, necesito cambiarlas por un talle menos",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Soy de CABA, como debo hacer?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 28,
+  "msg": "Sii🙈 soy 38 en todas pero puede ser que tengan horma grande?",
+  "topic": "product_question"
+ },
+ {
+  "conv": 28,
+  "msg": "Me sobra bastante",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Excepto este mal puesto el talle",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Claro, me probe con medias y siguen siendo bastante grandes",
+  "topic": "product_question"
+ },
+ {
+  "conv": 28,
+  "msg": "Como hago para cambiarlas por un talle menos?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Hola, gracias! Veo que en la pagina figura sin stock en talle 37 que es el que necesito",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 28,
+  "msg": "Tienen stock para cambiarlas? Sino directamente las devuelvo",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Porque quiero ese mismo modelo y color",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 28,
+  "msg": "Hola! Como estas?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 28,
+  "msg": "Me confirmas si estan en stock en 37? Asi ya veo que hago con eso",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 28,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 28,
+  "msg": "Dale",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "En cuanto lo entregan aprox?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 28,
+  "msg": "Dale perfecto",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 28,
+  "msg": "Tengo que hacer la compra o directamente lo registran ustedes al cambio?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Hola! Como estas, el jueves inicie el cambiod de unas botas",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 28,
+  "msg": "Queria saber si les llego el pago y todo ok!",
+  "topic": "order_status"
+ },
+ {
+  "conv": 28,
+  "msg": "Gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 28,
+  "msg": "Hola!",
+  "topic": "greeting"
+ },
+ {
+  "conv": 28,
+  "msg": "Hola! Tengo ese nada mas, pero esta pago",
+  "topic": "order_status"
+ },
+ {
+  "conv": 28,
+  "msg": "Lo pague y agregue en el momento al forms",
+  "topic": "order_status"
+ },
+ {
+  "conv": 28,
+  "msg": "Muchas gracias!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 29,
+  "msg": "Hola chicxs!! Como están? Realicé una compra me llegó ayer y hoy me las probé las botas Oregón pero me quedan muy grandes 😭🥺 el pedido es 33462 y también compré las taylor, que aún no me llegaron pero tengo duda de si es la misma horma pedido 33363",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 29,
+  "msg": "Hola 💕 me llegaron las botas Taylor y estoy flechada😍 lo hermosas que son por favor, las amé demasiado!! El único detalle es que me quedan un dedito grande, creo que me voy a sentir cómoda con un número menos tanto para Taylor como para Oregón!! Podemos gestionar el cambio?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 29,
+  "msg": "Estaba esperando que me llegaran las últimas para así gestionar todo junto",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 29,
+  "msg": "Las Oregón si me quedan mucho más grandes de ancho no puedo caminar porque es más zapato que piecito 🫣",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 29,
+  "msg": "Las Taylor hoy intento probarlas con una media más gruesa y veo, pero no entendí mucho el tema del cambio",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 29,
+  "msg": "Hola hermosas!! Si decido cambiar ambos modelos por un talle menos. 35!! Me adjuntan las etiquetas ni bien puedan así lo despacho esta semana 💕",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 29,
+  "msg": "Si por favor",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 29,
+  "msg": "Buen día",
+  "topic": "greeting"
+ },
+ {
+  "conv": 30,
+  "msg": "Hola Buen día !",
+  "topic": "greeting"
+ },
+ {
+  "conv": 30,
+  "msg": "Quería saber sobre mi  pedido 33421",
+  "topic": "order_status"
+ },
+ {
+  "conv": 30,
+  "msg": "Etsoy en Córdoba , zona norte y elegí buscarlos en la tienda",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 30,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 30,
+  "msg": "Oki , era para saber más o menos si sabían aprox cuando podrán estar",
+  "topic": "order_status"
+ },
+ {
+  "conv": 30,
+  "msg": "Oki !!",
+  "topic": "other"
+ },
+ {
+  "conv": 30,
+  "msg": "Gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 30,
+  "msg": "Hola buen día !",
+  "topic": "greeting"
+ },
+ {
+  "conv": 30,
+  "msg": "Vuelvo a preguntar por el pedido 33421",
+  "topic": "order_status"
+ },
+ {
+  "conv": 30,
+  "msg": "Hola buen día !",
+  "topic": "greeting"
+ },
+ {
+  "conv": 30,
+  "msg": "Si quería saber sobre el pedido 33421",
+  "topic": "order_status"
+ },
+ {
+  "conv": 30,
+  "msg": "Hola!! En qué horario se puede retirar ?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 31,
+  "msg": "Si entiendo pero quedaron en avisarme y todavía no tengo ninguna novedad",
+  "topic": "order_status"
+ },
+ {
+  "conv": 31,
+  "msg": "Tal vez no tuvieron mala predisposición pero debería tener una mejor comunicación con el cliente, ya que cada semana estuve esperando alguna novedad que no llegó. Si no me comunicaba, nunca me iba a enterar de la demora",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 31,
+  "msg": "Holaa, alguna novedad?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 31,
+  "msg": "Quiero hacer una consulta, se puede cambiar de modelo de última ?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 31,
+  "msg": "Por el mismo modelo pero el stone que vi que está en la tienda",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 31,
+  "msg": "Nono, está bien si está por ser enviado que sea el original",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 31,
+  "msg": "Hola, buenas tardes. Aún no me enviaron guía de seguimiento",
+  "topic": "order_status"
+ },
+ {
+  "conv": 31,
+  "msg": "Holaa, sii gracias ya me llegó el mail",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 32,
+  "msg": "Hola Buenos días ! \nTe quería mostrar lo que le pasó a los borcegos de mi hija",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 32,
+  "msg": "Qué solución me\nPueden dar??\nEs como se le hubiese salido el cuero",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 32,
+  "msg": "Lo compré personalmente en local",
+  "topic": "other"
+ },
+ {
+  "conv": 32,
+  "msg": "Presencial",
+  "topic": "other"
+ },
+ {
+  "conv": 32,
+  "msg": "En efectivo",
+  "topic": "other"
+ },
+ {
+  "conv": 32,
+  "msg": "Fue presencial no recuerdo si a nombre de Delfina Candela o Cecilia Arlla",
+  "topic": "order_status"
+ },
+ {
+  "conv": 32,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 32,
+  "msg": "Candela",
+  "topic": "other"
+ },
+ {
+  "conv": 32,
+  "msg": "Pero bueno mira como se salió el cuero y pasaron re pocos meses necesito por favor que me den una solución",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 32,
+  "msg": "Si si",
+  "topic": "order_status"
+ },
+ {
+  "conv": 32,
+  "msg": "Me llegó con los borcegos",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 32,
+  "msg": "Me pasas los horarios ?",
+  "topic": "other"
+ },
+ {
+  "conv": 32,
+  "msg": "Bueno gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 32,
+  "msg": "Hola cómo estás? Recién estuvimos en el local",
+  "topic": "greeting"
+ },
+ {
+  "conv": 32,
+  "msg": "Para comprar las botas cortitas vintage",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 32,
+  "msg": "Que precio en efectivo ?",
+  "topic": "payment_discount"
+ },
+ {
+  "conv": 32,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 33,
+  "msg": "Hola buen dia! Te escribo para tramitar un cambio. Mi pedido es el #33047",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 33,
+  "msg": "Hola! Como va?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 33,
+  "msg": "Ahi probe con el link y me salta esto",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 33,
+  "msg": "Me aparece lo mismo",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 33,
+  "msg": "Sii. Cerre todo entre otra vez",
+  "topic": "other"
+ },
+ {
+  "conv": 33,
+  "msg": "Pruebo mas tarde con la compu y les aviso",
+  "topic": "other"
+ },
+ {
+  "conv": 33,
+  "msg": "hola chicas como estan??",
+  "topic": "greeting"
+ },
+ {
+  "conv": 33,
+  "msg": "ahi pude continuar con los pasos",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 33,
+  "msg": "por las dudas esta mal puesto el alias. es para avisarles",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 33,
+  "msg": "ahi realice el pago. cuando tengo que llevarlo a la sucursar del correo?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 33,
+  "msg": "Dale dale perfecto. Muchas gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 33,
+  "msg": "Muy amable",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 33,
+  "msg": "Yo soy siempre 38, pero como en la pagina decia que me guie por las medias y demas, me guie con eso. El zapato me entra, pero no puedo ni caminar por lo que me aprieta.",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 33,
+  "msg": "no se la verdad, al no poder medirme es dificil decidir. las tucson tienen la misma horma??",
+  "topic": "product_question"
+ },
+ {
+  "conv": 33,
+  "msg": "ahi me las volvi a probar. voy a ir por las talle 38",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 33,
+  "msg": "Hola buenas tardes!! Como estan?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 33,
+  "msg": "Les consulto, como sigo con el proceso de cambio??",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 33,
+  "msg": "Holis! este fue el ultimo mail que me llegó",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 33,
+  "msg": "me lo podrian volver a enviar por favor?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 34,
+  "msg": "Hola buen dia. La semana pasada me llego un pedido que hice pero necesito cambiar las botas por un talle menos porque me quedan grandes. Son las tucson wild en 38. Las quiero cambiar por un 37 o 36 no estoy segura. Soy de Bs As. Como hago para hacer el cambio?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 34,
+  "msg": "Holaa! Ahi estaba por completar los datos para hacer la devolucion pero tengo un problema. Mi mama hizo el pedido porque era un regalo y borro el mail donde dice el orden de compra. Hay posibilidad de que ustds me lo digan? Asi puedo hacer el tramite! Gracias",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 34,
+  "msg": "Paz colombo",
+  "topic": "order_status"
+ },
+ {
+  "conv": 34,
+  "msg": "gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 34,
+  "msg": "Hola como va? Ya hice el tramite para hacer el cambio. Me enviaron este mail. Ahora que deberia hacer?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 34,
+  "msg": "Hay posibilidad de cambiar el mail al mio, para que me lleguen a mi? Xq mi mama hizo la compra asi que le llegan a su mail pero yo me estoy encargando del cambio",
+  "topic": "order_status"
+ },
+ {
+  "conv": 34,
+  "msg": "Holaaa",
+  "topic": "greeting"
+ },
+ {
+  "conv": 34,
+  "msg": "Sii me mandaron esto pero nada mas, deberia esperar a que me llegue otro mail? o como prosigo?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 34,
+  "msg": "No, no me llego nada mas",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 34,
+  "msg": "Aa esq como me aparecia esto que dice que tengo a favor no terminaba de entender que tenia que hacer",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 34,
+  "msg": "Ese es el unico mail que me llego…",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 34,
+  "msg": "Ahora vuelvo a chequear",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 34,
+  "msg": "No, ahi me volvi a fijar. Ese es el unico mail que me llego",
+  "topic": "order_status"
+ },
+ {
+  "conv": 34,
+  "msg": "Aaa okey",
+  "topic": "other"
+ },
+ {
+  "conv": 34,
+  "msg": "entonces como deberia proceder??",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 34,
+  "msg": "Sisis me estoy fijando ahi pero no me aparece nada mas que el mail que te mande",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 34,
+  "msg": "Daleee ahi paso!",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 34,
+  "msg": "noo tampcoo",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 34,
+  "msg": "Dale ahi me fijo",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 34,
+  "msg": "Ahi me llegoo",
+  "topic": "order_status"
+ },
+ {
+  "conv": 34,
+  "msg": "Lo que no termino de entender, cual seria la etiqueta que tengo que pegar?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 34,
+  "msg": "ahi esta el comprobante",
+  "topic": "other"
+ },
+ {
+  "conv": 34,
+  "msg": "Listoo!! Osea que ahora ya puedo despachar el pedido en la sucursal de correo argentino que elegi no?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 35,
+  "msg": "Buenos días",
+  "topic": "greeting"
+ },
+ {
+  "conv": 35,
+  "msg": "Hola !!\nComo están ?? \nSi está cerrado déjenlo en Grido",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 36,
+  "msg": "Hola! Hice una compra hace 2 semanas (el 17/05) podrías brindarme información en qué estado está mi pedido? Lo compré en preventa pero no me han avisado nada…",
+  "topic": "order_status"
+ },
+ {
+  "conv": 36,
+  "msg": "33511",
+  "topic": "order_status"
+ },
+ {
+  "conv": 36,
+  "msg": "Holaa! Sisi eso lo sé. Solo que me dijeron que iba a recibir un mensaje del estado y no recibí nada por eso conultaba. Gracias igual❤️🥰",
+  "topic": "order_status"
+ },
+ {
+  "conv": 36,
+  "msg": "Gracias chicas!!!❤️❤️",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 36,
+  "msg": "Holaa chicas, buen lunes. Consulta, ustedes cierran 13:00 hs puntual? Porque yo salgo de trabajar 12:50 sobre Rafael Núñez, estoy a 5 cuadras de ustedes para saber si me puedo llegar a esa hora apenas salga. Sino busco la forma de ir otro día por la tarde. Gracias 🥰",
+  "topic": "other"
+ },
+ {
+  "conv": 36,
+  "msg": "Sii",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 36,
+  "msg": "Tranqui, busco la forma de organizarme para pasar por la tarde en la semana así no las hago esperar! Que tengan buen día",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 37,
+  "msg": "Hola, buenos días. Hoy retiré mi pedido, y me quedo grande. Quería realizar el cambio por un talle menos. Cómo tendría que hacer? Gracias!!",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 37,
+  "msg": "Si si, el número es 33458",
+  "topic": "order_status"
+ },
+ {
+  "conv": 37,
+  "msg": "Siii, me quedan bastante grandes",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 37,
+  "msg": "Hasta cuando tengo tiempo de hacerlo?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 37,
+  "msg": "Puede ser el lunes?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 37,
+  "msg": "Sii, pasa que hoy trabajo y mañana también, el lunes a la mañana podría mandarlos de nuevo",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 37,
+  "msg": "Dale, muchísimas gracias!!!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 37,
+  "msg": "Hola, buen día! Quería consultar por el cambio de mi pedido. Ayer completé el formulario y transferi lo que me decía el último paso. No sé si está bien. Gracias!!",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 37,
+  "msg": "Adjunto el comprobante",
+  "topic": "order_status"
+ },
+ {
+  "conv": 37,
+  "msg": "Graciias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 38,
+  "msg": "Hola buen día cómo estás?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 38,
+  "msg": "Quería realizar un cambio de unos borcegos, me compré vía online, y me quedan grandes",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 38,
+  "msg": "Si bien las medidas son las que uso habitualmente se ve que la horma es más ancha",
+  "topic": "product_question"
+ },
+ {
+  "conv": 38,
+  "msg": "Los compré en número 39, quisiera cambiarlos por el número 38",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 38,
+  "msg": "Porfaaaa",
+  "topic": "other"
+ },
+ {
+  "conv": 38,
+  "msg": "Sippp ya mismo",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "#33355",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "Siisiii me fijé en todo",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 38,
+  "msg": "Y aún así te grandes me van",
+  "topic": "product_question"
+ },
+ {
+  "conv": 38,
+  "msg": "Listo genial",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 38,
+  "msg": "Hola buen día!",
+  "topic": "greeting"
+ },
+ {
+  "conv": 38,
+  "msg": "Cómo estás?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 38,
+  "msg": "Sabes que solicité para realizar el cambio de los borcegos que consulté el otro día",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 38,
+  "msg": "Hice el pago del envío",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "Pero no me enviaron ningún dato para poner en el\nPaquete para la devolución",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 38,
+  "msg": "Así que no sabía cómo hacer para enviarlo",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 38,
+  "msg": "Solamente esto me llegó",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 38,
+  "msg": "Es esto?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "No me llegó",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "🙁",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 38,
+  "msg": "Ahí me fijé nuevamente",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 38,
+  "msg": "Me fijé en todos lados y no me llegó nada",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "Ahí me llego",
+  "topic": "order_status"
+ },
+ {
+  "conv": 38,
+  "msg": "Muchas gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 39,
+  "msg": "Buenas cómo estás? Recibí un pedido esta semana y quisiera cambiarlo porque me quedaron grandes 🥲",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 39,
+  "msg": "El número de pedido es #33113. Espero a cuando estén para continuar con el proceso. Gracias 🫶🏻",
+  "topic": "order_status"
+ },
+ {
+  "conv": 39,
+  "msg": "Suelo comprar talle 26 o 37",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 39,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 39,
+  "msg": "En este caso me había medido y me parecía que el 37 iba a a ir mejor pero medido sobra adelante y probé desilazrlo adelante y me entran bien los dedos en el talón",
+  "topic": "product_question"
+ },
+ {
+  "conv": 39,
+  "msg": "Además cuando pruebo caminar me baila el talón o sea se me mueve bastante del lugar 😓",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 39,
+  "msg": "Buenass perdon, me olvide de responder lo siguiente, meti el pie re bien, y con medias gruesas tmb me queda flojito, asi que prefiero cambiarlas, por lo que vi es justo un cm menos",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 39,
+  "msg": "nono, no es apenas, la horma tmb me queda bastante floja, casi que se me sale si hago un poquito de fuerza, sin abrir el cierre",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 39,
+  "msg": "dale perfecto",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 39,
+  "msg": "te consulto, no me figura como disponible ese talle",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 39,
+  "msg": "que hago?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 39,
+  "msg": "Y no van a tener más ese color?",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 39,
+  "msg": "Porque quería en negro 😓",
+  "topic": "product_question"
+ },
+ {
+  "conv": 39,
+  "msg": "y hasta que fecha tengo para hacer el cambio?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 39,
+  "msg": "bueniss",
+  "topic": "greeting"
+ },
+ {
+  "conv": 39,
+  "msg": "y entonces que me recomiendan, puedo esperar a que reingrese?",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 39,
+  "msg": "hasta que dia tengo para esperar?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 39,
+  "msg": "Holaa, ahi ya hice la solicitud de cambio, ahora que tengo que hacer?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 39,
+  "msg": "ya tenia saldo a favor",
+  "topic": "payment_discount"
+ },
+ {
+  "conv": 39,
+  "msg": "dañe",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 40,
+  "msg": "hola!! en negro esta bien 🫶🏻",
+  "topic": "product_question"
+ },
+ {
+  "conv": 40,
+  "msg": "lo espero!",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 40,
+  "msg": "hola! quería consultar si el pedido viene en camino o aproximadamente cuando estarían llegando, gracias",
+  "topic": "order_status"
+ },
+ {
+  "conv": 40,
+  "msg": "no llegó mi pedido",
+  "topic": "order_status"
+ },
+ {
+  "conv": 41,
+  "msg": "Hola!! Buen dia, lo podra recibir algun vecino? Justo trabajo por la tarde",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 41,
+  "msg": "Podran traerlo el jueves mejor? Asi no molesto a los vecinos",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 41,
+  "msg": "Es el unico dia que estoy a esa hora en casa",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 41,
+  "msg": "Gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 42,
+  "msg": "Hola! Cuánto es es el descuento si la compras en sucursal?",
+  "topic": "payment_discount"
+ },
+ {
+  "conv": 43,
+  "msg": "Hola, como estas? Quisiera saber si en algún momento va a haber más talles disponibles de los TONY vintage, estoy buscando talle 40 pero cuando entre a la página ya estaba agotado🥲 \nGracias✨",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 43,
+  "msg": "Buen dia, ay bueno, gracias!!! Si, porfi, dejame anotada",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 44,
+  "msg": "Hola cómo están?",
+  "topic": "greeting"
+ },
+ {
+  "conv": 44,
+  "msg": "Perdón por el día pero quería unas botas, soy de Buenos Aires y las necesito para antes del jueves",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 44,
+  "msg": "Quería saber si había algún envío express o alguna posibilidad que lleguen",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 44,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 45,
+  "msg": "Hola! Tenes la tucson Wild en 37?",
+  "topic": "product_question"
+ },
+ {
+  "conv": 45,
+  "msg": "Dale! Buenisimo paso a probarlas, que horario hacen?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 46,
+  "msg": "Hola, quiero modificar los datos de mi compra #34080",
+  "topic": "order_status"
+ },
+ {
+  "conv": 46,
+  "msg": "El número de contacto 📞 está mal, no sé por qué el sistema agregó el número 0 al final",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 46,
+  "msg": "Mi número de teléfono correcto es: \n3644689798",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 46,
+  "msg": "Buenos días",
+  "topic": "greeting"
+ },
+ {
+  "conv": 46,
+  "msg": "Genial!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 46,
+  "msg": "Muchas gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 47,
+  "msg": "Hola! Buenos días cómo están? Mi nombre es felicitas, soy de Tucumán. Tengo local de indumentaria y estoy buscando sumar calzados, hace tiempo estoy siguiendo su marca y me encantaría que forme parte de By Olga. Hacen venta mayorista? Podrían enviarme más info? Muchas gracias",
+  "topic": "wholesale_b2b"
+ },
+ {
+  "conv": 47,
+  "msg": "Les dejo el perfil de mi marca",
+  "topic": "wholesale_b2b"
+ },
+ {
+  "conv": 47,
+  "msg": "🥹🥹🥹",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 47,
+  "msg": "Okey muchas gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 48,
+  "msg": "Hola, buen día! Yo realice un pedido el 13 de mayo de unas botas que estaban en preventa (oregon chocolate) pedido #33183. \nQuería saber si hay alguna novedad?",
+  "topic": "order_status"
+ },
+ {
+  "conv": 48,
+  "msg": "Buenísimo!! No hay problema",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 48,
+  "msg": "Gracias ❤️❤️",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 49,
+  "msg": "Hola, buen dia, quisiera saber la situacion de mi pedido #33404",
+  "topic": "order_status"
+ },
+ {
+  "conv": 49,
+  "msg": "Bárbaro, como en el email decía que eran diez días estimados para que ingrese y como ya pasaron por eso preguntaba.",
+  "topic": "order_status"
+ },
+ {
+  "conv": 50,
+  "msg": "Hola te hablo por la compra numero 34067 me acaban de mandar un Mail que hay un producto en preventa",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 50,
+  "msg": "Me podrías decir cuál es?",
+  "topic": "product_question"
+ },
+ {
+  "conv": 50,
+  "msg": "Ah bueno gracias",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 51,
+  "msg": "Holaa Como estas! tuve un problema con un envio a Tucuman!",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 51,
+  "msg": "me dijeron que vino el repartidor y no respondi la llamada pero no vino nadie ni me llamaron a mk",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 51,
+  "msg": "This message type can’t be displayed because it’s not supported yet.",
+  "topic": "other"
+ },
+ {
+  "conv": 51,
+  "msg": "y desde entonces no tengo novedades del paquete ni me responden en andreani",
+  "topic": "order_status"
+ },
+ {
+  "conv": 51,
+  "msg": "no se si podrian ayudarme",
+  "topic": "other"
+ },
+ {
+  "conv": 51,
+  "msg": "dalee muchas gracias!",
+  "topic": "thanks_closing"
+ },
+ {
+  "conv": 51,
+  "msg": "dalee",
+  "topic": "other"
+ },
+ {
+  "conv": 51,
+  "msg": "pasa que si ese dia estuve todo el dia esperando porque me dijeron que vendrian y no tocaron timbre ni me llamaron y luego recibi el mail de que no pudieron entregar",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 51,
+  "msg": "asi que me parecio muy extraño",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 51,
+  "msg": "espero que hoy no pase! cualquier cosa te aviso",
+  "topic": "greeting"
+ },
+ {
+  "conv": 52,
+  "msg": "Buenos días",
+  "topic": "greeting"
+ },
+ {
+  "conv": 52,
+  "msg": "Quisiera hacer una devolución",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 52,
+  "msg": "Los tengo que llevar al correo de vuelta que me los trajo",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 52,
+  "msg": "Me indican cómo hacerlo",
+  "topic": "product_question"
+ },
+ {
+  "conv": 52,
+  "msg": "Ahí le pase el número de pedido",
+  "topic": "order_status"
+ },
+ {
+  "conv": 52,
+  "msg": "Lo pagué con transferencia",
+  "topic": "payment_discount"
+ },
+ {
+  "conv": 52,
+  "msg": "disculpe no sabia lo del receso ahi envie toda la informacion para gestionar la devolución",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 52,
+  "msg": "espero me contenesten a la brevedad",
+  "topic": "other"
+ },
+ {
+  "conv": 52,
+  "msg": "Disculpe mi apuro pero para solicitar la devolución del dinero dice 72 hs corridas y tengo que llevarlo al correo",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 52,
+  "msg": "Aguardo su respuesta",
+  "topic": "other"
+ },
+ {
+  "conv": 52,
+  "msg": "Hola de nuevo ahí envié toda la info , nose si quieren que la vuelva enviar porque estaban en receso",
+  "topic": "other"
+ },
+ {
+  "conv": 52,
+  "msg": "Si ya hice todo y mandé el pago",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 52,
+  "msg": "Esperaba que me den lo del correo",
+  "topic": "complaint_problem"
+ },
+ {
+  "conv": 52,
+  "msg": "Para despachar",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 53,
+  "msg": "Hola, confirmo mis datos de envío del pedido #33370",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 54,
+  "msg": "Hola chicas !!!",
+  "topic": "greeting"
+ },
+ {
+  "conv": 54,
+  "msg": "Si obvio, me las mandan a mi casa?",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 54,
+  "msg": "Pago el envío",
+  "topic": "payment_discount"
+ },
+ {
+  "conv": 55,
+  "msg": "hola buenas tardes",
+  "topic": "greeting"
+ },
+ {
+  "conv": 55,
+  "msg": "quiero consultar por unas bbotas que compre",
+  "topic": "product_question"
+ },
+ {
+  "conv": 55,
+  "msg": "orden de compra 33922",
+  "topic": "order_status"
+ },
+ {
+  "conv": 55,
+  "msg": "no no queria saber si me la habian enviado y en la tarde",
+  "topic": "order_status"
+ },
+ {
+  "conv": 55,
+  "msg": "me llego un correo",
+  "topic": "other"
+ },
+ {
+  "conv": 56,
+  "msg": "Holaa, como estan? Me llegó mi pedido... compré las Oregon en negro. Me encantaronnnn 😍, excelente la calidad, estan increíbles pero le erré al talle 🤦🏽‍♀️🥺",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 56,
+  "msg": "Compre por la página queria saber si puedo cambiarlos en el local? Y si puede ir otra persona por mi a hacerlo? Yo soy de Alta Gracia pero mi hermano va para esa zona entonces me quedaría más cómodo si el lo puede cambiar para ahorrarme la demora del cambio a través del correo",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 56,
+  "msg": "Genial,  la verdad que se me complica mucho ir yo personalmente!!",
+  "topic": "shipping_coordination"
+ },
+ {
+  "conv": 56,
+  "msg": "Se que un talle menos me queda bien porque es el talle que pido siempre, se ve que me gano la ansiedad de la compra y marque un número más 😂",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 56,
+  "msg": "Revise midiendo bien el pie y comparé con las medidas de la tabla de talles de la página",
+  "topic": "product_question"
+ },
+ {
+  "conv": 56,
+  "msg": "Debe llevar algo más además del calzado cumpliendo con las condiciones de cambio?",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 56,
+  "msg": "Oregon negro, tengo talle 37 necesito cambiarlo por un 36!",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 56,
+  "msg": "estos!",
+  "topic": "exchange_return"
+ },
+ {
+  "conv": 56,
+  "msg": "mi pedido es el #33394",
+  "topic": "order_status"
+ },
+ {
+  "conv": 57,
+  "msg": "Hola!",
+  "topic": "greeting"
+ },
+ {
+  "conv": 57,
+  "msg": "Quería saber si tienen stock en el local del modelo california en color negro, talle 39. Muchas gracias 🥰",
+  "topic": "restock_availability"
+ },
+ {
+  "conv": 58,
+  "msg": "Hola chicas! Quiero saber estas botas comprándolas en el\nLocal",
+  "topic": "purchase_intent"
+ },
+ {
+  "conv": 58,
+  "msg": "A q precio quedan en efectivo?",
+  "topic": "payment_discount"
+ }
+]
