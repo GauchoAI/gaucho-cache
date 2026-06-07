@@ -1,5 +1,17 @@
 # GOAL — the north star
 
+> **STATUS (2026-06-07, ch. 30): the frontier is measured.** On real
+> COCO service traffic a $0 single-turn cache reaches correct-behaviour
+> ~67%, $0-share 44–48% (vs a ~75% templatable ceiling), lies ~3%
+> (irreducible floor without runtime verification — which isn't $0). The
+> 80% target sits just above the measured templatable ceiling; the
+> remaining gap needs inputs the benchmark lacks (real multi-turn
+> transcripts, the merchant's facts, human-certified narrow intents),
+> gathered per-merchant by the pipeline — not tuning this held-out set.
+> The goal's *spirit* (zero dollars on the templatable, truth-or-silence
+> on the rest) is now a bounded, reproducible result.
+
+
 > **For a real merchant's traffic, ≥ 80% of customer turns are served
 > from cache at $0 — judged equal-or-better than Cerebras, with zero
 > lying serves — and the pipeline reproduces that on any new merchant
