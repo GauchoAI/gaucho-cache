@@ -34,6 +34,20 @@ And because it loads any domain pack, the same script is the
 **certification step for distilled domains**: a traffic-mined pack
 (chapter 18) must pass the matrix before broad serve mode.
 
+## Medical density
+
+The first version ran 3 lengths × 3 registers × 3 probes — 27 per
+situation. The user's correction was immediate: *"for the medical one I
+was making 10 variations in length and 10 in paraphrasing."* At n=3
+per cell, a weak cell and bad luck are indistinguishable. The matrix
+now runs the original's shape: a **10-step length gradient** (bare
+fragment → chatty multi-sentence) × **10 paraphrases** each, register
+varied within every batch — 100 fresh probes per situation, 1,700 per
+run on the mattress slice. The gradient is the diagnostic: recall
+holds in the mid-lengths and falls off two cliffs — L07 (a long
+sentence with an aside, 29%) and L10 (chatty multi-sentence, 21%) —
+the places where harmless context smells like a compound.
+
 ## First measurement — the 48.5% moment
 
 The mature mattress slice, fresh probes: **recall 30%, 3 false
@@ -82,8 +96,50 @@ grows. One template per intent and thirty mined positives do not buy a
 zero-FP guarantee, and now there is an instrument that says so with
 numbers instead of optimism.
 
-The full loop is the standard lifecycle for ANY new domain: shadow
-→ distill → **matrix-certify (ingest FPs until clean)** → shadow-serve
-→ serve. The benchmark the medical book used to prove a cache *could*
-reach 100% is now the gate that decides when each new domain has
-earned its zero-dollar turns.
+## From instrument to pipeline
+
+The user named the destination: *"part experimentation, part creation
+of a pipeline — we should be able to plug into any domain."* So the
+loop became one command, `scripts/domain_pipeline.py`: per round, a
+fresh 10×10 matrix measures the domain, and its failures feed **both
+ratchets** — missed true-probes (labeled by construction) become
+positives, impostor serves become negatives — thresholds recalibrate,
+repeat until **CERTIFIED** (FP = 0 and recall ≥ target) or
+**WITHHELD**.
+
+Automation earned its scars the same day it was born:
+
+- **Blind densification poisons.** Round one ingested a thousand FN
+  probes wholesale; the eval gate caught generator-drift mislabels
+  ("¿Tiene disponibilidad?" generated *for* awaiting_reply — it's a
+  stock question) and the pipeline halted itself. The rule that
+  survived is the day's recurring lesson in its strictest form:
+  **only ingest a probe the router already routes to its label** —
+  "right intent, weak score" is pure density; everything else needs
+  arbitration, not ingestion. And on the mature 20-intent slice, the
+  pipeline now takes FP-fencing only — its own arbitration loops own
+  densification.
+- **Negatives by construction beat negatives by trickle.** Recepcion's
+  FP residue (2–3 fresh impostors per round, all from two semantic
+  neighborhoods) wouldn't drain through per-round ingestion alone.
+  Generating 50 dedicated impostors for those neighborhoods — the
+  OSDE-but-billing class, the free-but-conditional class — was the
+  medical "+negatives" applied wholesale.
+
+Then the receptionist pack — distilled from raw traffic the same
+night, zero hand-written anything — walked the whole pipeline:
+
+| stage | recall | FP |
+|---|---|---|
+| pipeline start | 35% | 5 |
+| densification rounds | 56% → 69% | 6 → 1 |
+| impostor density + final round | **69%** | **0** |
+
+> **✓ CERTIFIED: recall 69% ≥ 60%, FP = 0, near-misses refused 50/50.**
+
+The full lifecycle now closes end to end with no hand-written
+artifacts anywhere in it: **shadow → distill → pipeline-certify →
+shadow-serve → serve.** The benchmark the medical book used to prove a
+cache *could* reach 100% is now the machine that takes any agent's
+traffic and decides — with numbers, ratchets and a halt-wire — when
+each new domain has earned its zero-dollar turns.

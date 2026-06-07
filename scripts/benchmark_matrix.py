@@ -42,14 +42,24 @@ from gaucho_cache.cerebras import BatchClient
 from gaucho_cache.classifier import Classifier, StageIndex, load_thresholds
 from gaucho_cache.contracts import MatchContract, load_all_contracts
 
-K_PER_CELL = 3
-LENGTHS = [("short", "1-4 words, fragment-style"),
-           ("medium", "one natural sentence"),
-           ("long", "2-3 sentences with harmless extra context")]
-REGISTERS = [("casual", "casual rioplatense voseo"),
-             ("formal", "formal usted, complete sentences"),
-             ("typos", "lowercase, typos, abbreviations (q, xq, tmb)")]
-N_NEAR_MISS = 8
+# The medical book's density: 10 length steps x 10 paraphrases = 100
+# fresh probes per situation. Register varies WITHIN each batch of 10
+# (casual voseo / formal usted / typos+abbreviations) so every length
+# step samples every register.
+K_PER_LENGTH = 10
+LENGTHS = [
+    ("L01", "1-2 words, bare fragment"),
+    ("L02", "2-3 words"),
+    ("L03", "3-5 words, still fragmentary"),
+    ("L04", "a short clause, 5-7 words"),
+    ("L05", "one short natural sentence"),
+    ("L06", "one full sentence, ~10-14 words"),
+    ("L07", "one long sentence with a small aside"),
+    ("L08", "two sentences"),
+    ("L09", "two-three sentences with harmless extra context"),
+    ("L10", "three-four sentences, chatty, with harmless digressions"),
+]
+N_NEAR_MISS = 10
 
 GEN_SYS = ("You write realistic WhatsApp messages from Argentine customers. "
            "Output ONLY a JSON array of strings (escape quotes, no trailing "
@@ -58,8 +68,10 @@ TRUE_PROMPT = """An assistant has this approved reply on file:
 "{template}"
 (intent name: {intent})
 
-Write {k} customer messages for which this reply is the CORRECT and
-complete answer. Length: {length}. Register: {register}.
+Write {k} DISTINCT customer messages for which this reply is the CORRECT
+and complete answer. Length of every message: {length}.
+Vary the register across the {k}: some casual rioplatense voseo, some
+formal usted, some lowercase with typos and abbreviations (q, xq, tmb).
 Each message must be answerable by the reply above verbatim."""
 
 MISS_PROMPT = """An assistant has this approved reply on file:
@@ -103,6 +115,11 @@ async def main() -> None:
     ap.add_argument("--ingest-fp", action="store_true",
                     help="write FPs into the distilled pack as hard negatives "
                          "(the medical book's +negatives move, automated)")
+    ap.add_argument("--ingest-fn", action="store_true",
+                    help="write missed true-probes into the pack as positives "
+                         "(labeled by construction — densification for free)")
+    ap.add_argument("--dump", type=Path, default=None,
+                    help="write round results as JSON (for the pipeline)")
     a = ap.parse_args()
 
     clf, situations, stage = load_stack(a.domain)
@@ -110,14 +127,14 @@ async def main() -> None:
           f"({a.domain or 'mattress slice'})\n")
     client = BatchClient("benchmark_matrix")
 
-    async def gen_true(intent, body, lk, ld, rk, rd):
+    async def gen_true(intent, body, lk, ld):
         try:
             v = await client.chat_json(GEN_SYS, TRUE_PROMPT.format(
-                template=body, intent=intent, k=K_PER_CELL,
-                length=ld, register=rd), temperature=0.9)
-            return intent, lk, rk, [str(x) for x in v][:K_PER_CELL]
+                template=body, intent=intent, k=K_PER_LENGTH,
+                length=ld), temperature=0.9)
+            return intent, lk, [str(x) for x in v][:K_PER_LENGTH]
         except Exception:
-            return intent, lk, rk, []
+            return intent, lk, []
 
     async def gen_miss(intent, body):
         try:
@@ -128,21 +145,21 @@ async def main() -> None:
             return intent, []
 
     trues = await asyncio.gather(*(
-        gen_true(i, b, lk, ld, rk, rd)
-        for i, b in situations.items()
-        for lk, ld in LENGTHS for rk, rd in REGISTERS))
+        gen_true(i, b, lk, ld)
+        for i, b in situations.items() for lk, ld in LENGTHS))
     misses = await asyncio.gather(*(gen_miss(i, b)
                                     for i, b in situations.items()))
 
     # ---- classify (local, free) ---------------------------------------------
-    cell_hit = defaultdict(lambda: [0, 0])     # (length, register) -> [hit, n]
+    cell_hit = defaultdict(lambda: [0, 0])     # length -> [hit, n]
     per_intent = defaultdict(lambda: [0, 0])   # intent -> [hit, n]
     fn_reasons = defaultdict(int)
+    fn_probes: list[tuple[str, str]] = []
     SOCIAL = {"greet", "thanks_goodbye", "confirmation", "declination",
               "answer_for_whom"}
     FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom",
               "ask_recommendation"}
-    for intent, lk, rk, probes in trues:
+    for intent, lk, probes in trues:
         for t in probes:
             d = clf.classify(t, stage=stage)
             # doctrine parity: in-cluster serves are correct (a probe for
@@ -150,11 +167,12 @@ async def main() -> None:
             ok = d.serve_eligible and (
                 d.intent == intent or {d.intent, intent} <= SOCIAL
                 or {d.intent, intent} <= FUNNEL)
-            cell_hit[(lk, rk)][0] += ok
-            cell_hit[(lk, rk)][1] += 1
+            cell_hit[lk][0] += ok
+            cell_hit[lk][1] += 1
             per_intent[intent][0] += ok
             per_intent[intent][1] += 1
             if not ok:
+                fn_probes.append((intent, t))
                 fn_reasons[d.reason or
                            (f"served_{d.intent}" if d.serve_eligible
                             else "miss")] += 1
@@ -172,13 +190,11 @@ async def main() -> None:
     # ---- report (the medical book's tables) ----------------------------------
     tot_hit = sum(h for h, _ in per_intent.values())
     tot_n = sum(n for _, n in per_intent.values())
-    print("RECALL MATRIX (fresh paraphrases that must HIT)")
-    print(f"{'':10s}" + "".join(f"{rk:>10s}" for rk, _ in REGISTERS))
-    for lk, _ in LENGTHS:
-        row = "".join(
-            f"{cell_hit[(lk, rk)][0]}/{cell_hit[(lk, rk)][1]:<7}"
-            .rjust(10) for rk, _ in REGISTERS)
-        print(f"{lk:10s}{row}")
+    print("RECALL BY LENGTH (10 fresh paraphrases x situations per row)")
+    for lk, ld in LENGTHS:
+        h, n = cell_hit[lk]
+        bar = "█" * int(40 * h / max(1, n))
+        print(f"  {lk} {ld[:34]:36s} {bar:<40} {h}/{n} ({h/max(1,n):.0%})")
     print(f"\nper-situation recall (worst 6):")
     for i, (h, n) in sorted(per_intent.items(), key=lambda kv: kv[1][0] / max(1, kv[1][1]))[:6]:
         print(f"  {i:38s} {h}/{n}")
@@ -190,19 +206,90 @@ async def main() -> None:
           f"| FALSE POSITIVES: {len(fp)} (gate: 0)")
     for i, t in fp[:8]:
         print(f"  FP [{i}] {t!r}")
-    if fp and a.ingest_fp and a.domain:
+    if a.domain and (a.ingest_fp or a.ingest_fn):
         import numpy as np
         from gaucho_cache.classifier import Embedder
         pack = REPO / "data" / "domains" / a.domain
         idx = StageIndex.load(pack / "index.npz")
-        vecs = Embedder().encode([t for _i, t in fp])
-        idx2 = StageIndex(
-            np.vstack([idx.embeddings, vecs]),
-            np.concatenate([idx.intents, np.array([i for i, _t in fp])]),
-            np.concatenate([idx.kinds, np.array(["negative"] * len(fp))]),
-            np.concatenate([idx.actual_intents, np.array(["other"] * len(fp))]))
-        idx2.save(pack / "index.npz")
-        print(f"→ ingested {len(fp)} FPs as pack negatives (re-run to certify)")
+        emb = Embedder()
+        E, I, K, A = (idx.embeddings, list(idx.intents), list(idx.kinds),
+                      list(idx.actual_intents))
+        adds = []
+        if a.ingest_fp and fp:
+            adds += [(i, t, "negative") for i, t in fp]
+        if a.ingest_fn and fn_probes:
+            for i, t in fn_probes:
+                routed, *_ = clf.route(t)
+                if routed != i:
+                    continue  # strict: pure density only
+                adds.append((i, t, "positive"))
+        if adds:
+            vecs = emb.encode([t for _i, t, _k in adds])
+            E = np.vstack([E, vecs])
+            I += [i for i, _t, _k in adds]
+            K += [k for _i, _t, k in adds]
+            A += ["other" if k == "negative" else "" for _i, _t, k in adds]
+            StageIndex(E, np.array(I), np.array(K), np.array(A)).save(
+                pack / "index.npz")
+            # recalibrate: an intent's threshold sits above what OTHER
+            # intents' positives reach into it (distill parity)
+            V, In, Kn = E, np.array(I), np.array(K)
+            pos = Kn == "positive"
+            th = {}
+            for intent in sorted(set(In[pos])):
+                m = pos & (In == intent)
+                o = pos & (In != intent)
+                cross = float((V[o] @ V[m].T).max()) if o.any() else 0.6
+                th[intent] = {"threshold": min(0.88, cross + 0.02),
+                              "margin": 0.05, "negative_margin": 0.03}
+            (pack / "thresholds.json").write_text(json.dumps(th, indent=1))
+            print(f"→ ingested {sum(1 for *_x, k in adds if k=='negative')} FPs"
+                  f" as negatives + {sum(1 for *_x, k in adds if k=='positive')}"
+                  f" FNs as positives; thresholds recalibrated")
+    if not a.domain and (a.ingest_fp or a.ingest_fn):
+        import sqlite3 as _sq
+        con = _sq.connect(REPO / "data" / "slice.sqlite")
+        cur = con.cursor()
+        base = cur.execute("SELECT COALESCE(MAX(variant_index),0)+1 FROM "
+                           "variants WHERE register='matrix'").fetchone()[0]
+        n_in = 0
+        if a.ingest_fn:
+            for intent, t in fn_probes:
+                # STRICT densification rule: only ingest probes the router
+                # already routes to the label (or in-cluster) — "right
+                # intent, weak score" is pure density; anything else is
+                # generator drift and needs arbitration, not ingestion.
+                routed, *_ = clf.route(t)
+                if not (routed == intent or {routed, intent} <= SOCIAL
+                        or {routed, intent} <= FUNNEL):
+                    continue
+                try:
+                    cur.execute(
+                        "INSERT INTO variants (stage,intent,kind,register,"
+                        "variant_index,text) VALUES ('objection',?,"
+                        "'positive','matrix',?,?)", (intent, base, t))
+                    base += 1; n_in += 1
+                except _sq.IntegrityError:
+                    pass
+        if a.ingest_fp:
+            for intent, t in fp:
+                try:
+                    cur.execute(
+                        "INSERT INTO variants (stage,intent,kind,register,"
+                        "variant_index,text,actual_intent) VALUES "
+                        "('objection',?,'negative','matrix',?,?,'other')",
+                        (intent, base, t))
+                    base += 1; n_in += 1
+                except _sq.IntegrityError:
+                    pass
+        con.commit()
+        print(f"→ ingested {n_in} rows into slice.sqlite "
+              f"(rebuild_index + eval_slice required)")
+    if a.dump:
+        a.dump.write_text(json.dumps({
+            "recall": tot_hit / max(1, tot_n), "n": tot_n,
+            "fp": len(fp), "tn": tn,
+            "per_intent": {i: [h, n] for i, (h, n) in per_intent.items()}}))
     print(f"ledger ${spend.spent():.2f}")
     sys.exit(1 if fp else 0)
 

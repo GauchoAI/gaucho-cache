@@ -1,7 +1,7 @@
 # P0.5 slice evaluation — embedding-only (mini-E2)
 
 - Model: `sentence-transformers/paraphrase-multilingual-mpnet-base-v2`
-- Index: 3602 train positives + 1235 hard negatives; 913 held-out positives evaluated
+- Index: 3604 train positives + 1245 hard negatives; 914 held-out positives evaluated
 
 ## Headline (gate: serving accuracy ≥99%, confident_wrong = 0; raw routing informational — social-pair and below-threshold confusions never reach a customer)
 
@@ -9,36 +9,36 @@
 |---|---|
 | Routing accuracy (top-1, informational) | 86.5% |
 | **Serving accuracy (correct intent when served)** | **100.0%** |
-| Hit rate (compound predicate) | 33.8% |
+| Hit rate (compound predicate) | 32.6% |
 | Confident-wrong rate | **0.00%** (0) |
-| Adversarial negatives confidently mis-served | 47 / 1235 |
+| Adversarial negatives confidently mis-served | 42 / 1245 |
 
 ## Per intent
 
 | Intent | audited | n | top-1 | hits | confident-wrong |
 |---|---|---|---|---|---|
-| answer_for_whom | ✓ | 48 | 69% | 46% | 0 |
+| answer_for_whom | ✓ | 48 | 69% | 42% | 0 |
 | answer_payment_choice | ✓ | 84 | 94% | 6% | 0 |
-| answer_size_posture | ✓ | 263 | 95% | 29% | 0 |
-| ask_recommendation | ✓ | 29 | 45% | 31% | 0 |
+| answer_size_posture | ✓ | 263 | 95% | 27% | 0 |
+| ask_recommendation | ✓ | 29 | 45% | 14% | 0 |
 | awaiting_reply | ✓ | 23 | 70% | 0% | 0 |
 | bot_skepticism | ✓ | 21 | 81% | 62% | 0 |
 | brand_trust | ✗ | 20 | 85% | 65% | 0 |
 | confirmation | ✓ | 52 | 77% | 48% | 0 |
-| declination | ✓ | 57 | 77% | 63% | 0 |
+| declination | ✓ | 57 | 77% | 65% | 0 |
 | firmness_doubt | ✗ | 20 | 85% | 20% | 0 |
 | greet | ✓ | 13 | 85% | 77% | 0 |
 | order_status | ✓ | 22 | 86% | 68% | 0 |
-| out_of_stock_reservation | ✓ | 24 | 79% | 33% | 0 |
-| price | ✗ | 31 | 81% | 32% | 0 |
+| out_of_stock_reservation | ✓ | 24 | 79% | 38% | 0 |
+| price | ✗ | 31 | 81% | 35% | 0 |
 | return_policy | ✗ | 32 | 94% | 6% | 0 |
-| shipping_time | ✓ | 29 | 97% | 21% | 0 |
-| shipping_zone | ✓ | 22 | 91% | 32% | 0 |
+| shipping_time | ✓ | 29 | 97% | 17% | 0 |
+| shipping_zone | ✓ | 23 | 91% | 30% | 0 |
 | size_fit | ✗ | 22 | 91% | 23% | 0 |
 | thanks_goodbye | ✓ | 21 | 86% | 71% | 0 |
-| want_to_buy | ✓ | 23 | 78% | 74% | 0 |
+| want_to_buy | ✓ | 23 | 78% | 57% | 0 |
 | warranty | ✓ | 36 | 97% | 11% | 0 |
-| what_do_you_sell | ✓ | 21 | 95% | 38% | 0 |
+| what_do_you_sell | ✓ | 21 | 95% | 48% | 0 |
 
 ## Confusable pairs (routing confusions, held-out)
 
@@ -53,7 +53,6 @@ Other confusions: answer_for_whom→answer_size_posture×5, answer_for_whom→as
 
 ## Adversarial negatives confidently mis-served
 
-- `quiero un colchon para mi` — not-answer_for_whom (actually other), served `want_to_buy` (0.850)
 - `¿Tienen reseñas de clientes reales sobre el colchón?` — not-answer_for_whom (actually other), served `brand_trust` (0.895)
 - `¿Me pueden indicar la hora estimada de entrega?` — not-answer_for_whom (actually other), served `shipping_time` (0.900)
 - `¿Vuelven a poner el colchón de espuma alta en stock?` — not-answer_for_whom (actually other), served `out_of_stock_reservation` (0.884)
@@ -61,7 +60,6 @@ Other confusions: answer_for_whom→answer_size_posture×5, answer_for_whom→as
 - `¿Cuál es el tiempo de entrega estimado?` — not-answer_for_whom (actually other), served `shipping_time` (0.926)
 - `¿Se pueden pagar cuotas sin interés pero que el envío sea a domicilio?` — not-answer_payment_choice (actually other), served `price` (0.867)
 - `¿Cuál es la política de devolución si el colchón no me gusta después de probarlo?` — not-answer_size_posture (actually other), served `return_policy` (0.908)
-- `¿Cuánto tardan en entregar el colchón queen a la zona de Palermo?` — not-answer_size_posture (actually other), served `shipping_time` (0.801)
 - `¿Cuántas reseñas reales hay del colchón queen en su sitio?` — not-answer_size_posture (actually other), served `brand_trust` (0.784)
 - `¿Me contestó una máquina? Quisiera saber si aceptan pago por transferencia bancaria.` — not-bot_skepticism (actually other), served `price` (0.814)
 - `¿Hay alguna forma de pagar con puntos de fidelidad?` — not-brand_trust (actually other), served `price` (0.821)
@@ -73,5 +71,7 @@ Other confusions: answer_for_whom→answer_size_posture×5, answer_for_whom→as
 - `¿Puedo usar cupones de descuento?` — not-declination (actually other), served `price` (0.888)
 - `¿Hay disponible el modelo en color gris?` — not-declination (actually other), served `out_of_stock_reservation` (0.855)
 - `¿Cuál es la política de devoluciones?` — not-declination (actually other), served `return_policy` (0.903)
+- `¿Cuándo repondrán el stock del colchón king size?` — not-declination (actually other), served `out_of_stock_reservation` (0.820)
+- `¿Cuándo reponen los colchones de espuma firme? Necesito saber si habrá disponibilidad pronto.` — not-firmness_doubt (actually other), served `out_of_stock_reservation` (0.871)
 
 ## Gate: **PASS**

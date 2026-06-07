@@ -15,7 +15,7 @@
     "negative_margin": 0.03
   },
   "ask_recommendation": {
-    "threshold": 0.7355194282531738,
+    "threshold": 0.856854636669159,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -35,7 +35,7 @@
     "negative_margin": 0.03
   },
   "confirmation": {
-    "threshold": 0.777759153842926,
+    "threshold": 0.7777590942382813,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -55,7 +55,7 @@
     "negative_margin": 0.03
   },
   "order_status": {
-    "threshold": 0.7181412768363953,
+    "threshold": 0.7965477895736695,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -75,12 +75,12 @@
     "negative_margin": 0.03
   },
   "shipping_time": {
-    "threshold": 0.7730887126922608,
+    "threshold": 0.8350309920310974,
     "margin": 0.05,
     "negative_margin": 0.03
   },
   "shipping_zone": {
-    "threshold": 0.7853508186340332,
+    "threshold": 0.799057264328003,
     "margin": 0.05,
     "negative_margin": 0.03
   },
@@ -95,7 +95,7 @@
     "negative_margin": 0.03
   },
   "want_to_buy": {
-    "threshold": 0.8348882389068604,
+    "threshold": 0.87134756565094,
     "margin": 0.05,
     "negative_margin": 0.03
   },
