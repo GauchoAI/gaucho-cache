@@ -28,6 +28,14 @@ against a merchant's real logs (merchant #1 = COCO Shoes, 444 turns).
   Open issue: matrix probe-generation is template-derived; for service
   intents it must generate from real customer phrasings to certify
   honestly.
+- **2026-06-07 (cont.)** — the **service safe-cluster** unlock (ch. 27):
+  registered {order_status, exchange, shipping, complaint} as a third
+  safe cluster (exempt from multi/margin legs, shared unified ask) like
+  SOCIAL/FUNNEL. Held-out served-AND-correct **23% → 41%**, lies
+  **31 → 5**; mattress slice unchanged at 100%/0. restock pulled out
+  (different ask). Remaining gap = multi-turn conversation state +
+  deliberately-forwarded flows (refund, data-change, hours, wholesale).
+  Distance to 80% is now labour, not mystery.
 
 100% is the wrong target: ~17% of real traffic is genuinely bespoke
 (novel complaints, wholesale negotiation, true one-offs). Those *should*

@@ -117,10 +117,15 @@ async def main() -> None:
             # STATEFUL service walk: a turn is read in the context of the
             # bot's last move (the conversation graph, not isolated turns).
             last = pending.get(ci)
+            oid = svc.extract_order_id(msg)
+            # REAL context: if the store's actual previous message asked for
+            # an order number, this turn is its answer — set pending from
+            # ground truth (defaulting to order_status if none inferred yet).
+            if svc.prev_asked_for_ref(prev) and last is None:
+                last = "order_status"
             cd = clf.classify(msg[:200], stage="cocoshoes-service",
                               last_bot_intent=last)
             srv = None
-            oid = svc.extract_order_id(msg)
             # continuation: bot asked for a ref, customer now gives the
             # number (or a short reply) → serve the pending intent's flow
             AFFIRM = ("si", "sí", "sii", "dale", "ok", "listo", "ese", "este",

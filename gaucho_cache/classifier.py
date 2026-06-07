@@ -66,6 +66,15 @@ SOCIAL = {"greet","thanks_goodbye","confirmation","declination","answer_for_whom
 # A genuine second concern (shipping, price…) is outside the cluster and
 # still vetoes.
 FUNNEL = {"want_to_buy", "answer_size_posture", "answer_for_whom", "ask_recommendation"}
+# Service safe-cluster (post-sale e-commerce, chapter 26): every member
+# answers a no-reference opener identically ("pasame tu número de pedido"),
+# so an in-cluster confusion is harmless — the same doctrine as SOCIAL and
+# FUNNEL. The compound and margin legs are exempt within it.
+# only the four that share the SAME no-reference ask ("pasame tu número
+# de pedido") are mutually safe to confuse — restock asks for model+size
+# instead, so confusing it with the others is NOT harmless and it stays out.
+SERVICE = {"order_status", "exchange_return", "shipping_coordination",
+           "complaint_problem"}
 # Slot detectors for the funnel-tie preference (see classify()).
 SIZE_RX = re.compile(r"\b(1|una?|2|dos)\s*plazas?\b|\bqueen\b|\bking\b|\b(90|140|150|160|180|200)\s*x\s*(190|200)\b", re.I)
 POSTURE_RX = re.compile(r"\bde\s+costado\b|\bde\s+lado\b|\bboca\s+(arriba|abajo)\b|\bde\s+espaldas?\b", re.I)
@@ -213,8 +222,9 @@ class Classifier:
                      COMPOUND_FLOOR)
                  and (not short or top1 - ranked[1][1] < MULTI_GAP))
         if multi and ({top1_intent, ranked[1][0]} <= SOCIAL
-                      or {top1_intent, ranked[1][0]} <= FUNNEL):
-            multi = False  # one nicety / one funnel move, not two concerns
+                      or {top1_intent, ranked[1][0]} <= FUNNEL
+                      or {top1_intent, ranked[1][0]} <= SERVICE):
+            multi = False  # one nicety / funnel move / service ask, not two
 
         # Nearest hard negative attached to the winning intent.
         neg = (self.index.kinds == "negative") & (self.index.intents == top1_intent)
@@ -294,7 +304,8 @@ class Classifier:
             return d
         if (margin < th.margin and not corpus_exact
                 and not ({intent, second_intent} <= SOCIAL)
-                and not ({intent, second_intent} <= FUNNEL)):
+                and not ({intent, second_intent} <= FUNNEL)
+                and not ({intent, second_intent} <= SERVICE)):
             d.reason = "ambiguous_margin"   # in-cluster ties are safe to serve
             return d
         # Funnel-tie slot preference: in an in-FUNNEL margin tie, when the

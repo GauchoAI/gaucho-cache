@@ -1,36 +1,36 @@
 {
  "complaint_problem": {
-  "threshold": 0.73,
+  "threshold": 0.66,
   "margin": 0.04,
   "negative_margin": 0.03
  },
  "exchange_return": {
-  "threshold": 0.73,
+  "threshold": 0.66,
   "margin": 0.04,
   "negative_margin": 0.03
  },
  "greeting": {
-  "threshold": 0.84,
+  "threshold": 0.82,
   "margin": 0.04,
   "negative_margin": 0.03
  },
  "order_status": {
-  "threshold": 0.73,
+  "threshold": 0.66,
   "margin": 0.04,
   "negative_margin": 0.03
  },
  "restock_availability": {
-  "threshold": 0.73,
+  "threshold": 0.82,
   "margin": 0.04,
   "negative_margin": 0.03
  },
  "shipping_coordination": {
-  "threshold": 0.73,
+  "threshold": 0.66,
   "margin": 0.04,
   "negative_margin": 0.03
  },
  "thanks_closing": {
-  "threshold": 0.84,
+  "threshold": 0.82,
   "margin": 0.04,
   "negative_margin": 0.03
  }

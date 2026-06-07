@@ -32,8 +32,31 @@ ORDER_RX = re.compile(r"#?\b(\d{5})\b")
 # the social/funnel clusters (chapters 13, 16). The has-reference turn,
 # where the customer states their goal with the number, is where they
 # branch.
+# the REF cluster: the four intents that answer a no-reference opener with
+# the SAME ask ("pasame tu número de pedido"). Confusing them is harmless
+# because the served ask is identical. restock is NOT here (it asks for
+# model+size, a different ask), so it must be routed confidently on its own.
 SERVICE_CLUSTER = {"order_status", "exchange_return", "shipping_coordination",
-                   "complaint_problem", "restock_availability"}
+                   "complaint_problem"}
+UNIFIED_ASK = ("¡Claro, te ayudo! 😊 Pasame tu número de pedido (está en el "
+               "mail de confirmación) y me decís qué necesitás — estado, "
+               "cambio o envío — y lo resolvemos.")
+# closers / waiting acks: not a fresh service request → forward, never
+# trigger a new ask.
+CLOSER_RX = re.compile(
+    r"\b(lo|te|los|las) espero\b|cualquier cosa (te )?aviso|quedo a la espera|"
+    r"te aviso|ya est[aá]|gracias|buenas noches|hasta luego|saludos\b", re.I)
+
+# the REAL previous store message is ground-truth context: if the store
+# just asked for an order number, the next customer turn is its answer —
+# an unambiguous graph edge, not a guess.
+PREV_ASKS_REF = re.compile(
+    r"n[uú]mero de pedido|detall[aá]|pas[aá](me|nos)?.*(pedido|orden)|"
+    r"cu[aá]l es tu pedido|qu[eé] pedido|orden de compra", re.I)
+
+
+def prev_asked_for_ref(prev: str | None) -> bool:
+    return bool(prev and PREV_ASKS_REF.search(prev))
 
 
 def orders() -> dict:
@@ -123,10 +146,16 @@ def serve_service(intent: str, text: str, *, continuation: bool = False
         return None                       # media/empty → forward
     if NO_FLOW_RX.search(t):
         return None                       # out-of-graph concern → forward
-    if (not continuation and t.lower().strip(" .!¡?") in BARE_ACK
-            and not extract_order_id(t)):
-        return None                       # bare FRESH ack → not a request
     oid = extract_order_id(text)
+    if not continuation and not oid and CLOSER_RX.search(t):
+        return None                       # closer/waiting ack → forward
+    if (not continuation and t.lower().strip(" .!¡?") in BARE_ACK
+            and not oid):
+        return None                       # bare FRESH ack → not a request
+    # ref-cluster (the four sharing one ask): a no-reference turn gets the
+    # UNIFIED ask, so an in-cluster mis-route serves the correct shared ask.
+    if not oid and intent in SERVICE_CLUSTER:
+        return UNIFIED_ASK, "service_ask_ref"
     if oid and flow.get("ref"):
         o = orders().get(oid)
         if o:
