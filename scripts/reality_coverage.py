@@ -95,10 +95,16 @@ async def main() -> None:
         from gaucho_cache import service as svc
         from gaucho_cache.classifier import (Classifier, StageIndex,
                                              load_thresholds)
+        from gaucho_cache.contracts import MatchContract
         pack = REPO / "data" / "domains" / a.domain
-        clf = Classifier(StageIndex.load(pack / "index.npz"), {},
-                         load_thresholds(pack / "thresholds.json"))
         svc_variants = json.loads((pack / "variants.json").read_text())
+        # real contracts (audited) → serve_eligible works AND salutation
+        # decomposition fires (greeting-prefixed service turns route right)
+        contracts = {i: MatchContract(template_id=f"{i.upper()}-svc",
+                                      category=i, version=1, audited=True,
+                                      body=v[0]) for i, v in svc_variants.items()}
+        clf = Classifier(StageIndex.load(pack / "index.npz"), contracts,
+                         load_thresholds(pack / "thresholds.json"))
 
     # ---- run each turn through the cache, stateful per conversation -------
     sessions: dict[int, object] = {}
@@ -121,24 +127,18 @@ async def main() -> None:
                       "ese mismo", "correcto", "exacto", "ese es")
             is_cont = oid or msg.lower().strip(" .!¡") in AFFIRM
             if last in svc.SERVICE_CLUSTER and is_cont:
-                r = svc.serve_service(last, msg)
+                r = svc.serve_service(last, msg, continuation=True)
                 if r is not None:
                     results.append((ci, msg, prev, True, last, "graph_" + r[1]))
                     served += 1
                     if oid:
                         pending.pop(ci, None)   # resolved
                     continue
-            # empty contracts → routing that PASSES threshold lands on
-            # 'no_template'; the compound legs still veto ambiguous turns.
-            routed_ok = cd.reason in ("no_template", "template_unaudited") \
-                or cd.serve_eligible
-            # in-cluster acceptance: only when the predicate actually
-            # cleared its legs (no_template = passed threshold+margin with
-            # no contract). Dropping the ambiguous_margin acceptance — that
-            # was the source of sibling mis-serves the parity judge caught.
-            in_cluster = (cd.intent in svc.SERVICE_CLUSTER
-                          and cd.reason in ("no_template", "template_unaudited"))
-            if routed_ok or in_cluster:
+            # contracts are audited → serve_eligible means the full compound
+            # predicate cleared (threshold + margin + negative legs), and
+            # salutation decomposition already fired for greeting-prefixed
+            # turns. The parity judge is the backstop.
+            if cd.serve_eligible:
                 intent = cd.intent
                 r = svc.serve_service(intent, msg)
                 if r is not None:
@@ -215,6 +215,14 @@ async def main() -> None:
         judged = await asyncio.gather(*(
             reserve(m, rsn, i) for (_c, m, _p, sv, i, rsn) in results if sv))
         served_correct = sum(judged)
+        import os as _os
+        if _os.environ.get("SHOW_WRONG"):
+            print("\n--- served-but-WRONG (floor breaches) ---")
+            for ok, (_c, m, _p, sv, i, rsn) in zip(
+                    judged, [r for r in results if r[3]]):
+                if not ok:
+                    print(f"  [{i}/{rsn}] {m[:64]!r}")
+            print("---\n")
 
     rate = served / len(turns)
     crate = served_correct / len(turns)

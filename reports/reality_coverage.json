@@ -1,5 +1,5 @@
 {
- "served": 39,
+ "served": 43,
  "total": 124,
  "topic_tot": {
   "thanks_closing": 13,
@@ -15,14 +15,14 @@
   "payment_discount": 3
  },
  "topic_served": {
-  "thanks_closing": 5,
+  "thanks_closing": 9,
   "greeting": 9,
-  "other": 9,
   "product_question": 1,
-  "order_status": 5,
+  "shipping_coordination": 4,
+  "order_status": 7,
   "exchange_return": 5,
+  "other": 4,
   "restock_availability": 2,
-  "shipping_coordination": 1,
   "complaint_problem": 1,
   "payment_discount": 1,
   "purchase_intent": 0

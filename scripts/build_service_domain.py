@@ -60,18 +60,34 @@ async def densify(by_intent: dict[str, list[str]], per_intent: int):
 
     async def gen(intent, seeds):
         ex = "\n".join(f"- {s}" for s in seeds[:12])
-        try:
-            v = await client.chat_json(GEN,
-                f"Real customer messages with intent '{intent}':\n{ex}\n\n"
-                f"Write {per_intent} MORE distinct messages with the same "
-                f"intent. Vary length (short fragments to chatty) and register "
-                f"(casual voseo, formal, typos/abbreviations). Some with an "
-                f"order number like #33421, some without.", temperature=0.95)
-            return intent, [str(x) for x in v][:per_intent]
-        except Exception:
-            return intent, []
-    res = await asyncio.gather(*(gen(i, s) for i, s in by_intent.items()))
-    return {i: v for i, v in res}
+        prompt = (f"Real customer messages with intent '{intent}':\n{ex}\n\n"
+                  f"Write {per_intent} MORE distinct messages with the same "
+                  f"intent. Vary length (short fragments to chatty) and "
+                  f"register (casual voseo, formal, typos/abbreviations). Some "
+                  f"with an order number like #33421, some without.")
+        # generate in batches of 20 so the JSON array never truncates at
+        # max_tokens (the verbose service intents have long messages)
+        out: list[str] = []
+        while len(out) < per_intent:
+            got = []
+            for _ in range(3):
+                try:
+                    v = await client.chat_json(GEN, prompt + f"\n(write 20)",
+                                               temperature=0.95, max_tokens=2000)
+                    got = [str(x) for x in v][:20]
+                    if got:
+                        break
+                except Exception:
+                    continue
+            if not got:
+                break
+            out.extend(got)
+        return intent, out[:per_intent]
+    out = {}
+    for i, s in by_intent.items():       # sequential — avoids rate-limit
+        _i, v = await gen(i, s)           # failures that thinned the cluster
+        out[i] = v
+    return out
 
 
 def main() -> None:
@@ -123,7 +139,7 @@ def main() -> None:
         cross = float((V[o] @ V[m].T).max()) if o.any() else 0.6
         # cluster intents serve a shared ask → a lower floor is safe;
         # non-cluster (greeting/thanks) keep a firmer bar
-        cap = 0.74 if it in SERVICE_CLUSTER else 0.84
+        cap = 0.73 if it in SERVICE_CLUSTER else 0.84
         th[it] = {"threshold": min(cap, max(0.60, cross + 0.02)),
                   "margin": 0.04, "negative_margin": 0.03}
     (PACK / "thresholds.json").write_text(json.dumps(th, indent=1))

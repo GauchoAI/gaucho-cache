@@ -96,11 +96,36 @@ SERVICE = {
 }
 
 
-def serve_service(intent: str, text: str) -> tuple[str, str] | None:
-    """Returns (reply, reason) or None if this intent has no service flow."""
+# turns the cache must NEVER serve a service flow to: media placeholders
+# (an image/audio the customer sent — no text to act on) and bare acks
+# (a closing nicety, not a service request). Both forward.
+MEDIA_RX = re.compile(r"message type can.?t be displayed|no.?t supported yet",
+                      re.I)
+BARE_ACK = {"oki", "ok", "oka", "okok", "dale", "listo", "joya", "buenísimo",
+            "perfecto", "genial", "ah", "ahh", "aa", "si", "sí", "ya"}
+
+
+NO_FLOW_RX = re.compile(
+    r"devoluci[oó]n del dinero|reembols|me devuelv[ae]n? (el|la|mi)? ?(plata|"
+    r"dinero|pago)|modificar (los )?datos|cambiar (la )?direcci[oó]n",
+    re.I)
+
+
+def serve_service(intent: str, text: str, *, continuation: bool = False
+                  ) -> tuple[str, str] | None:
+    """Returns (reply, reason) or None if this intent has no flow, or the
+    turn must forward (media / no-flow concern / bare fresh ack)."""
     flow = SERVICE.get(intent)
     if not flow:
         return None
+    t = (text or "").strip()
+    if MEDIA_RX.search(t) or not t:
+        return None                       # media/empty → forward
+    if NO_FLOW_RX.search(t):
+        return None                       # out-of-graph concern → forward
+    if (not continuation and t.lower().strip(" .!¡?") in BARE_ACK
+            and not extract_order_id(t)):
+        return None                       # bare FRESH ack → not a request
     oid = extract_order_id(text)
     if oid and flow.get("ref"):
         o = orders().get(oid)
